@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gatech CSE big data bootcamp">
+    <title>Scala Basic - Bigdata Bootcamp</title>
+
+    <link rel="canonical" href="http://www.sunlab.org/bigdata/scala-basic/">
+    <!-- favicon -->
+    <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bigdata-bootcamp.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/bigdata/css/syntax.css">
+
+    <!-- TOC -->
+    <link rel="stylesheet" href="/bigdata/css/jquery.tocify.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/bigdata/">Bigdata Bootcamp</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+<!--                 <li>
+                    <a href="/bigdata/">Home</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/contact/">Contact us</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li> -->
+<!--                 <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li> -->
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="/bigdata/">Home</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/about/">About</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li>
+                <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li>
+                <li><a href="/bigdata/environment/">Environment</a></li>
+                <li><a href="/bigdata/data/">Data</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/bigdata/image/background.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading" style="padding: 100px 0px 50px 0px">
+                    <h1>Scala Basic</h1>
+                    <hr class="small">
+                    <span class="subheading">Georgia Tech big data bootcamp training material</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <p>This section will briefly go through the essential knowledge about scala for later Spark training. In this section we will first show how to work with spark shell, then show how use variables, functions with examples. Finally, we give instructions about how to compile and run a standalone program using <code class="prettyprint">sbt</code>.</p>
+
+<h1 id="spark-shell">Spark Shell</h1>
+
+<p>Open a terminal and navigate to the root of code samples. You could open a scala shell by typing <code class="prettyprint">scala</code>. Or, you could use <a href="http://www.scala-sbt.org/index.html">sbt</a> by typing <code class="prettyprint">sbt/sbt console</code>. The second approach will help you add your project source code and dependencies into class path, so that your functions or library functions will be available for you to try to in the interactive shell. </p>
+
+<p>Start the scala shell you will see</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">$ sbt console
+[info]...
+
+Welcome to Scala version 2.10.4 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0).
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala&gt; 
+</code></pre></div>
+<p>type <code class="prettyprint">:quit</code> to stop the shell.</p>
+
+<h1 id="variables">Variables</h1>
+
+<p>You could decalre a variable like</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val myInt = 1 + 1
+myInt: Int = 2
+
+scala&gt; myInt = 3
+</code></pre></div>
+<p>where <code class="prettyprint">val</code> is a key word in <code class="prettyprint">scala</code> that make the variable immutable. If you reassign a value to <code class="prettyprint">myInt</code>, error will be reported.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myInt = 3
+&lt;console&gt;:8: error: reassignment to val
+       myInt = 3
+             ^
+
+scala&gt; 
+</code></pre></div>
+<p>Instead, variable declared with <code class="prettyprint">var</code> is mutable. In real practice, we try to use  <code class="prettyprint">val</code> instead of <code class="prettyprint">var</code> if possible as a good practice of functional programming.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; var myString = &quot;Hello Big Data&quot;
+myString: String = Hello Big Data
+
+scala&gt; myString = &quot;Hello Scala&quot;
+myString: String = Hello Scala
+</code></pre></div>
+<p>Looks like we are working with script language like Javascript or Python, no variable type is specified. In fact, <code class="prettyprint">scala</code> is static type language and the compiler implicitly infered the type. You could always specify a type as</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val myDouble: Double = 3
+myDouble: Double = 3.0
+</code></pre></div>
+<p>Beside <code class="prettyprint">Int</code>, <code class="prettyprint">Double</code> and <code class="prettyprint">String</code>. Built-in variable types of Scala you may need in this training include</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val myList: List[String] = List(&quot;this&quot;, &quot;is&quot;, &quot;a&quot;, &quot;list&quot;, &quot;of&quot;, &quot;string&quot;)
+myList: List[String] = List(this, is, a, list, of, string)
+
+scala&gt; val myTuple:(Double, Double) = (1.0, 2.0)
+myTuple: (Double, Double) = (1.0,2.0)
+</code></pre></div>
+<h1 id="functions">Functions</h1>
+
+<p>You could define a function and call into it</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; def triple(x: Int): Int = {
+     | x*3
+     | }
+triple: (x: Int)Int
+
+scala&gt; triple(2)
+res0: Int = 6
+</code></pre></div>
+<p>Where <code class="prettyprint">x: Int</code> is parameter and type, the second <code class="prettyprint">Int</code> is function return type. There&#39;s not explicit <code class="prettyprint">return</code> statement, the result of last expresssion <code class="prettyprint">x*3</code> will be returned. In this example, as there are only one expression and return type could be infered by compiler, you could define function as</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">def triple(x: Int) = x*3
+</code></pre></div>
+<p>Scala is object-oriented, function calls on a class method is straight forward like most OO language</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myString.lastIndexOf(&quot;Scala&quot;)
+res1: Int = 6
+</code></pre></div>
+<p>If the function do not have parameters, you could call it without parenthesis</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myInt.toString
+res2: String = 2
+</code></pre></div>
+<p>You could also define an anonymous function and pass it to variable like lambda expression in some other language:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val increaseOne = (x: Int) =&gt; x + 1
+increaseOne: Int =&gt; Int = &lt;function1&gt;
+
+scala&gt; increaseOne(3)
+res3: Int = 4
+</code></pre></div>
+<p>Anonymous function is very useful when a simple funtion will be passed as parameter to a function call</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myList.foreach{item: String =&gt; println(item)}
+this
+is
+a
+list
+of
+string
+</code></pre></div>
+<p>where <code class="prettyprint">item: String =&gt; println(item)</code> is an anonymous function. This function call be simpled to </p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myList.foreach(println(_))
+</code></pre></div>
+<p>where <code class="prettyprint">_</code> will represent first parameter. You could even write <code class="prettyprint">myList.foreach(println)</code> only.</p>
+
+<h1 id="class">Class</h1>
+
+<p>Declare class in scala could be as simple as </p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; class Patient(val name: String, val id: Int)
+defined class Patient
+
+scala&gt; val patient = new Partial
+PartialOrdering    PartiallyOrdered   
+
+scala&gt; val patient = new Partial
+PartialOrdering    PartiallyOrdered   
+
+scala&gt; val patient = new Patient(&quot;Bob&quot;, 1)
+patient: Patient = Patient@755f5e80
+
+scala&gt; patient.name
+res13: String = Bob
+</code></pre></div>
+<p>A special kind of class we will use is <a href="http://www.scala-lang.org/old/node/107"><code class="prettyprint">Case Class</code></a>. <code class="prettyprint">Case Class</code> could be declared as </p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; case class Patient(val name: String, val id: Int)
+</code></pre></div>
+<p>It&#39;s very convenient to use case class in pattern matting</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val p = new Patient(&quot;Abc&quot;, 1)
+p: Patient = Patient(Abc,1)
+
+scala&gt; p match {case Patient(&quot;Abc&quot;, id) =&gt; println(s&quot;matching id is $id&quot;)}
+matching id is 1
+</code></pre></div>
+<h1 id="standalone-program">Standalone Program</h1>
+
+<p>Working with large real world application, you usually need to compile and package your source code with some tools. Here we show how to compile and run a simple program with <a href="http://www.scala-sbt.org/index.html">sbt</a>. Run the sample code in &#39;hello-bigdata&#39; folder</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">% sbt/sbt run
+Attempting to fetch sbt
+######################################################################## 100.0%
+Launching sbt from sbt/sbt-launch-0.13.8.jar
+[info] .....
+[info] Done updating.
+[info] Compiling 1 Scala source to ./hello-bigdata/target/scala-2.10/classes...
+[info] Running Hello 
+Hello bigdata
+[success] Total time: 2 s, completed May 3, 2015 8:42:48 PM
+</code></pre></div>
+<p>the source code file <code class="prettyprint">hello.scals</code> is compiled and invoked.</p>
+
+<h1 id="further-reading">Further Reading</h1>
+
+<p>This is a very brief overview of important Scala language features required for the training. We highly recommend the readers to checkout below references</p>
+
+<ul>
+<li><a href="https://twitter.github.io/scala_school/index.html">Twitter Scala School</a></li>
+<li><a href="http://docs.scala-lang.org/tutorials/?_ga=1.128323084.1826222080.1429310377">Official Scala Tutorial</a></li>
+<li><a href="http://www.scala-sbt.org/0.13/tutorial/index.html">sbt tutorial</a></li>
+</ul>
+
+
+            <ul class="pager">
+                
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+    
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+<li class="previous">
+    <a href="/bigdata/spark/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Overview of Spark</a>
+</li>
+
+                
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+<li class="next">
+    <a href="/bigdata/spark-sql/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Spark Sql&rarr;</a>
+</li>
+
+
+            </ul>
+
+            <div class="clearfix"></div>
+
+            <hr>
+            <!-- disqus -->
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                /* * * CONFIGURATION VARIABLES * * */
+                var disqus_shortname = 'sunlabbigdata';
+                
+                /* * * DON'T EDIT BELOW THIS LINE * * */
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+        <div class="col-lg-2 col-md-1">
+            <div id="toc"></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/bigdata/feed.xml" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/jimeng" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Georgia Institute of Technology 2015. Theme by <a href="https://github.com/IronSummitMedia/startbootstrap-clean-blog-jekyll" target="_blank">Iron Summit Media</a>'s Jekyll version of <a href="http://startbootstrap.com/template-overviews/clean-blog/" target="_blank">Clean Blog</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/bigdata/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/bigdata/js/bootstrap.min.js "></script>
+
+<!-- TOC -->
+<script src="/bigdata/js/jquery-ui.min.js"></script>
+<script src="/bigdata/js/jquery.tocify.js"></script>
+
+<!-- ACE Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/bigdata/js/bigdata-bootcamp.js "></script>
+
+
+</body>
+
+</html>

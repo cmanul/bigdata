@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gatech CSE big data bootcamp">
+    <title>Overview of Hadop - Bigdata Bootcamp</title>
+
+    <link rel="canonical" href="http://www.sunlab.org/bigdata/hadoop/">
+    <!-- favicon -->
+    <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bigdata-bootcamp.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/bigdata/css/syntax.css">
+
+    <!-- TOC -->
+    <link rel="stylesheet" href="/bigdata/css/jquery.tocify.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/bigdata/">Bigdata Bootcamp</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+<!--                 <li>
+                    <a href="/bigdata/">Home</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/contact/">Contact us</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li> -->
+<!--                 <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li> -->
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="/bigdata/">Home</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/about/">About</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li>
+                <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li>
+                <li><a href="/bigdata/environment/">Environment</a></li>
+                <li><a href="/bigdata/data/">Data</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/bigdata/image/background.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading" style="padding: 100px 0px 50px 0px">
+                    <h1>Overview of Hadop</h1>
+                    <hr class="small">
+                    <span class="subheading">Georgia Tech big data bootcamp training material</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="bs-callout bs-callout-info" id="callout-helper-context-color-specificity">
+        <h4>Learning Objectives</h4><ul>
+<li>Being farmiliar with basic operations of HDFS.</li>
+<li>Being able to write basic MapReduce program.</li>
+<li>Know matual tools in Hadoop ecosystem.</li>
+</ul>
+</div>
+
+<p><a href="http://hadoop.apache.org">Hadoop</a> is a framework for distributed storage and processing of very large data sets on computer clusters built from commodity hardware. It&#39;s mainly composed of two parts: data storage and data processing. The distributed storage part is handled by the Hadoop Distributed File System (HDFS). The distributed processing part is achieved via MapReduce. On top of HDFS and MapReduce, a bunch of powerful tools have being developed. In this chapter you will learn the basic Hadoop HDFS, MapReduce knowledge as well as usage of advanced tools like Pig and Hive.</p>
+
+<p>This chapter is divided into following sections</p>
+
+<ol>
+<li><p><strong><a href="/bigdata/hadoop-basic/">Hadoop Basic</a></strong>: You will learn basic operations of HDFS, including copy data in/out of HDFS, list available items in HDFS, remove items etc. Also, you will learn how to write a basic MapReduce program to count distinct diagnostic code to see prevalence of disease in given dataset.</p></li>
+<li><p><strong><a href="/bigdata/hadoop-hbase/">Apache HBase</a></strong>: HBase is a powerful distributed NOSql database inspired by Google BigTable. HBase provide SQL-like syntax to query big data. You will learn typical create, retrieve, update, delte (CRUD) operations.</p></li>
+<li><p><strong><a href="/bigdata/hadoop-streaming">Hadoop Streaming</a></strong>: Hadoop streaming provide the mechanism to write MapReduce program in any programming language. In this section, you will learn how to do the same count task via Hadoop streaming in python.</p></li>
+<li><p><strong><a href="/bigdata/hadoop-pig">Apache Pig</a></strong>: Apache Pig is a declarative language to manipulate data using Hadoop. You will learn Pig Latin, the grammer of Pig and Pig will translate that into low-level cubersome MapReduce program.</p></li>
+<li><p><strong><a href="/bigdata/hadoop-hive">Apache Hive</a></strong>: Apace Hive provides SQL-like syntax to query data stored in HDFS, HBase etc. You will learn how to create table and do a simple query.</p></li>
+</ol>
+
+
+            <ul class="pager">
+                
+  
+  
+
+  
+    
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+<li class="previous">
+    <a href="/bigdata/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Big Data Bootcamp</a>
+</li>
+
+                
+  
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+<li class="next">
+    <a href="/bigdata/hadoop-basic/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Basic&rarr;</a>
+</li>
+
+
+            </ul>
+
+            <div class="clearfix"></div>
+
+            <hr>
+            <!-- disqus -->
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                /* * * CONFIGURATION VARIABLES * * */
+                var disqus_shortname = 'sunlabbigdata';
+                
+                /* * * DON'T EDIT BELOW THIS LINE * * */
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+        <div class="col-lg-2 col-md-1">
+            <div id="toc"></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/bigdata/feed.xml" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/jimeng" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Georgia Institute of Technology 2015. Theme by <a href="https://github.com/IronSummitMedia/startbootstrap-clean-blog-jekyll" target="_blank">Iron Summit Media</a>'s Jekyll version of <a href="http://startbootstrap.com/template-overviews/clean-blog/" target="_blank">Clean Blog</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/bigdata/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/bigdata/js/bootstrap.min.js "></script>
+
+<!-- TOC -->
+<script src="/bigdata/js/jquery-ui.min.js"></script>
+<script src="/bigdata/js/jquery.tocify.js"></script>
+
+<!-- ACE Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/bigdata/js/bigdata-bootcamp.js "></script>
+
+
+</body>
+
+</html>

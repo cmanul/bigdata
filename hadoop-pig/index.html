@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gatech CSE big data bootcamp">
+    <title>Apache Pig - Bigdata Bootcamp</title>
+
+    <link rel="canonical" href="http://www.sunlab.org/bigdata/hadoop-pig/">
+    <!-- favicon -->
+    <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bigdata-bootcamp.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/bigdata/css/syntax.css">
+
+    <!-- TOC -->
+    <link rel="stylesheet" href="/bigdata/css/jquery.tocify.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/bigdata/">Bigdata Bootcamp</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+<!--                 <li>
+                    <a href="/bigdata/">Home</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/contact/">Contact us</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li> -->
+<!--                 <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li> -->
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="/bigdata/">Home</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/about/">About</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li>
+                <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li>
+                <li><a href="/bigdata/environment/">Environment</a></li>
+                <li><a href="/bigdata/data/">Data</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/bigdata/image/background.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading" style="padding: 100px 0px 50px 0px">
+                    <h1>Apache Pig</h1>
+                    <hr class="small">
+                    <span class="subheading">Georgia Tech big data bootcamp training material</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <p>In this part of training, we show the usage of <a href="http://pig.apache.org/">Hadoop Pig</a>, a high-level data analysis tool on top of Hadoop MapReduce. Througout the training you will learn how to run interactive shell and run Pig script. We will use feature construction for predictive modeling from longitude data as an example.</p>
+
+<h1 id="interactive-shell-basic">Interactive Shell Basic</h1>
+
+<p>Pig provides a shell to manipulate data interactively. Let&#39;s start a shell an run that in local mode for demo purpose</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">pig -x local
+</code></pre></div>
+<p>and you will see promte as</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">[info] ...
+grunt&gt;  
+</code></pre></div>
+<p>Next, you can input Pig Latin <strong>statement</strong>, the basic construct of using Pig. For example,</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; case_events = LOAD &#39;case.csv&#39; USING PigStorage(&#39;,&#39;) AS (patientid:chararray, eventname:chararray, dateoffset:int, value:double);
+</code></pre></div>
+<p>Here we call the <code class="prettyprint">case_events</code> a <a href="http://pig.apache.org/docs/r0.14.0/basic.html#relations"><strong>relation</strong></a> in Pig Latin. In this statement, we load data from <code class="prettyprint">case.csv</code> file into <code class="prettyprint">case_events</code> relation. We also specified the <a href="http://pig.apache.org/docs/r0.14.0/basic.html#schemas"><strong>schema</strong></a> of the data as </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">(patientid:chararray, eventname:chararray, dateoffset:int, value:double)
+</code></pre></div>
+<p>which define a four-field tuple with names and type of each field.</p>
+
+<p>You can check the schema using <code class="prettyprint">DESCRIBE</code> operator</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; DESCRIBE case_events;
+case_events: {patientid: chararray,eventname: chararray,dateoffset: int,value: double}
+</code></pre></div>
+<p>and collect display data with <code class="prettyprint">DUMP</code></p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; DUMP case_events;
+...
+(021FB39310BC3797,DRUG67544054730,1352,30.0)
+(021FB39310BC3797,DRUG00002021008,1391,10.0)
+(021FB39310BC3797,DRUG63304073705,1393,30.0)
+(021FB39310BC3797,DRUG36987235901,1456,30.0)
+(021FB39310BC3797,DRUG55154239805,1456,10.0)
+</code></pre></div>
+<p>The shell also provide other commands. Important ones include but not limited to</p>
+
+<ol>
+<li><code class="prettyprint">fs</code>: serve same purpose as <code class="prettyprint">hdfs dfs</code>, so that your can type <code class="prettyprint">fs -ls</code> directly in pig shell instead of <code class="prettyprint">hdfs dfs -ls</code>.</li>
+<li><code class="prettyprint">pwd</code>: check present working directory in case file is not found.</li>
+</ol>
+
+<p>type <code class="prettyprint">help</code> to learn more about these commands in pig shell.</p>
+
+<p>Finally, type <code class="prettyprint">quit</code> to leave the shell.</p>
+
+<h1 id="data-type">Data type</h1>
+
+<p>In this section, we briefly describe data types. Pig could work with simple type like <code class="prettyprint">int</code>, <code class="prettyprint">double</code>. Most important concept is <code class="prettyprint">tupe</code> and <code class="prettyprint">bag</code>.</p>
+
+<p><strong>Tuple</strong> is usually reprented with <code class="prettyprint">()</code>, for example</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">(021FB39310BC3797,DRUG55154239805,1456,10.0)
+</code></pre></div>
+<p>in Pig Latin, we could either fetch field by index (like <code class="prettyprint">$0</code>) or by name (like <code class="prettyprint">patientid</code>). With index we could also fetch a range of fields. For example <code class="prettyprint">$2..</code> means <em>2</em>-st to last. </p>
+
+<p><strong>Bag</strong> is usually denoted with <code class="prettyprint">{}</code>, from result of <code class="prettyprint">DESCRIBE case_events</code> we could see <code class="prettyprint">case_events</code> itself is a bag. You could regard bag as a special un ordered <code class="prettyprint">set</code> that don&#39;t check duplication.</p>
+
+<p>Check out <a href="http://pig.apache.org/docs/r0.14.0/basic.html#Data+Types+and+More">official doc about data type</a> for more. You will find examples of the type in below samples, pay attention to result of <code class="prettyprint">DESCRIBE</code> and you will find types and names of fields.</p>
+
+<h1 id="feature-construction">Feature construction</h1>
+
+<p>Next, you will practice working with Pig Latin in the context of feature construction for predictive modeling. You will learn built-in operators like <code class="prettyprint">GROUP BY</code>, <code class="prettyprint">JOIN</code> as well as User Defined Function (UDF) in python. The result of feature construction will be feature matrix that can be consumed by a lot of machine learning packages.</p>
+
+<h2 id="load-data">Load data</h2>
+
+<p>First, you can check your working directory and availability of raw data file by</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; pwd    
+file:/path/to/bigdata-bootcamp
+grunt&gt; ls data
+file:/path/to/bigdata-bootcamp/data/case.csv&lt;r 1&gt;    536404
+file:/path/to/bigdata-bootcamp/data/control.csv&lt;r 1&gt; 672568
+grunt&gt; 
+</code></pre></div>
+<p>Then, let&#39;s load the data as</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">grunt&gt; events = LOAD &#39;data/&#39; USING PigStorage(&#39;,&#39;) AS (patientid:chararray, eventname:chararray, dateoffset:int, value:int);
+</code></pre></div>
+<h2 id="extract-target-and-filter">Extract target and filter</h2>
+
+<p>Our data set can be used for predicting heart failure (HF), and we want to predict heart failure one year before it happen. As a result, we need to find the heart failure event date (for case patient, event value is 1 means HF happened, for control patient value is 0 as there&#39;s no HF) and filter out events that happended later than one year before HF.</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; targets = FILTER events BY eventname == &#39;heartfailure&#39;;
+grunt&gt; event_target_pairs = JOIN events by patientid, targets BY patientid;
+grunt&gt; filtered_events = FILTER event_target_pairs BY (events::dateoffset &lt;= targets::dateoffset - 365);
+</code></pre></div>
+<p>After <code class="prettyprint">JOIN</code> we have some redundant fields we will no longer need, so that we can project <code class="prettyprint">filtered_events</code> to a simpler format.</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; filtered_events = FOREACH filtered_events GENERATE $0 AS patientid, $1 AS eventname, $3 AS value;
+</code></pre></div>
+<p>Notice that as dateoffset is no longer useful after filtering, we droped that.</p>
+
+<h2 id="aggregate-events-into-feature">Aggregate events into feature</h2>
+
+<p>Our raw data is event sequence. In order to aggregate that into feature suitable for machine learning, we can  sum up event value as feature value corresponds to the given event. In additionFor example, given below raw event sequence for a patient</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">FBFD014814507B5C,PAYMENT,1220,30.0
+FBFD014814507B5C,DIAGE887,1321,1.0
+FBFD014814507B5C,PAYMENT,1321,1000.0
+FBFD014814507B5C,DIAGE887,907,1.0
+FBFD014814507B5C,DRUG52959072214,1016,30.0
+</code></pre></div>
+<p>We can get feature name value pair for this patient with ID <code class="prettyprint">FBFD014814507B5C</code> as</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">(PAYMENT, 1030.0)
+(DIAGE887, 2.0)
+(DRUG52959072214, 30.0)
+</code></pre></div>
+<p>Below code will convert <code class="prettyprint">filtered_events</code> into tuples in <code class="prettyprint">(patientid, feature name, feature value)</code> format</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">
+grunt&gt; feature_name_values = GROUP filtered_events BY (patientid, eventname);
+grunt&gt; DESCRIBE feature_name_values;                                         
+feature_name_values: {group: (patientid: chararray,eventname: chararray),filtered_events: {(patientid: chararray,eventname: chararray,value: int)}}
+grunt&gt; feature_name_values = FOREACH feature_name_values GENERATE group.$0, group.$1 as featurename, SUM(filtered_events.value) AS value;
+grunt&gt; DESCRIBE feature_name_values                                                                              
+feature_name_values: {patientid: chararray,featurename: chararray,value: long}
+grunt&gt; dump feature_name_values;
+...
+(FBFD014814507B5C,DIAG38845,1)
+(FBFD014814507B5C,DIAGV6546,1)
+(FBFD014814507B5C,DRUG00008251302,30)
+(FBFD014814507B5C,DRUG52959072214,30)
+</code></pre></div>
+<h2 id="assign-index-to-feature">Assign index to feature</h2>
+
+<p>In machine learning setting, we want to assign an index to each different feature. Form example, DIAG38845 corresponds to 1 and DIAGV6546 corresponds to 2 etc.</p>
+
+<p>Below code find unique feature name using <code class="prettyprint">DISTINCT</code>and assign an index to feature name with <code class="prettyprint">RANK</code></p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; feature_names = FOREACH feature_name_values GENERATE featurename;
+grunt&gt; feature_names = DISTINCT feature_names;
+grunt&gt; feature_name_index = RANK feature_names;
+grunt&gt; feature_name_index = FOREACH feature_name_index GENERATE $0 AS index, $1;
+grunt&gt; DESCRIBE feature_name_index 
+feature_name_index: {index: long,featurename: chararray}
+grunt&gt; DUMP feature_name_index;
+...
+(9973,DRUG81306041113)
+(9974,DRUG91899051572)
+(9975,DRUG99207049110)
+(9976,DRUG99207049211)
+(9977,DRUG99207049905)
+(9978,DRUG99207074501)
+</code></pre></div>
+<p>Next, we could update <code class="prettyprint">feature_name_values</code> to use feature index rather than feature name.</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; feature_id_values = JOIN feature_name_values BY featurename, feature_name_index BY featurename;
+grunt&gt; DESCRIBE feature_id_values;
+feature_id_values: {feature_name_values::patientid: chararray,feature_name_values::featurename: chararray,feature_name_values::value: long,feature_name_index::index: long,feature_name_index::featurename: chararray}  
+grunt&gt; feature_id_values = FOREACH feature_id_values GENERATE feature_name_values::patientid AS patientid, feature_name_index::index AS featureid, feature_name_values::value as value; 
+grunt&gt; DESCRIBE feature_id_values;
+feature_id_values: {patientid: chararray,featureid: long,value: long}
+grunt&gt; DUMP feature_id_values;
+....
+(2363A06EF118B098,9974,60)
+(524F2DD2CC093F4D,9975,30)
+(DB85757793B65DA0,9976,60)
+(06E460A01C6DCC41,9977,10)
+(276D7F6B824964C3,9978,90)
+</code></pre></div>
+<h2 id="format-feature-matrix">Format feature matrix</h2>
+
+<p>Now, we are approaching the final step. We need to create a feature vector for each patient. Our ultimate result will convert each patient into a feature vector associated with target we want to predict. We already get target in the <code class="prettyprint">targets</code> relation. Our final representation is like below</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">target featureid:value[featureid:value]...
+</code></pre></div>
+<p>For example, given patient <code class="prettyprint">2363A06EF118B098</code> with below features and don&#39;t have heart failure (target value is 0)</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">(2363A06EF118B098,1,60)
+(2363A06EF118B098,4,30)
+(2363A06EF118B098,9,60)
+(2363A06EF118B098,23,10)
+(2363A06EF118B098,45,90)
+</code></pre></div>
+<p>we will represet the patient with</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">0 1:60 4:30 9:60 23:10 45:90
+</code></pre></div>
+<p>notice that the <code class="prettyprint">feautreid</code> is in increase order and this is required by a lot of machine learning package. We call such target (aka label) and features pair a <code class="prettyprint">sample</code>.</p>
+
+<p>Let&#39;s for group <code class="prettyprint">feature_id_values</code> by patientid and check the structure</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">grunt&gt; grpd = GROUP feature_id_values BY patientid;
+grunt&gt; DESCRIBE grpd;
+grpd: {group: chararray,feature_id_values: {(patientid: chararray,featureid: long,value: long)}}
+</code></pre></div>
+<p>We can find <code class="prettyprint">feature_id_values</code> is a bag and we want to convert it into a string like <code class="prettyprint">1:60 4:30 9:60 23:10 45:90</code> mentioned above. Here we will employ UDF defined in <code class="prettyprint">utils.py</code> as</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python">@outputSchema(&quot;feature:chararray&quot;)
+def bag_to_svmlight(input):
+    return &#39; &#39;.join(( &quot;%s:%f&quot; % (fid, float(fvalue)) for _, fid, fvalue in input))
+</code></pre></div>
+<p>The script just simply enumerate all tuples from <code class="prettyprint">input</code> and form id value pairs then join. <code class="prettyprint">@outputSchema(&quot;feature:chararray&quot;)</code> specifies the return value name and tupe. In order to use that, we need to register it first</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; REGISTER sample/pig/utils.py USING jython AS utils;
+grunt&gt; feature_vectors = FOREACH grpd {
+    sorted = ORDER feature_id_values BY featureid;
+    generate group as patientid, utils.bag_to_svmlight(sorted) as sparsefeature;
+}
+grunt&gt; DUMP feature_vectors;
+...
+(FBF4F34C7437373D,30:3220.000000 7... 9584:30.000000 9743:60.000000 9770:30.000000)
+(FBFD014814507B5C,30:270.000000 700:1.000000)
+</code></pre></div>
+<p>Next, we could join <code class="prettyprint">targets</code> and <code class="prettyprint">feature_vectors</code> to asscociate feature vector with target</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; samples = JOIN targets BY patientid, feature_vectors BY patientid;
+grunt&gt; DESCRIBE samples;
+samples: {targets::patientid: chararray,targets::eventname: chararray,targets::dateoffset: int,targets::value: int,feature_vectors::patientid: chararray,feature_vectors::sparsefeature: chararray}
+grunt&gt; samples = FOREACH samples GENERATE targets::value AS label, feature_vectors::sparsefeature as sparsefeature;
+grunt&gt; DESCRIBE samples;
+samples: {label: int,sparsefeature: chararray}
+grunt&gt; DUMP samples;
+...
+(0,30:270.000000 117:1.000000 ... 6232:30.000000)
+</code></pre></div>
+<h2 id="split-and-save">Split and save</h2>
+
+<p>We are almost there, just save the <code class="prettyprint">samples</code>. In machine learning setting, it&#39;s a common practice to split data into training and testing samples. We could do that by associate each sample with a random key and split with that random key.</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; samples = FOREACH samples GENERATE RANDOM() as assignmentkey, *;
+grunt&gt; SPLIT samples INTO testing IF assignmentkey &lt;= 0.20, training OTHERWISE;
+grunt&gt; training = FOREACH training GENERATE $1..;
+grunt&gt; testing = FOREACH testing GENERATE $1..;
+</code></pre></div>
+<p>Then, we could save </p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; STORE training INTO &#39;training&#39; USING PigStorage(&#39; &#39;);
+grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
+</code></pre></div>
+<h1 id="script">Script</h1>
+
+<p>Running commands interactively is efficient, but sometimes we want to save the commands for reuse. We could save the commands we run into a script file (i.e. features.pig) and run the entire script.</p>
+
+<p>You could checkout <code class="prettyprint">sample/pig</code> folder. Navigate to there and run the script simply with</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">pig -x local features.pig
+</code></pre></div>
+
+            <ul class="pager">
+                
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+    
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+<li class="previous">
+    <a href="/bigdata/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
+</li>
+
+                
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+<li class="next">
+    <a href="/bigdata/pig/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Apache Pig&rarr;</a>
+</li>
+
+
+            </ul>
+
+            <div class="clearfix"></div>
+
+            <hr>
+            <!-- disqus -->
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                /* * * CONFIGURATION VARIABLES * * */
+                var disqus_shortname = 'sunlabbigdata';
+                
+                /* * * DON'T EDIT BELOW THIS LINE * * */
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+        <div class="col-lg-2 col-md-1">
+            <div id="toc"></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/bigdata/feed.xml" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/jimeng" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Georgia Institute of Technology 2015. Theme by <a href="https://github.com/IronSummitMedia/startbootstrap-clean-blog-jekyll" target="_blank">Iron Summit Media</a>'s Jekyll version of <a href="http://startbootstrap.com/template-overviews/clean-blog/" target="_blank">Clean Blog</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/bigdata/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/bigdata/js/bootstrap.min.js "></script>
+
+<!-- TOC -->
+<script src="/bigdata/js/jquery-ui.min.js"></script>
+<script src="/bigdata/js/jquery.tocify.js"></script>
+
+<!-- ACE Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/bigdata/js/bigdata-bootcamp.js "></script>
+
+
+</body>
+
+</html>

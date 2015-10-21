@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gatech CSE big data bootcamp">
+    <title>Apache Hive - Bigdata Bootcamp</title>
+
+    <link rel="canonical" href="http://www.sunlab.org/bigdata/hadoop-hive/">
+    <!-- favicon -->
+    <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bigdata-bootcamp.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/bigdata/css/syntax.css">
+
+    <!-- TOC -->
+    <link rel="stylesheet" href="/bigdata/css/jquery.tocify.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/bigdata/">Bigdata Bootcamp</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+<!--                 <li>
+                    <a href="/bigdata/">Home</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/contact/">Contact us</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li> -->
+<!--                 <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li> -->
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="/bigdata/">Home</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/about/">About</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li>
+                <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li>
+                <li><a href="/bigdata/environment/">Environment</a></li>
+                <li><a href="/bigdata/data/">Data</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/bigdata/image/background.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading" style="padding: 100px 0px 50px 0px">
+                    <h1>Apache Hive</h1>
+                    <hr class="small">
+                    <span class="subheading">Georgia Tech big data bootcamp training material</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <p>This section shows the basic usage of Hadoop Hive. Hive provides SQL like language HiveQL on top of Hadoop. Instead of writing raw MapReduce program, you can work on data warehouse task using simple farmiliar query language.</p>
+
+<h1 id="interactive-shell">Interactive shell</h1>
+
+<p>In the sample code, we will use the data of patient event sequences in tupel format. Let&#39;s start the Hive CLI interactive shell first by typing <code class="prettyprint">hive</code> in command line</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; hive
+...                                                                         
+[info]
+hive&gt; 
+</code></pre></div>
+<p>Before loading data, we first need to define a table just like working with database server with SQL.</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; CREATE TABLE events (
+    &gt;   patient_id STRING,
+    &gt;   event_name STRING,
+    &gt;   date_offset INT,
+    &gt;   value INT)
+    &gt; ROW FORMAT DELIMITED
+    &gt; FIELDS TERMINATED BY &#39;,&#39;
+    &gt; STORED AS TEXTFILE;
+OK
+Time taken: 0.289 seconds
+hive&gt; 
+</code></pre></div>
+<p>And we could check existing tables and schema with commands</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; SHOW TABLES;
+OK
+events
+Time taken: 0.022 seconds, Fetched: 1 row(s)
+hive&gt; DESCRIBE events;
+OK
+patient_id              string                                      
+event_name              string                                      
+date_offset             int                                         
+value                   int                                         
+Time taken: 0.221 seconds, Fetched: 4 row(s)
+</code></pre></div>
+<p>Next, let&#39;s insert data into the table.</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; LOAD DATA LOCAL INPATH &#39;data&#39;
+    &gt; OVERWRITE INTO TABLE events;
+Loading data to table default.events
+Table default.events stats: [numFiles=2, numRows=0, totalSize=1208972, rawDataSize=0]
+OK
+Time taken: 0.521 seconds
+</code></pre></div>
+<p>Then we could run SQL we are farmiliar with like</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; SELECT patient_id, count(*) FROM events
+    &gt; GROUP BY patient_id;
+
+[info]...
+
+F49EA945C42543C8        19
+F4C0BFF334226C29        60
+F560829E559E1FEB        13
+...
+FA4854797F48D537        88
+FA831739B546F976        15
+FAEF9F6E7AF1D99D        196
+FBF4F34C7437373D        119
+FBFD014814507B5C        28
+Time taken: 20.351 seconds, Fetched: 300 row(s)
+</code></pre></div>
+<p>We could also save query result to local directory</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; INSERT OVERWRITE LOCAL DIRECTORY &#39;tmp_local_out&#39;
+    &gt; ROW FORMAT DELIMITED
+    &gt; FIELDS TERMINATED BY &#39;,&#39;
+    &gt; STORED AS TEXTFILE
+    &gt; SELECT patient_id, count(*) 
+    &gt; FROM events 
+    &gt; GROUP BY patient_id;
+
+
+[info]...
+OK
+Time taken: 17.034 seconds
+</code></pre></div>
+<p>You could learn more about the syntax from its <a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual">language manual</a>.</p>
+
+<h1 id="besides-shell">Besides shell</h1>
+
+<p>Besides running commands with interactive shell, you can also run a script. In the <code class="prettyprint">sample/hive</code> folder, you can run the entire script with</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">hive -f sample.hql
+</code></pre></div>
+<p>The content of the script is simply the combination of commands we run in shell with one more statement to drop existing table if necessary</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql">DROP TABLE IF EXISTS events;
+
+CREATE TABLE events (
+  patient_id STRING,
+  event_name STRING,
+  date_offset INT,
+  value INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY &#39;,&#39;
+STORED AS TEXTFILE;
+
+SHOW TABLES;
+DESCRIBE events;
+
+LOAD DATA LOCAL INPATH &#39;data&#39;
+OVERWRITE INTO TABLE events;
+
+INSERT OVERWRITE LOCAL DIRECTORY &#39;tmp_local_out&#39;
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY &#39;,&#39;
+STORED AS TEXTFILE
+SELECT patient_id, count(*) 
+FROM events 
+GROUP BY patient_id;
+</code></pre></div>
+<p>Further, it&#39;s possible to run <a href="https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients">hive as a server</a> and connect with JDBC or its beeline client.</p>
+
+<h1 id="related-tools">Related tools</h1>
+
+<p>Hive translate queries into a series of MapReduce jobs, thus not suitable for realtime setting. Alternative tools inspired and influeced by Hive are getting more attention, for example, <a href="http://impala.io/">Cloudera Impala</a> and <a href="https://spark.apache.org/sql/">Spark SQL</a>.</p>
+
+
+            <ul class="pager">
+                
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+    
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+<li class="previous">
+    <a href="/bigdata/pig/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Apache Pig</a>
+</li>
+
+                
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+<li class="next">
+    <a href="/bigdata/spark/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Overview of Spark&rarr;</a>
+</li>
+
+
+            </ul>
+
+            <div class="clearfix"></div>
+
+            <hr>
+            <!-- disqus -->
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                /* * * CONFIGURATION VARIABLES * * */
+                var disqus_shortname = 'sunlabbigdata';
+                
+                /* * * DON'T EDIT BELOW THIS LINE * * */
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+        <div class="col-lg-2 col-md-1">
+            <div id="toc"></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/bigdata/feed.xml" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/jimeng" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Georgia Institute of Technology 2015. Theme by <a href="https://github.com/IronSummitMedia/startbootstrap-clean-blog-jekyll" target="_blank">Iron Summit Media</a>'s Jekyll version of <a href="http://startbootstrap.com/template-overviews/clean-blog/" target="_blank">Clean Blog</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/bigdata/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/bigdata/js/bootstrap.min.js "></script>
+
+<!-- TOC -->
+<script src="/bigdata/js/jquery-ui.min.js"></script>
+<script src="/bigdata/js/jquery.tocify.js"></script>
+
+<!-- ACE Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/bigdata/js/bigdata-bootcamp.js "></script>
+
+
+</body>
+
+</html>

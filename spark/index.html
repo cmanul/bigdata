@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gatech CSE big data bootcamp">
+    <title>Overview of Spark - Bigdata Bootcamp</title>
+
+    <link rel="canonical" href="http://www.sunlab.org/bigdata/spark/">
+    <!-- favicon -->
+    <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bigdata-bootcamp.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/bigdata/css/syntax.css">
+
+    <!-- TOC -->
+    <link rel="stylesheet" href="/bigdata/css/jquery.tocify.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/bigdata/">Bigdata Bootcamp</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+<!--                 <li>
+                    <a href="/bigdata/">Home</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/contact/">Contact us</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li> -->
+<!--                 <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li> -->
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="/bigdata/">Home</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/about/">About</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li>
+                <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li>
+                <li><a href="/bigdata/environment/">Environment</a></li>
+                <li><a href="/bigdata/data/">Data</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/bigdata/image/background.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading" style="padding: 100px 0px 50px 0px">
+                    <h1>Overview of Spark</h1>
+                    <hr class="small">
+                    <span class="subheading">Georgia Tech big data bootcamp training material</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="bs-callout bs-callout-info" id="callout-helper-context-color-specificity">
+        <h4>Learning Objectives</h4><ul>
+<li>hi this is learning objective</li>
+<li>objective 2.</li>
+</ul>
+</div>
+
+<div class="panel-group exercise"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#question2" style="text-decoration:none;">Exercise: hi this is test </a></h4></div><div id="question2" class="panel-collapse collapse"><div class="panel-body"><p>hi</p><blockquote><p>this</p><blockquote><p>istest</p></blockquote></blockquote><div class="highlight"><pre><code class="language-scala" data-lang="scala">val x = 2l</code></pre></div><p>ad</p></div></div></div></div>
+
+<div class="panel-group exercise"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#question3" style="text-decoration:none;">Exercise: hi this is another test </a></h4></div><div id="question3" class="panel-collapse collapse"><div class="panel-body"><p>xxxx antoerh</p></div></div></div></div>
+
+<p>In this chapter, you will learn the usage of <a href="http://spark.apache.org">Spark</a>, an in-memory spark clustering computing framework for parallel data processing. Due to time limit, we will focus more on interactive shell. </p>
+
+<p>Initially, Spark is developed with <a href="http://www.scala-lang.org/">Scala</a>, a functional programming laguage on JVM. Though most of the Spark functions also have Python and Java API, in this course, we will give examples in Scala only for its concise and simplicity. Interested students could learn more about Python and Java in Spark from <a href="https://spark.apache.org/docs/latest/programming-guide.html">Spark document</a>.</p>
+
+<p>This chapter is divided into following sections</p>
+
+<ol>
+<li><strong><a href="/bigdata/scala-basic/">Scala Basic</a></strong>: You will learn/review basic of scala via interactive shell, including declare variables of different types, make function calls etc. How to compile and run a standalone program will also be covered.</li>
+<li><strong><a href="/bigdata/spark-basic/">Spark Basic</a></strong>: In this section, you will learn how to load data into Spark and how to do some basic processing, i.e. convert data from raw string into some defined class, filter out those items with missing field and count the final. </li>
+<li><strong><a href="/bigdata/spark-sql/">Spark SQL</a></strong>: In this section, you will learn how to use SQL for data processing in Spark. You will see how the tasks of previous section could be achieved using SQL.</li>
+<li><strong><a href="/bigdata/spark-graphx/">Spark Graphx</a></strong>: Grpahx is a special designed component of Spark for graph data processing. In this section, you will learn how to how to construct a graph and run PageRank, Connected Components algorithm on the graph.</li>
+<li><strong><a href="/bigdata/spark-mllib/">Spark MLlib</a></strong>: With pre-processed data you got by following instructions of previous sections, you will have a dataset suitable for Machine Learning task. In this section, you will learn how to convert data you have into feature vectors and how to apply existing algorithms in MLlib to predict whether patient will have heart disease or not. </li>
+</ol>
+
+
+            <ul class="pager">
+                
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+    
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+<li class="previous">
+    <a href="/bigdata/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Apache Hive</a>
+</li>
+
+                
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+<li class="next">
+    <a href="/bigdata/scala-basic/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Scala Basic&rarr;</a>
+</li>
+
+
+            </ul>
+
+            <div class="clearfix"></div>
+
+            <hr>
+            <!-- disqus -->
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                /* * * CONFIGURATION VARIABLES * * */
+                var disqus_shortname = 'sunlabbigdata';
+                
+                /* * * DON'T EDIT BELOW THIS LINE * * */
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+        <div class="col-lg-2 col-md-1">
+            <div id="toc"></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/bigdata/feed.xml" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/jimeng" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Georgia Institute of Technology 2015. Theme by <a href="https://github.com/IronSummitMedia/startbootstrap-clean-blog-jekyll" target="_blank">Iron Summit Media</a>'s Jekyll version of <a href="http://startbootstrap.com/template-overviews/clean-blog/" target="_blank">Clean Blog</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/bigdata/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/bigdata/js/bootstrap.min.js "></script>
+
+<!-- TOC -->
+<script src="/bigdata/js/jquery-ui.min.js"></script>
+<script src="/bigdata/js/jquery.tocify.js"></script>
+
+<!-- ACE Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/bigdata/js/bigdata-bootcamp.js "></script>
+
+
+</body>
+
+</html>

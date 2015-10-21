@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bigdata Bootcamp</title>
+    <description>Gatech CSE big data bootcamp</description>
+    <link>http://www.sunlab.org/bigdata/</link>
+    <atom:link href="http://www.sunlab.org/bigdata/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Wed, 21 Oct 2015 13:37:37 -0400</pubDate>
+    <lastBuildDate>Wed, 21 Oct 2015 13:37:37 -0400</lastBuildDate>
+    <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Big Data Bootcamp</title>
+        <link>http://www.sunlab.org/bigdata/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/</guid>
+      </item>
+    
+      <item>
+        <title>Overview of Hadop</title>
+        <link>http://www.sunlab.org/bigdata/hadoop/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop/</guid>
+      </item>
+    
+      <item>
+        <title>Hadoop Basic</title>
+        <link>http://www.sunlab.org/bigdata/hadoop-basic/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-basic/</guid>
+      </item>
+    
+      <item>
+        <title>Apache HBase</title>
+        <link>http://www.sunlab.org/bigdata/hbase/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hbase/</guid>
+      </item>
+    
+      <item>
+        <title>Apache HBase</title>
+        <link>http://www.sunlab.org/bigdata/hadoop-hbase/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-hbase/</guid>
+      </item>
+    
+      <item>
+        <title>Hadoop Streaming</title>
+        <link>http://www.sunlab.org/bigdata/hadoop-streaming/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-streaming/</guid>
+      </item>
+    
+      <item>
+        <title>Apache Pig</title>
+        <link>http://www.sunlab.org/bigdata/hadoop-pig/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-pig/</guid>
+      </item>
+    
+      <item>
+        <title>Apache Pig</title>
+        <link>http://www.sunlab.org/bigdata/pig/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/pig/</guid>
+      </item>
+    
+      <item>
+        <title>Apache Hive</title>
+        <link>http://www.sunlab.org/bigdata/hadoop-hive/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-hive/</guid>
+      </item>
+    
+      <item>
+        <title>Overview of Spark</title>
+        <link>http://www.sunlab.org/bigdata/spark/</link>
+        <guid isPermaLink="true">http://www.sunlab.org/bigdata/spark/</guid>
+      </item>
+    
+  </channel>
+</rss>

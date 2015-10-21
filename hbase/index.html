@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gatech CSE big data bootcamp">
+    <title>Apache HBase - Bigdata Bootcamp</title>
+
+    <link rel="canonical" href="http://www.sunlab.org/bigdata/hbase/">
+    <!-- favicon -->
+    <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/bigdata/css/bigdata-bootcamp.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/bigdata/css/syntax.css">
+
+    <!-- TOC -->
+    <link rel="stylesheet" href="/bigdata/css/jquery.tocify.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/bigdata/">Bigdata Bootcamp</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+<!--                 <li>
+                    <a href="/bigdata/">Home</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/contact/">Contact us</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li> -->
+<!--                 <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li> -->
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="/bigdata/">Home</a>
+                </li>
+<!--                 <li>
+                    <a href="/bigdata/about/">About</a>
+                </li> -->
+                <li>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
+                </li>
+                <li>
+                    <a href="/bigdata/spark/">Spark</a>
+                </li>
+                <li><a href="/bigdata/environment/">Environment</a></li>
+                <li><a href="/bigdata/data/">Data</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/bigdata/image/background.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading" style="padding: 100px 0px 50px 0px">
+                    <h1>Apache HBase</h1>
+                    <hr class="small">
+                    <span class="subheading">Georgia Tech big data bootcamp training material</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <p>Apache HBase is a distributed column-oriented database built on top of the Hadoop file system. Use HBase when you need random, realtime read/write access to your Big Data. It provides a convenient interactive shell as well as a Java API.</p>
+
+<h1 id="interactive-shell">Interactive Shell</h1>
+
+<p>You can start the HBase interactive shell using <code class="prettyprint">hbase shell</code> command. If HBase is successfully installed in your system, you will get </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">HBase Shell; enter &#39;help&lt;RETURN&gt;&#39; for list of supported commands.
+Type &quot;exit&lt;RETURN&gt;&quot; to leave the HBase Shell
+Version 0.94.18, rb149f3f0d25c5cd2f195b39fe05d42507fdeabfc, Sat May 23 00:09:16 GMT 2015
+
+hbase(main):001:0&gt; 
+</code></pre></div>
+<p>To exit the interactive shell, type <code class="prettyprint">exit</code> or <code class="prettyprint">&lt;ctrl+c&gt;</code>.</p>
+
+<ol>
+<li><p>Checking the status of the cluster</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):001:0&gt; status
+(may have some debug messages)
+2 servers, 0 dead, 1.0000 average load
+</code></pre></div></li>
+<li><p>Creating a table</p></li>
+</ol>
+
+<p>The syntax to create a table in HBase shell is shown below.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">create &#39;table name&#39;, &#39;column family&#39;
+</code></pre></div>
+<p>Let&#39;s create a table called <code class="prettyprint">hospital</code> with two column families <code class="prettyprint">id</code> and <code class="prettyprint">value</code>.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):002:0&gt; create &#39;hospital&#39;, &#39;id&#39;, &#39;value&#39;
+</code></pre></div>
+<p>And it will give you the following output.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">0 row(s) in 1.1620 seconds
+</code></pre></div>
+<ol>
+<li>Listing table(s)</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):003:0&gt; list
+TABLE
+hospital
+1 row(s) in 0.0180 seconds
+</code></pre></div>
+<ol>
+<li>Describe and Alter the table</li>
+</ol>
+
+<p>The <code class="prettyprint">describe</code> command returns the description of the table. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):004:0&gt; describe &#39;hospital&#39;
+&#39;hospital&#39;, {NAME =&gt; &#39;id&#39;, DATA_BLOCK_ENCODING =&gt; &#39;NONE&#39;, BLOOMFILTER =&gt; &#39;NONE&#39;, REPLICATION_SCOPE =&gt; true                                                    
+  &#39;0&#39;, VERSIONS =&gt; &#39;3&#39;, COMPRESSION =&gt; &#39;NONE&#39;, MIN_VERSIONS =&gt; &#39;0&#39;, TTL =&gt; &#39;2147483647&#39;, KEEP_DELETED_                                                         
+ CELLS =&gt; &#39;false&#39;, BLOCKSIZE =&gt; &#39;65536&#39;, IN_MEMORY =&gt; &#39;false&#39;, ENCODE_ON_DISK =&gt; &#39;true&#39;, BLOCKCACHE =&gt;                                                         
+  &#39;true&#39;}, {NAME =&gt; &#39;value&#39;, DATA_BLOCK_ENCODING =&gt; &#39;NONE&#39;, BLOOMFILTER =&gt; &#39;NONE&#39;, REPLICATION_SCOPE =                                                         
+ &gt; &#39;0&#39;, VERSIONS =&gt; &#39;3&#39;, COMPRESSION =&gt; &#39;NONE&#39;, MIN_VERSIONS =&gt; &#39;0&#39;, TTL =&gt; &#39;2147483647&#39;, KEEP_DELETED                                                         
+ _CELLS =&gt; &#39;false&#39;, BLOCKSIZE =&gt; &#39;65536&#39;, IN_MEMORY =&gt; &#39;false&#39;, ENCODE_ON_DISK =&gt; &#39;true&#39;, BLOCKCACHE =                                                         
+ &gt; &#39;true&#39;}                                                                                                                                                     
+1 row(s) in 0.0350 seconds
+</code></pre></div>
+<p>This shows some basic information for each column family. For example, the <code class="prettyprint">id</code> column family has block size 65536 and keeps at most 3 versions for each cell (distinguish by timestamp).</p>
+
+<p>We can alter the setting by using <code class="prettyprint">alter</code>. But we need to first disable the table.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):005:0&gt; disable &#39;hospital&#39;
+hbase(main):006:0&gt; alter &#39;hospital&#39;, {NAME =&gt; &#39;id&#39;, VERSIONS =&gt; 5}
+</code></pre></div>
+<p>Don&#39;t forget to re-enable after changing the setting.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):007:0&gt; enable &#39;hospital&#39;
+
+</code></pre></div>
+<ol>
+<li>Putting data into the table</li>
+</ol>
+
+<p>Using <code class="prettyprint">put</code> command, you can insert rows into a table. Its syntax is as follows:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">put &#39;table name&#39;, &#39;row key&#39;, &#39;colfamily:colname&#39;, &#39;value&#39;
+</code></pre></div>
+<p>For example, let&#39;s put a record of a paitent-id.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):008:0&gt; put &#39;hospital&#39;, &#39;row1&#39;, &#39;id:patient&#39;, &#39;patient-id-1&#39;
+0 row(s) in 0.0140 seconds
+</code></pre></div>
+<p>This puts the value <code class="prettyprint">patient-id-1</code> in row <code class="prettyprint">row1</code> and column <code class="prettyprint">patient</code> (within the column family <code class="prettyprint">id</code>).
+Let&#39;s put some more records.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):009:0&gt; put &#39;hospital&#39;, &#39;row1&#39;, &#39;id:event&#39;, &#39;event-id-1&#39;
+hbase(main):010:0&gt; put &#39;hospital&#39;, &#39;row1&#39;, &#39;value:value&#39;, &#39;1&#39;
+hbase(main):011:0&gt; put &#39;hospital&#39;, &#39;row2&#39;, &#39;id:event&#39;, &#39;event-id-2&#39;
+</code></pre></div>
+<ol>
+<li>Reading data </li>
+</ol>
+
+<p>Using the <code class="prettyprint">scan</code> command, you can get the table data.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):012:0&gt; scan &#39;hospital&#39;
+ROW            COLUMN+CELL
+ row1          column=id:event, timestamp=1436623001980, value=event-id-1
+ row1          column=id:patient, timestamp=1436622532169, value=patient-id-1
+ row1          column=value:value, timestamp=1436622642925, value=1
+ row2          column=id:event, timestamp=1436623003694, value=event-id-2
+2 row(s) in 0.0130 seconds
+</code></pre></div>
+<p>If you only want to know the number of rows, you can use</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):013:0&gt; count &#39;hospital&#39;
+2 row(s) in 0.0130 seconds
+</code></pre></div>
+<p>Using the <code class="prettyprint">get</code> command, you can get a single row of data at a time.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):014:0&gt; get &#39;hospital&#39;, &#39;row1&#39; 
+COLUMN                                   CELL
+ id:event           timestamp=1436623001980, value=event-id-1
+ id:patient         timestamp=1436622532169, value=patient-id-1
+ value:value        timestamp=1436622642925, value=1
+3 row(s) in 0.0270 seconds
+</code></pre></div>
+<p>We can further specify the column that we want to retrieve.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):015:0&gt; get &#39;hospital&#39;, &#39;row1&#39;, {COLUMN =&gt; &#39;id:patient&#39;}
+ id:patient       timestamp=1436622532169, value=patient-id-1
+ 1 row(s) in 0.9730 seconds
+</code></pre></div>
+<ol>
+<li>Deleting data</li>
+</ol>
+
+<p>You can delete a specific cell in a table by the <code class="prettyprint">delete</code> command</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):016:0&gt; delete &#39;hospital&#39;, &#39;row1&#39;, &#39;id:event&#39;
+0 row(s) in 0.0100 seconds
+</code></pre></div>
+<p>To delete all the cells in a row, use the <code class="prettyprint">deleteall</code> command</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):017:0&gt; deleteall &#39;hospital&#39;, &#39;row1&#39;
+0 row(s) in 0.0110 seconds   
+</code></pre></div>
+<ol>
+<li>Dropping a Table</li>
+</ol>
+
+<p>Using the drop command, you can delete a table. Before dropping a table, you have to disable it.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):018:0&gt; disable &#39;hospital&#39;
+0 row(s) in 1.1000 seconds
+
+hbase(main):019:0&gt; drop &#39;hospital&#39;
+</code></pre></div>
+
+            <ul class="pager">
+                
+  
+  
+
+  
+  
+
+  
+  
+
+  
+    
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+<li class="previous">
+    <a href="/bigdata/hadoop-basic/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Basic</a>
+</li>
+
+                
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+<li class="next">
+    <a href="/bigdata/hadoop-hbase/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Apache HBase&rarr;</a>
+</li>
+
+
+            </ul>
+
+            <div class="clearfix"></div>
+
+            <hr>
+            <!-- disqus -->
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                /* * * CONFIGURATION VARIABLES * * */
+                var disqus_shortname = 'sunlabbigdata';
+                
+                /* * * DON'T EDIT BELOW THIS LINE * * */
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+        <div class="col-lg-2 col-md-1">
+            <div id="toc"></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/bigdata/feed.xml" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/jimeng" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Georgia Institute of Technology 2015. Theme by <a href="https://github.com/IronSummitMedia/startbootstrap-clean-blog-jekyll" target="_blank">Iron Summit Media</a>'s Jekyll version of <a href="http://startbootstrap.com/template-overviews/clean-blog/" target="_blank">Clean Blog</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/bigdata/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/bigdata/js/bootstrap.min.js "></script>
+
+<!-- TOC -->
+<script src="/bigdata/js/jquery-ui.min.js"></script>
+<script src="/bigdata/js/jquery.tocify.js"></script>
+
+<!-- ACE Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/bigdata/js/bigdata-bootcamp.js "></script>
+
+
+</body>
+
+</html>
