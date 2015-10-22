@@ -1,73 +1,22 @@
+---
+layout: null
+---
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Bigdata Bootcamp</title>
-    <description>Gatech CSE big data bootcamp</description>
-    <link>http://bigdata.manul.io/bigdata/</link>
-    <atom:link href="http://bigdata.manul.io/bigdata/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 21 Oct 2015 22:38:38 -0400</pubDate>
-    <lastBuildDate>Wed, 21 Oct 2015 22:38:38 -0400</lastBuildDate>
-    <generator>Jekyll v2.5.3</generator>
-    
+    <title>{{ site.title | xml_escape }}</title>
+    <description>{{ site.description | xml_escape }}</description>
+    <link>{{ site.url }}{{ site.baseurl }}/</link>
+    <atom:link href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml" />
+    <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
+    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
+    <generator>Jekyll v{{ jekyll.version }}</generator>
+    {% for page in site.navigation limit:10 %}
       <item>
-        <title>Big Data Bootcamp</title>
-        <link>http://bigdata.manul.io/bigdata/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/</guid>
+        <title>{{ page.title | xml_escape }}</title>
+        <link>{{ page.url | prepend: site.baseurl | prepend: site.url }}</link>
+        <guid isPermaLink="true">{{ page.url | prepend: site.baseurl | prepend: site.url }}</guid>
       </item>
-    
-      <item>
-        <title>Overview of Hadop</title>
-        <link>http://bigdata.manul.io/bigdata/hadoop/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/hadoop/</guid>
-      </item>
-    
-      <item>
-        <title>Hadoop Basic</title>
-        <link>http://bigdata.manul.io/bigdata/hadoop-basic/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/hadoop-basic/</guid>
-      </item>
-    
-      <item>
-        <title>Apache HBase</title>
-        <link>http://bigdata.manul.io/bigdata/hbase/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/hbase/</guid>
-      </item>
-    
-      <item>
-        <title>Apache HBase</title>
-        <link>http://bigdata.manul.io/bigdata/hadoop-hbase/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/hadoop-hbase/</guid>
-      </item>
-    
-      <item>
-        <title>Hadoop Streaming</title>
-        <link>http://bigdata.manul.io/bigdata/hadoop-streaming/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/hadoop-streaming/</guid>
-      </item>
-    
-      <item>
-        <title>Apache Pig</title>
-        <link>http://bigdata.manul.io/bigdata/hadoop-pig/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/hadoop-pig/</guid>
-      </item>
-    
-      <item>
-        <title>Apache Pig</title>
-        <link>http://bigdata.manul.io/bigdata/pig/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/pig/</guid>
-      </item>
-    
-      <item>
-        <title>Apache Hive</title>
-        <link>http://bigdata.manul.io/bigdata/hadoop-hive/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/hadoop-hive/</guid>
-      </item>
-    
-      <item>
-        <title>Overview of Spark</title>
-        <link>http://bigdata.manul.io/bigdata/spark/</link>
-        <guid isPermaLink="true">http://bigdata.manul.io/bigdata/spark/</guid>
-      </item>
-    
+    {% endfor %}
   </channel>
 </rss>

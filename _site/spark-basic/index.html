@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gatech CSE big data bootcamp">
+    <title>Spark Basic - Bigdata Bootcamp</title>
+
+    <link rel="canonical" href="http://bigdata.manul.io/spark-basic/">
+    <!-- favicon -->
+    <link rel="icon" type="image/png" sizes="100x60" href="/image/favicon.png">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/bigdata-bootcamp.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- TOC -->
+    <link rel="stylesheet" href="/css/jquery.tocify.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bigdata Bootcamp</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+<!--                 <li>
+                    <a href="/">Home</a>
+                </li> -->
+                <li>
+                    <a href="/contact/">Contact us</a>
+                </li>
+<!--                 <li>
+                    <a href="/spark/">Spark</a>
+                </li> -->
+<!--                 <li>
+                    <a href="/hadoop/">Hadoop</a>
+                </li> -->
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+<!--                 <li>
+                    <a href="/about/">About</a>
+                </li> -->
+                <li>
+                    <a href="/hadoop/">Hadoop</a>
+                </li>
+                <li>
+                    <a href="/spark/">Spark</a>
+                </li>
+                <li><a href="/environment/">Environment</a></li>
+                <li><a href="/data/">Data</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/image/background.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading" style="padding: 100px 0px 50px 0px">
+                    <h1>Spark Basic</h1>
+                    <hr class="small">
+                    <span class="subheading">Georgia Tech big data bootcamp training material</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <h1 id="spark-interactive-shell">Spark Interactive Shell</h1>
+
+<p>Start the Spark interactive shell by typing the command in the Spark directory.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">bin</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">shell</span>
+</code></pre></div>
+<p>You may find the logging statements that get printed in the shell distracting. You can control the verbosity of the logging. To do this, you can create a file in the conf directory called <code class="prettyprint">log4j.properties</code>. The Spark developers already include a template for this file called <code class="prettyprint">log4j.properties.template</code>. To make the logging less verbose, make a copy of <code class="prettyprint">conf/log4j.properties.template</code> called <code class="prettyprint">conf/log4j.properties</code> and find the following line:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">log4j.rootCategory=INFO, console
+</code></pre></div>
+<p>Replace <code class="prettyprint">INFO</code> with <code class="prettyprint">WARN</code> so that only WARN messages and above are shown.</p>
+
+<p>A driver program can access Spark through a <code class="prettyprint">SparkContext</code> object, which represents a connection to a computing cluster. In the interactive shell, <code class="prettyprint">SparkContext</code> is already created for you as variable <code class="prettyprint">sc</code>. Try printing out <code class="prettyprint">sc</code> to see its type.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">sc</span>
+<span class="n">res0</span><span class="k">:</span> <span class="kt">org.apache.spark.SparkContext</span> <span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">spark</span><span class="o">.</span><span class="nc">SparkContext</span><span class="k">@</span><span class="mf">87860d</span><span class="n">e</span>
+</code></pre></div>
+<h1 id="resilient-distributed-datasets-(rdds)">Resilient Distributed Datasets (RDDs)</h1>
+
+<p>RDD is Spark&#39;s core abstraction for working with data. An RDD is simply a fault-tolerant distributed collection of elements. In Spark, all work is expressed as either creating new RDDs, transforming existing RDDs, or calling operations on RDDs to compute a result. There are two ways to create RDDs: by distributing a collection of objects (e.g., a list or set), or by referencing a dataset in an external storage system, such as a shared filesystem, HDFS, HBase, or any data source offering a Hadoop InputFormat.</p>
+
+<h2 id="parallelized-collections">Parallelized Collections</h2>
+
+<p>The simplest way to create an RDD is to take an existing collection (a Scala Seq) in your program and pass it to SparkContext&#39;s <code class="prettyprint">parallelize()</code> method.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">data</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+<span class="n">data</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">distData</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="o">(</span><span class="n">data</span><span class="o">)</span>
+<span class="n">distData</span><span class="k">:</span> <span class="kt">org.apache.spark.rdd.RDD</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ParallelCollectionRDD</span><span class="o">[</span><span class="err">2</span><span class="o">]</span> <span class="n">at</span> <span class="n">parallelize</span> <span class="n">at</span> <span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">23</span>
+</code></pre></div>
+<p>Once created, the distributed dataset (distData) can be operated on in parallel. For example, we can add up the elements by calling <code class="prettyprint">distData.reduce((a, b) =&gt; a + b)</code>. You will see more operations on RDD later on.
+This approach is very useful when you are learning Spark. However, this is not widely used in practice since it requires the entire dataset to be in memory on one machine.</p>
+
+<h2 id="external-datasets">External Datasets</h2>
+
+<p>A more common way to create RDDs is to load data from external storage. Below we show how to load data from your local file system.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">lines</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"case.csv"</span><span class="o">)</span>
+<span class="n">lines</span><span class="k">:</span> <span class="kt">org.apache.spark.rdd.RDD</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">README</span><span class="o">.</span><span class="n">md</span> <span class="nc">MapPartitionsRDD</span><span class="o">[</span><span class="err">1</span><span class="o">]</span> <span class="n">at</span> <span class="n">textFile</span> <span class="n">at</span> <span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">21</span>
+</code></pre></div>
+<h1 id="rdd-operations">RDD Operations</h1>
+
+<p>RDDs offer two types of operations: <strong>transformation</strong> and <strong>actions</strong>. 
+Transformations are operations on RDDs that return a new RDD, such as <code class="prettyprint">map()</code> and <code class="prettyprint">filter()</code>.
+Actions are operations that return a result to the driver program or write it to storage, such as <code class="prettyprint">first()</code> and <code class="prettyprint">count()</code>.
+Spark treats transformations and actions very differently, so understanding which type of operation you are performing is very important.
+You can check whether a function is a transformation or an action by looking at its return type: transformations return RDDs, whereas actions return some other data type.</p>
+
+<p>All transformations in Spark are lazy, in that they do not compute the results right away. Instead, they just remember the operations applied to some base dataset (e.g. an Array or a file). The transformations are only computed when an action requires a result to be returned to the driver program.
+Therefore, the above command of reading in a file has not actually been executed yet. 
+We can force the evaluation of RDDs by calling any actions.</p>
+
+<p>Let&#39;s go through some common RDD operations by playing with our dataset.
+Recall that in the file <strong>case.csv</strong>, each line is a 4-tuple <code class="prettyprint">patient-id, event-id, timestamp, value</code>.</p>
+
+<ol>
+<li>Count the number of lines in the input file</li>
+</ol>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">count</span><span class="o">()</span>
+<span class="n">res1</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">14046</span>
+</code></pre></div>
+<ol>
+<li>Let us take a peek at the data. The <code class="prettyprint">take(k)</code> will return the first k elements in the RDD. Spark also provides <code class="prettyprint">collect()</code> which brings all the elements in the RDD back to the driver program. Note that it is only used when the data is small.</li>
+</ol>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">take</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+</code></pre></div><div class="highlight"><pre><code class="language-" data-lang="">res2: Array[String] = Array(00013D2EFD8E45D1,DIAG78820,1166,1.0, 00013D2EFD8E45D1,DIAGV4501,1166,1.0, 00013D2EFD8E45D1,heartfailure,1166,1.0, 00013D2EFD8E45D1,DIAG2720,1166,1.0, 00013D2EFD8E45D1,DIAG4019,1166,1.0)  
+</code></pre></div>
+<p>We got the first 5 records in this RDD. However, this is hard to read. We can make it more readable by traversing the array to print each record on its own line. </p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">take</span><span class="o">(</span><span class="mi">5</span><span class="o">).</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+</code></pre></div><div class="highlight"><pre><code class="language-" data-lang="">00013D2EFD8E45D1,DIAG78820,1166,1.0
+00013D2EFD8E45D1,DIAGV4501,1166,1.0
+00013D2EFD8E45D1,heartfailure,1166,1.0
+00013D2EFD8E45D1,DIAG2720,1166,1.0
+00013D2EFD8E45D1,DIAG4019,1166,1.0
+</code></pre></div>
+<p>Note that during the above 3 commands, the RDD <code class="prettyprint">lines</code> has been computed (i.e. read in from file) 3 times. We can prevent this by calling <code class="prettyprint">lines.cache()</code>, which will cache the RDD in memory.</p>
+
+<ol>
+<li><p>We can count the number of records for a particular patients by using the <code class="prettyprint">filter</code> function.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="n">line</span> <span class="k">=&gt;</span> <span class="n">line</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span><span class="s">"00013D2EFD8E45D1"</span><span class="o">)).</span><span class="n">count</span><span class="o">()</span>
+<span class="n">res4</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">200</span>
+</code></pre></div></li>
+<li><p>We can also calculate the number of distinct patients.
+In order to do this, we first extract the patient ID from each line.
+We use the <code class="prettyprint">map()</code> function, which transforms each item in the RDD into a new item by performing the provided function. In this example, we transform each line into the corresponding patient ID by extracting only the first column. We then eliminate duplicate IDs by the <code class="prettyprint">distinct()</code> function.</p></li>
+</ol>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">line</span> <span class="k">=&gt;</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="o">(</span><span class="s">","</span><span class="o">)(</span><span class="mi">0</span><span class="o">)).</span><span class="n">distinct</span><span class="o">().</span><span class="n">count</span><span class="o">()</span>
+<span class="n">res5</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">100</span>
+</code></pre></div>
+<ol>
+<li>Suppose now we want to calculate the total payment by each patients. A payment record in the dataset is in the form of <code class="prettyprint">(patient-id, PAYMENT, timestamp, value)</code>.
+<code class="prettyprint">scala
+scala&gt; val payments = lines.filter(line =&gt; line.contains(&quot;PAYMENT&quot;)).
+                             map{ x =&gt;
+                               val s = x.split(&quot;,&quot;)
+                               (s(0), s(3).toFloat)
+                             }.reduceByKey(_+_)
+</code></li>
+</ol>
+
+<p>The RDD returned by <code class="prettyprint">filter</code> contains those records associated with payment. Each item is then transformed to a key-value pair <code class="prettyprint">(patient-id, amount)</code>. Because each patient can have multiple payments, we need to use <code class="prettyprint">reduceByKey</code> to sum up the payments for each patient.</p>
+
+<p>We can then show the top-3 patients with the highest payment.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">payments</span><span class="o">.</span><span class="n">sortBy</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_2</span><span class="o">,</span> <span class="kc">false</span><span class="o">).</span><span class="n">take</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+</code></pre></div><div class="highlight"><pre><code class="language-" data-lang="">(0085B4F55FFA358D,139880.0)
+(019E4729585EF3DD,108980.0)
+(01AC552BE839AB2B,108530.0)
+</code></pre></div>
+<ol>
+<li>For RDD consists of numeric values, Spark provides some useful statistical primitives.</li>
+</ol>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">payment_values</span> <span class="k">=</span> <span class="n">payments</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">payment</span> <span class="k">=&gt;</span> <span class="n">payment</span><span class="o">.</span><span class="n">_2</span><span class="o">).</span><span class="n">cache</span><span class="o">()</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">max</span><span class="o">()</span>
+<span class="n">res6</span><span class="k">:</span> <span class="kt">Float</span> <span class="o">=</span> <span class="mf">139880.0</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">min</span><span class="o">()</span>
+<span class="n">res7</span><span class="k">:</span> <span class="kt">Float</span> <span class="o">=</span> <span class="mf">3910.0</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">sum</span><span class="o">()</span>
+<span class="n">res8</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">2842480.0</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">mean</span><span class="o">()</span>
+<span class="n">res9</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">28424.8</span>  
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">stdev</span><span class="o">()</span>
+<span class="n">res10</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">26337.091771112468</span>
+</code></pre></div>
+<ol>
+<li>RDDs support many of the operations of mathematical sets, such as <code class="prettyprint">union</code> and <code class="prettyprint">intersection</code>, even when the RDDs themselves are not properly sets. For example, we can combine the two files by the <code class="prettyprint">union</code> fucntion.</li>
+</ol>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">lines2</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"control.csv"</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">union</span><span class="o">(</span><span class="n">lines2</span><span class="o">).</span><span class="n">count</span><span class="o">()</span> 
+<span class="n">res11</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">31144</span> 
+
+</code></pre></div>
+<p>For the complete list of RDD operations, please see the 
+<a href="https://spark.apache.org/docs/latest/programming-guide.html#rdd-operations">Spark Programming Guide</a>.</p>
+
+
+            <ul class="pager">
+                
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+                
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+
+            </ul>
+
+            <div class="clearfix"></div>
+
+            <hr>
+            <!-- disqus -->
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                /* * * CONFIGURATION VARIABLES * * */
+                var disqus_shortname = 'sunlabbigdata';
+                
+                /* * * DON'T EDIT BELOW THIS LINE * * */
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+        <div class="col-lg-2 col-md-1">
+            <div id="toc"></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/jimeng" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/cmanul" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Georgia Institute of Technology 2015. Theme by <a href="https://github.com/IronSummitMedia/startbootstrap-clean-blog-jekyll" target="_blank">Iron Summit Media</a>'s Jekyll version of <a href="http://startbootstrap.com/template-overviews/clean-blog/" target="_blank">Clean Blog</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- TOC -->
+<script src="/js/jquery-ui.min.js"></script>
+<script src="/js/jquery.tocify.js"></script>
+
+<!-- ACE Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/bigdata-bootcamp.js "></script>
+
+
+</body>
+
+</html>
