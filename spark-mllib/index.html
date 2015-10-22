@@ -9,7 +9,7 @@
     <meta name="description" content="Gatech CSE big data bootcamp">
     <title>Spark MLlib - Bigdata Bootcamp</title>
 
-    <link rel="canonical" href="http://www.sunlab.org/bigdata/spark-mllib/">
+    <link rel="canonical" href="http://bigdata.manul.io/bigdata/spark-mllib/">
     <!-- favicon -->
     <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
 
@@ -127,31 +127,31 @@ If a vector contains only a few non-zero entries, we can then more efficiently r
 For example, a vector <code class="prettyprint">(1.0, 0.0, 3.0)</code> can be represented in dense format as <code class="prettyprint">[1.0, 0.0, 3.0]</code> or in sparse format as <code class="prettyprint">(3, [0, 1.0], [2, 3.0])</code>, where 3 is the size of the vector.</p>
 
 <p>The base class of a vectors is <code class="prettyprint">Vector</code>, and there are two implementations: <code class="prettyprint">DenseVector</code> and <code class="prettyprint">SparseVector</code>. We recommend using the factory methods implemented in <code class="prettyprint">Vectors</code> to create vectors.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; import org.apache.spark.mllib.linalg.{Vector, Vectors}
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">org.apache.spark.mllib.linalg.</span><span class="o">{</span><span class="nc">Vector</span><span class="o">,</span> <span class="nc">Vectors</span><span class="o">}</span>
 
-// Create a dense vector (1.0, 0.0, 3.0).
-scala&gt; val dv = Vectors.dense(1.0, 0.0, 3.0)
+<span class="c1">// Create a dense vector (1.0, 0.0, 3.0).
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">dv</span> <span class="k">=</span> <span class="nc">Vectors</span><span class="o">.</span><span class="n">dense</span><span class="o">(</span><span class="mf">1.0</span><span class="o">,</span> <span class="mf">0.0</span><span class="o">,</span> <span class="mf">3.0</span><span class="o">)</span>
 
-// Create a sparse vector (1.0, 0.0, 3.0) by specifying its nonzero entries.
-scala&gt; val sv = Vectors.sparse(3, Seq((0, 1.0), (2, 3.0)))
+<span class="c1">// Create a sparse vector (1.0, 0.0, 3.0) by specifying its nonzero entries.
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">sv</span> <span class="k">=</span> <span class="nc">Vectors</span><span class="o">.</span><span class="n">sparse</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">((</span><span class="mi">0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">),</span> <span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mf">3.0</span><span class="o">)))</span>
 </code></pre></div>
 <h2 id="labeled-point">Labeled Point</h2>
 
 <p>A labeled point is a vector, either dense or sparse, associated with a label/response. In MLlib, labeled points are used in supervised learning algorithms.
 For example, in binary classification, a label should be either 0 or 1. For multiclass classification, labels should be class indices starting from zero: 0, 1, 2, .... For regression, a label is a real-valued number.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; import org.apache.spark.mllib.linalg.Vectors
-scala&gt; import org.apache.spark.mllib.regression.LabeledPoint
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">org.apache.spark.mllib.linalg.Vectors</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">org.apache.spark.mllib.regression.LabeledPoint</span>
 
-// Create a labeled point with label 1 and a dense feature vector.
-scala&gt; val labeled1 = LabeledPoint(1, Vectors.dense(1.0, 0.0, 3.0))
+<span class="c1">// Create a labeled point with label 1 and a dense feature vector.
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">labeled1</span> <span class="k">=</span> <span class="nc">LabeledPoint</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">Vectors</span><span class="o">.</span><span class="n">dense</span><span class="o">(</span><span class="mf">1.0</span><span class="o">,</span> <span class="mf">0.0</span><span class="o">,</span> <span class="mf">3.0</span><span class="o">))</span>
 
-// Create a labeled point with label 0 and a sparse feature vector.
-scala&gt; val labeled0 = LabeledPoint(0, Vectors.sparse(3, Seq((0, 1.0), (2, 3.0))))
+<span class="c1">// Create a labeled point with label 0 and a sparse feature vector.
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">labeled0</span> <span class="k">=</span> <span class="nc">LabeledPoint</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="nc">Vectors</span><span class="o">.</span><span class="n">sparse</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">((</span><span class="mi">0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">),</span> <span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mf">3.0</span><span class="o">))))</span>
 </code></pre></div>
 <h1 id="pre-processing-data">Pre-processing Data</h1>
 
 <p>To apply machine learning algorithms provided in MLlib, we need to transform our data into <code class="prettyprint">RDD[LabeledPoint]</code>. Recall that our data file is in the following form.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">00013D2EFD8E45D1,DIAG78820,1166,1.0
+<div class="highlight"><pre><code class="language-" data-lang="">00013D2EFD8E45D1,DIAG78820,1166,1.0
 00013D2EFD8E45D1,DIAGV4501,1166,1.0
 00013D2EFD8E45D1,heartfailure,1166,1.0
 00013D2EFD8E45D1,DIAG2720,1166,1.0
@@ -168,48 +168,48 @@ Note that each patient can have multiple records with the same <code class="pret
 <li>Read in the data. The file <strong>case.csv</strong> consists of only positive examples, and the file <strong>control.csv</strong> consists of only negative examples. The function <code class="prettyprint">union</code> is used to combine the two files. Since the data will be used more than once, we use <code class="prettyprint">cache()</code> to prevent reading in the file multiple times.</li>
 </ol>
 <div class="highlight"><pre><code class="language-scala" data-lang="scala">
-// read in positive examples (patients with heart failure)
-scala&gt; val rawData1 = sc.textFile(&quot;case.csv&quot;)
+<span class="c1">// read in positive examples (patients with heart failure)
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">rawData1</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"case.csv"</span><span class="o">)</span>
 
-// read in negative examples (patients without heart failure)
-scala&gt; val rawData2 = sc.textFile(&quot;control.csv&quot;)
+<span class="c1">// read in negative examples (patients without heart failure)
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">rawData2</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"control.csv"</span><span class="o">)</span>
 
-// combine the two files
-scala&gt; val rawData = rawData1.union(rawData2).cache()
+<span class="c1">// combine the two files
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">rawData</span> <span class="k">=</span> <span class="n">rawData1</span><span class="o">.</span><span class="n">union</span><span class="o">(</span><span class="n">rawData2</span><span class="o">).</span><span class="n">cache</span><span class="o">()</span>
 </code></pre></div>
 <ol>
 <li>Extract the set of distinct <code class="prettyprint">event-id</code>&#39;s, and assign each of them a consecutive integer value starting from 0. The first step is to extract all <code class="prettyprint">event-id</code>&#39;s, and then use <code class="prettyprint">distinct()</code> to eliminate duplicate elements. Then, we append each element in the set a consecutive integer index by calling <code class="prettyprint">zipWithIndex()</code>. Finally, in order to be used in the next step, it is convenient to transform this set (consists of pairs) into a Scala Map.</li>
 </ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">                                // extract the second field in each line
-scala&gt; val featureMap = rawData.map( x =&gt; x.split(&quot;,&quot;)(1) ).
-                                // eliminate duplicate event-id 
-                                distinct().
-                                // append each event-id a consecutive integer index
-                                // e.g. (DIAG78820, 0), (DIAGV4501, 1), ...
-                                zipWithIndex().
-                                // make it into a Scala Map(DIAG78820 -&gt; 0, DIAGV4501 -&gt; 1, ...)
-                                collectAsMap()
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">                                <span class="c1">// extract the second field in each line
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">featureMap</span> <span class="k">=</span> <span class="n">rawData</span><span class="o">.</span><span class="n">map</span><span class="o">(</span> <span class="n">x</span> <span class="k">=&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="o">(</span><span class="s">","</span><span class="o">)(</span><span class="mi">1</span><span class="o">)</span> <span class="o">).</span>
+                                <span class="c1">// eliminate duplicate event-id 
+</span>                                <span class="n">distinct</span><span class="o">().</span>
+                                <span class="c1">// append each event-id a consecutive integer index
+</span>                                <span class="c1">// e.g. (DIAG78820, 0), (DIAGV4501, 1), ...
+</span>                                <span class="n">zipWithIndex</span><span class="o">().</span>
+                                <span class="c1">// make it into a Scala Map(DIAG78820 -&gt; 0, DIAGV4501 -&gt; 1, ...)
+</span>                                <span class="n">collectAsMap</span><span class="o">()</span>
 
-// number of distinct event-id&#39;s = length of the feature vector
-scala&gt; val numOfFeatures = featureMap.size
+<span class="c1">// number of distinct event-id's = length of the feature vector
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">numOfFeatures</span> <span class="k">=</span> <span class="n">featureMap</span><span class="o">.</span><span class="n">size</span>
 </code></pre></div>
 <ol>
 <li>Next, we transform each line <code class="prettyprint">(patient-id, event-id, timestamp, value)</code> into a key-value pair <code class="prettyprint">((patient-id, feature), value)</code>, where <code class="prettyprint">feature</code> is an integer mapped from the original <code class="prettyprint">event-id</code>. Note that the key in this key-value pair is itself a pair.
 Then, we apply <code class="prettyprint">reduceByKey</code> to sum up <code class="prettyprint">value</code>&#39;s for each <code class="prettyprint">(user-id, feature)</code> key. </li>
 </ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val features = pos.map{ x =&gt;
-                        val s = x.split(&quot;,&quot;)
-                        // s(0): parent-id
-                        // s(1): event-id
-                        // s(2): timestamp
-                        // s(3): value
-
-                        // featureMap: event-id (String) =&gt; feature (Long)
-                        // toInt: convert Long to Int
-                        // toDouble: convert String to Double
-                        ((s(0), featureMap(s(1)).toInt), s(3).toDouble)
-                      }.
-                      reduceByKey(_+_)
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">features</span> <span class="k">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">map</span><span class="o">{</span> <span class="n">x</span> <span class="k">=&gt;</span>
+                        <span class="k">val</span> <span class="n">s</span> <span class="k">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="o">(</span><span class="s">","</span><span class="o">)</span>
+                        <span class="c1">// s(0): parent-id
+</span>                        <span class="c1">// s(1): event-id
+</span>                        <span class="c1">// s(2): timestamp
+</span>                        <span class="c1">// s(3): value
+</span>
+                        <span class="c1">// featureMap: event-id (String) =&gt; feature (Long)
+</span>                        <span class="c1">// toInt: convert Long to Int
+</span>                        <span class="c1">// toDouble: convert String to Double
+</span>                        <span class="o">((</span><span class="n">s</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span> <span class="n">featureMap</span><span class="o">(</span><span class="n">s</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="n">toInt</span><span class="o">),</span> <span class="n">s</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="n">toDouble</span><span class="o">)</span>
+                      <span class="o">}.</span>
+                      <span class="n">reduceByKey</span><span class="o">(</span><span class="k">_</span><span class="o">+</span><span class="k">_</span><span class="o">)</span>
 
 </code></pre></div>
 <ol>
@@ -217,39 +217,39 @@ Then, we apply <code class="prettyprint">reduceByKey</code> to sum up <code clas
 </ol>
 
 <p>To construct a <code class="prettyprint">LabeledPont</code>, we use <code class="prettyprint">find()</code> to find the value corresponds to <code class="prettyprint">heartfailure</code> as the label, and then remove this pair from the feature vector.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val labelID = featureMap(&quot;heartfailure&quot;)
-scala&gt; val data = features.map{ case ((patient, feature), value) =&gt;
-                    (patient, (feature, value))
-                  }.
-                  groupByKey().
-                  map{ x =&gt;
-                    val label = x._2.find(_._1 == labelID).get()._2
-                    val featureNoLabel = x._2.toSeq.filter(_._1 != labelID)
-                    LabeledPoint(label, Vectors.sparse(numOfFeatures, featureNoLabel))
-                  }
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">labelID</span> <span class="k">=</span> <span class="n">featureMap</span><span class="o">(</span><span class="s">"heartfailure"</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">data</span> <span class="k">=</span> <span class="n">features</span><span class="o">.</span><span class="n">map</span><span class="o">{</span> <span class="k">case</span> <span class="o">((</span><span class="n">patient</span><span class="o">,</span> <span class="n">feature</span><span class="o">),</span> <span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span>
+                    <span class="o">(</span><span class="n">patient</span><span class="o">,</span> <span class="o">(</span><span class="n">feature</span><span class="o">,</span> <span class="n">value</span><span class="o">))</span>
+                  <span class="o">}.</span>
+                  <span class="n">groupByKey</span><span class="o">().</span>
+                  <span class="n">map</span><span class="o">{</span> <span class="n">x</span> <span class="k">=&gt;</span>
+                    <span class="k">val</span> <span class="n">label</span> <span class="k">=</span> <span class="n">x</span><span class="o">.</span><span class="n">_2</span><span class="o">.</span><span class="n">find</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_1</span> <span class="o">==</span> <span class="n">labelID</span><span class="o">).</span><span class="n">get</span><span class="o">().</span><span class="n">_2</span>
+                    <span class="k">val</span> <span class="n">featureNoLabel</span> <span class="k">=</span> <span class="n">x</span><span class="o">.</span><span class="n">_2</span><span class="o">.</span><span class="n">toSeq</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_1</span> <span class="o">!=</span> <span class="n">labelID</span><span class="o">)</span>
+                    <span class="nc">LabeledPoint</span><span class="o">(</span><span class="n">label</span><span class="o">,</span> <span class="nc">Vectors</span><span class="o">.</span><span class="n">sparse</span><span class="o">(</span><span class="n">numOfFeatures</span><span class="o">,</span> <span class="n">featureNoLabel</span><span class="o">))</span>
+                  <span class="o">}</span>
 </code></pre></div>
 <h1 id="basic-statistics">Basic Statistics</h1>
 
 <p>Spark provides various functions to compute summary statistics that are useful when doing machine learning and data analysis tasks.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; import org.apache.spark.mllib.stat.{MultivariateStatisticalSummary, Statistics}
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">org.apache.spark.mllib.stat.</span><span class="o">{</span><span class="nc">MultivariateStatisticalSummary</span><span class="o">,</span> <span class="nc">Statistics</span><span class="o">}</span>
 
-// colStats() calculates the column statistics for RDD[Vector]
+<span class="c1">// colStats() calculates the column statistics for RDD[Vector]
 // we need to extract only the features part of each LabeledPoint:
 //   RDD[LabeledPoint] =&gt; RDD[Vector] 
-scala&gt; val summary = Statistics.colStats(data.map(_.features))
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">summary</span> <span class="k">=</span> <span class="nc">Statistics</span><span class="o">.</span><span class="n">colStats</span><span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">features</span><span class="o">))</span>
 
-// summary.mean: a dense vector containing the mean value for each feature (column)
+<span class="c1">// summary.mean: a dense vector containing the mean value for each feature (column)
 // the mean of the first feature is 0.1
-scala&gt; summary.mean(0)
-res: Double = 0.1  
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="n">summary</span><span class="o">.</span><span class="n">mean</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="n">res</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">0.1</span>  
 
-// the variance of the first feature
-scala&gt; summary.variance(0)
-res: Double = 3.0
+<span class="c1">// the variance of the first feature
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="n">summary</span><span class="o">.</span><span class="n">variance</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="n">res</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">3.0</span>
 
-// the number of non-zero values of the first feature
-scala&gt; summary.numNonzeros(0)
-res: Double = 1.0
+<span class="c1">// the number of non-zero values of the first feature
+</span><span class="n">scala</span><span class="o">&gt;</span> <span class="n">summary</span><span class="o">.</span><span class="n">numNonzeros</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="n">res</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">1.0</span>
 </code></pre></div>
 <h1 id="classification">Classification</h1>
 
@@ -258,21 +258,21 @@ res: Double = 1.0
 <ol>
 <li>Split data into training (60%) and test (40%) set.</li>
 </ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val splits = data.randomSplit(Array(0.6, 0.4), seed = 0L)
-scala&gt; val train = splits(0).cache()
-scala&gt; val test = splits(1).cache()
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">splits</span> <span class="k">=</span> <span class="n">data</span><span class="o">.</span><span class="n">randomSplit</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="mf">0.6</span><span class="o">,</span> <span class="mf">0.4</span><span class="o">),</span> <span class="n">seed</span> <span class="k">=</span> <span class="mi">0L</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">train</span> <span class="k">=</span> <span class="n">splits</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="n">cache</span><span class="o">()</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">test</span> <span class="k">=</span> <span class="n">splits</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">cache</span><span class="o">()</span>
 </code></pre></div>
 <ol>
 <li>Train a linear SVM model using Stochastic Gradient Descent (SGD) on the training set</li>
 </ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; import org.apache.spark.mllib.classification.SVMWithSGD
-scala&gt; val numIterations = 100
-scala&gt; val model = SVMWithSGD.train(training, numIterations)
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">org.apache.spark.mllib.classification.SVMWithSGD</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">numIterations</span> <span class="k">=</span> <span class="mi">100</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">SVMWithSGD</span><span class="o">.</span><span class="n">train</span><span class="o">(</span><span class="n">training</span><span class="o">,</span> <span class="n">numIterations</span><span class="o">)</span>
 </code></pre></div>
 <p>3 For each example in the testing set, output a (prediction, label) pair, and calculate the prediction accuracy.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val predictionAndLabel = test.map(x =&gt; (model.predict(x.features), x.label))
-scala&gt; val accuracy = predictionAndLabel.filter(x =&gt; x._1 == x._2).count / test.count.toFloat
-scala&gt; println(&quot;testing Accuracy  = &quot; + accuracy)
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">predictionAndLabel</span> <span class="k">=</span> <span class="n">test</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="o">(</span><span class="n">x</span><span class="o">.</span><span class="n">features</span><span class="o">),</span> <span class="n">x</span><span class="o">.</span><span class="n">label</span><span class="o">))</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">accuracy</span> <span class="k">=</span> <span class="n">predictionAndLabel</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">_1</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">_2</span><span class="o">).</span><span class="n">count</span> <span class="o">/</span> <span class="n">test</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">toFloat</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"testing Accuracy  = "</span> <span class="o">+</span> <span class="n">accuracy</span><span class="o">)</span>
 </code></pre></div>
 <h1 id="regression">Regression</h1>
 
@@ -281,37 +281,37 @@ scala&gt; println(&quot;testing Accuracy  = &quot; + accuracy)
 <ol>
 <li>We need to construct a new dataset for this regression problem. The only difference is that we change the label from <code class="prettyprint">heartfailure</code> (binary) to <code class="prettyprint">PAYMENT</code> (real value).</li>
 </ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val labelID = featureMap(&quot;PAYMENT&quot;)
-scala&gt; val data = features.map{ case ((patient, feature), value) =&gt;
-                    (patient, (feature, value))
-                  }.
-                  groupByKey().
-                  map{ x =&gt;
-                    val label = x._2.find(_._1 == labelID).get._2
-                    val featureNoLabel = x._2.toSeq.filter(_._1 != labelID)
-                    LabeledPoint(label, Vectors.sparse(numOfFeatures, featureNoLabel))
-                  }
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">labelID</span> <span class="k">=</span> <span class="n">featureMap</span><span class="o">(</span><span class="s">"PAYMENT"</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">data</span> <span class="k">=</span> <span class="n">features</span><span class="o">.</span><span class="n">map</span><span class="o">{</span> <span class="k">case</span> <span class="o">((</span><span class="n">patient</span><span class="o">,</span> <span class="n">feature</span><span class="o">),</span> <span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span>
+                    <span class="o">(</span><span class="n">patient</span><span class="o">,</span> <span class="o">(</span><span class="n">feature</span><span class="o">,</span> <span class="n">value</span><span class="o">))</span>
+                  <span class="o">}.</span>
+                  <span class="n">groupByKey</span><span class="o">().</span>
+                  <span class="n">map</span><span class="o">{</span> <span class="n">x</span> <span class="k">=&gt;</span>
+                    <span class="k">val</span> <span class="n">label</span> <span class="k">=</span> <span class="n">x</span><span class="o">.</span><span class="n">_2</span><span class="o">.</span><span class="n">find</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_1</span> <span class="o">==</span> <span class="n">labelID</span><span class="o">).</span><span class="n">get</span><span class="o">.</span><span class="n">_2</span>
+                    <span class="k">val</span> <span class="n">featureNoLabel</span> <span class="k">=</span> <span class="n">x</span><span class="o">.</span><span class="n">_2</span><span class="o">.</span><span class="n">toSeq</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_1</span> <span class="o">!=</span> <span class="n">labelID</span><span class="o">)</span>
+                    <span class="nc">LabeledPoint</span><span class="o">(</span><span class="n">label</span><span class="o">,</span> <span class="nc">Vectors</span><span class="o">.</span><span class="n">sparse</span><span class="o">(</span><span class="n">numOfFeatures</span><span class="o">,</span> <span class="n">featureNoLabel</span><span class="o">))</span>
+                  <span class="o">}</span>
 </code></pre></div>
 <ol>
 <li>Split data into training (60%) and test (40%) set.</li>
 </ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val splits = data.randomSplit(Array(0.6, 0.4), seed = 0L)
-scala&gt; val train = splits(0).cache()
-scala&gt; val test = splits(1).cache()
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">splits</span> <span class="k">=</span> <span class="n">data</span><span class="o">.</span><span class="n">randomSplit</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="mf">0.6</span><span class="o">,</span> <span class="mf">0.4</span><span class="o">),</span> <span class="n">seed</span> <span class="k">=</span> <span class="mi">0L</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">train</span> <span class="k">=</span> <span class="n">splits</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="n">cache</span><span class="o">()</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">test</span> <span class="k">=</span> <span class="n">splits</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">cache</span><span class="o">()</span>
 </code></pre></div>
 <ol>
 <li>Train a linear regression model using SGD on the training set</li>
 </ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">import org.apache.spark.mllib.regression.LinearRegressionWithSGD
-scala&gt; val numIterations = 100
-scala&gt; val model = LinearRegressionWithSGD.train(training, numIterations)
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">import</span> <span class="nn">org.apache.spark.mllib.regression.LinearRegressionWithSGD</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">numIterations</span> <span class="k">=</span> <span class="mi">100</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">LinearRegressionWithSGD</span><span class="o">.</span><span class="n">train</span><span class="o">(</span><span class="n">training</span><span class="o">,</span> <span class="n">numIterations</span><span class="o">)</span>
 </code></pre></div>
 <ol>
 <li>For each example in the testing set, output a (prediction, label) pair, and calculate the mean squared error.</li>
 </ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val predictionAndLabel = test.map(x =&gt; (model.predict(x.features), x.label))
-scala&gt; val MSE = predictionAndLabel.map{case(p, l) =&gt; math.pow((p - .), 2)}.mean()
-scala&gt; println(&quot;testing Mean Squared Error = &quot; + MSE)
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">predictionAndLabel</span> <span class="k">=</span> <span class="n">test</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="o">(</span><span class="n">x</span><span class="o">.</span><span class="n">features</span><span class="o">),</span> <span class="n">x</span><span class="o">.</span><span class="n">label</span><span class="o">))</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="nc">MSE</span> <span class="k">=</span> <span class="n">predictionAndLabel</span><span class="o">.</span><span class="n">map</span><span class="o">{</span><span class="k">case</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="o">((</span><span class="n">p</span> <span class="o">-</span> <span class="o">.),</span> <span class="mi">2</span><span class="o">)}.</span><span class="n">mean</span><span class="o">()</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"testing Mean Squared Error = "</span> <span class="o">+</span> <span class="nc">MSE</span><span class="o">)</span>
 </code></pre></div>
 
             <ul class="pager">

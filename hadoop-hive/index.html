@@ -9,7 +9,7 @@
     <meta name="description" content="Gatech CSE big data bootcamp">
     <title>Apache Hive - Bigdata Bootcamp</title>
 
-    <link rel="canonical" href="http://www.sunlab.org/bigdata/hadoop-hive/">
+    <link rel="canonical" href="http://bigdata.manul.io/bigdata/hadoop-hive/">
     <!-- favicon -->
     <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
 
@@ -120,75 +120,75 @@
 <h1 id="interactive-shell">Interactive shell</h1>
 
 <p>In the sample code, we will use the data of patient event sequences in tupel format. Let&#39;s start the Hive CLI interactive shell first by typing <code class="prettyprint">hive</code> in command line</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; hive
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt; </span>hive
 ...                                                                         
-[info]
-hive&gt; 
+<span class="o">[</span>info]
+<span class="gp">hive&gt; </span>
 </code></pre></div>
 <p>Before loading data, we first need to define a table just like working with database server with SQL.</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; CREATE TABLE events (
-    &gt;   patient_id STRING,
-    &gt;   event_name STRING,
-    &gt;   date_offset INT,
-    &gt;   value INT)
-    &gt; ROW FORMAT DELIMITED
-    &gt; FIELDS TERMINATED BY &#39;,&#39;
-    &gt; STORED AS TEXTFILE;
-OK
-Time taken: 0.289 seconds
-hive&gt; 
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">events</span> <span class="p">(</span>
+    <span class="o">&gt;</span>   <span class="n">patient_id</span> <span class="n">STRING</span><span class="p">,</span>
+    <span class="o">&gt;</span>   <span class="n">event_name</span> <span class="n">STRING</span><span class="p">,</span>
+    <span class="o">&gt;</span>   <span class="n">date_offset</span> <span class="n">INT</span><span class="p">,</span>
+    <span class="o">&gt;</span>   <span class="n">value</span> <span class="n">INT</span><span class="p">)</span>
+    <span class="o">&gt;</span> <span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span>
+    <span class="o">&gt;</span> <span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span>
+    <span class="o">&gt;</span> <span class="n">STORED</span> <span class="k">AS</span> <span class="n">TEXTFILE</span><span class="p">;</span>
+<span class="n">OK</span>
+<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">289</span> <span class="n">seconds</span>
+<span class="n">hive</span><span class="o">&gt;</span> 
 </code></pre></div>
 <p>And we could check existing tables and schema with commands</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; SHOW TABLES;
-OK
-events
-Time taken: 0.022 seconds, Fetched: 1 row(s)
-hive&gt; DESCRIBE events;
-OK
-patient_id              string                                      
-event_name              string                                      
-date_offset             int                                         
-value                   int                                         
-Time taken: 0.221 seconds, Fetched: 4 row(s)
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">SHOW</span> <span class="n">TABLES</span><span class="p">;</span>
+<span class="n">OK</span>
+<span class="n">events</span>
+<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">022</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">Fetched</span><span class="p">:</span> <span class="mi">1</span> <span class="k">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">hive</span><span class="o">&gt;</span> <span class="k">DESCRIBE</span> <span class="n">events</span><span class="p">;</span>
+<span class="n">OK</span>
+<span class="n">patient_id</span>              <span class="n">string</span>                                      
+<span class="n">event_name</span>              <span class="n">string</span>                                      
+<span class="n">date_offset</span>             <span class="n">int</span>                                         
+<span class="n">value</span>                   <span class="n">int</span>                                         
+<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">221</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">Fetched</span><span class="p">:</span> <span class="mi">4</span> <span class="k">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 </code></pre></div>
 <p>Next, let&#39;s insert data into the table.</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; LOAD DATA LOCAL INPATH &#39;data&#39;
-    &gt; OVERWRITE INTO TABLE events;
-Loading data to table default.events
-Table default.events stats: [numFiles=2, numRows=0, totalSize=1208972, rawDataSize=0]
-OK
-Time taken: 0.521 seconds
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">LOAD</span> <span class="k">DATA</span> <span class="k">LOCAL</span> <span class="n">INPATH</span> <span class="s1">'data'</span>
+    <span class="o">&gt;</span> <span class="n">OVERWRITE</span> <span class="k">INTO</span> <span class="k">TABLE</span> <span class="n">events</span><span class="p">;</span>
+<span class="n">Loading</span> <span class="k">data</span> <span class="k">to</span> <span class="k">table</span> <span class="k">default</span><span class="p">.</span><span class="n">events</span>
+<span class="k">Table</span> <span class="k">default</span><span class="p">.</span><span class="n">events</span> <span class="n">stats</span><span class="p">:</span> <span class="p">[</span><span class="n">numFiles</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">numRows</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">totalSize</span><span class="o">=</span><span class="mi">1208972</span><span class="p">,</span> <span class="n">rawDataSize</span><span class="o">=</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">OK</span>
+<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">521</span> <span class="n">seconds</span>
 </code></pre></div>
 <p>Then we could run SQL we are farmiliar with like</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; SELECT patient_id, count(*) FROM events
-    &gt; GROUP BY patient_id;
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">patient_id</span><span class="p">,</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">events</span>
+    <span class="o">&gt;</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">patient_id</span><span class="p">;</span>
 
-[info]...
+<span class="p">[</span><span class="n">info</span><span class="p">]...</span>
 
-F49EA945C42543C8        19
-F4C0BFF334226C29        60
-F560829E559E1FEB        13
-...
-FA4854797F48D537        88
-FA831739B546F976        15
-FAEF9F6E7AF1D99D        196
-FBF4F34C7437373D        119
-FBFD014814507B5C        28
-Time taken: 20.351 seconds, Fetched: 300 row(s)
+<span class="n">F49EA945C42543C8</span>        <span class="mi">19</span>
+<span class="n">F4C0BFF334226C29</span>        <span class="mi">60</span>
+<span class="n">F560829E559E1FEB</span>        <span class="mi">13</span>
+<span class="p">...</span>
+<span class="n">FA4854797F48D537</span>        <span class="mi">88</span>
+<span class="n">FA831739B546F976</span>        <span class="mi">15</span>
+<span class="n">FAEF9F6E7AF1D99D</span>        <span class="mi">196</span>
+<span class="n">FBF4F34C7437373D</span>        <span class="mi">119</span>
+<span class="n">FBFD014814507B5C</span>        <span class="mi">28</span>
+<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">20</span><span class="p">.</span><span class="mi">351</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">Fetched</span><span class="p">:</span> <span class="mi">300</span> <span class="k">row</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 </code></pre></div>
 <p>We could also save query result to local directory</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; INSERT OVERWRITE LOCAL DIRECTORY &#39;tmp_local_out&#39;
-    &gt; ROW FORMAT DELIMITED
-    &gt; FIELDS TERMINATED BY &#39;,&#39;
-    &gt; STORED AS TEXTFILE
-    &gt; SELECT patient_id, count(*) 
-    &gt; FROM events 
-    &gt; GROUP BY patient_id;
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">INSERT</span> <span class="n">OVERWRITE</span> <span class="k">LOCAL</span> <span class="n">DIRECTORY</span> <span class="s1">'tmp_local_out'</span>
+    <span class="o">&gt;</span> <span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span>
+    <span class="o">&gt;</span> <span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span>
+    <span class="o">&gt;</span> <span class="n">STORED</span> <span class="k">AS</span> <span class="n">TEXTFILE</span>
+    <span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">patient_id</span><span class="p">,</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> 
+    <span class="o">&gt;</span> <span class="k">FROM</span> <span class="n">events</span> 
+    <span class="o">&gt;</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">patient_id</span><span class="p">;</span>
 
 
-[info]...
-OK
-Time taken: 17.034 seconds
+<span class="p">[</span><span class="n">info</span><span class="p">]...</span>
+<span class="n">OK</span>
+<span class="n">Time</span> <span class="n">taken</span><span class="p">:</span> <span class="mi">17</span><span class="p">.</span><span class="mi">034</span> <span class="n">seconds</span>
 </code></pre></div>
 <p>You could learn more about the syntax from its <a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual">language manual</a>.</p>
 
@@ -198,30 +198,30 @@ Time taken: 17.034 seconds
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">hive -f sample.hql
 </code></pre></div>
 <p>The content of the script is simply the combination of commands we run in shell with one more statement to drop existing table if necessary</p>
-<div class="highlight"><pre><code class="language-sql" data-lang="sql">DROP TABLE IF EXISTS events;
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">events</span><span class="p">;</span>
 
-CREATE TABLE events (
-  patient_id STRING,
-  event_name STRING,
-  date_offset INT,
-  value INT)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY &#39;,&#39;
-STORED AS TEXTFILE;
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">events</span> <span class="p">(</span>
+  <span class="n">patient_id</span> <span class="n">STRING</span><span class="p">,</span>
+  <span class="n">event_name</span> <span class="n">STRING</span><span class="p">,</span>
+  <span class="n">date_offset</span> <span class="n">INT</span><span class="p">,</span>
+  <span class="n">value</span> <span class="n">INT</span><span class="p">)</span>
+<span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span>
+<span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span>
+<span class="n">STORED</span> <span class="k">AS</span> <span class="n">TEXTFILE</span><span class="p">;</span>
 
-SHOW TABLES;
-DESCRIBE events;
+<span class="k">SHOW</span> <span class="n">TABLES</span><span class="p">;</span>
+<span class="k">DESCRIBE</span> <span class="n">events</span><span class="p">;</span>
 
-LOAD DATA LOCAL INPATH &#39;data&#39;
-OVERWRITE INTO TABLE events;
+<span class="k">LOAD</span> <span class="k">DATA</span> <span class="k">LOCAL</span> <span class="n">INPATH</span> <span class="s1">'data'</span>
+<span class="n">OVERWRITE</span> <span class="k">INTO</span> <span class="k">TABLE</span> <span class="n">events</span><span class="p">;</span>
 
-INSERT OVERWRITE LOCAL DIRECTORY &#39;tmp_local_out&#39;
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY &#39;,&#39;
-STORED AS TEXTFILE
-SELECT patient_id, count(*) 
-FROM events 
-GROUP BY patient_id;
+<span class="k">INSERT</span> <span class="n">OVERWRITE</span> <span class="k">LOCAL</span> <span class="n">DIRECTORY</span> <span class="s1">'tmp_local_out'</span>
+<span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span>
+<span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span>
+<span class="n">STORED</span> <span class="k">AS</span> <span class="n">TEXTFILE</span>
+<span class="k">SELECT</span> <span class="n">patient_id</span><span class="p">,</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> 
+<span class="k">FROM</span> <span class="n">events</span> 
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">patient_id</span><span class="p">;</span>
 </code></pre></div>
 <p>Further, it&#39;s possible to run <a href="https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients">hive as a server</a> and connect with JDBC or its beeline client.</p>
 

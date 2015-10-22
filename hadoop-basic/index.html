@@ -9,7 +9,7 @@
     <meta name="description" content="Gatech CSE big data bootcamp">
     <title>Hadoop Basic - Bigdata Bootcamp</title>
 
-    <link rel="canonical" href="http://www.sunlab.org/bigdata/hadoop-basic/">
+    <link rel="canonical" href="http://bigdata.manul.io/bigdata/hadoop-basic/">
     <!-- favicon -->
     <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
 
@@ -129,32 +129,32 @@
 <h2 id="create-directory">Create directory</h2>
 
 <p>Similar to creating local directory via linux command <code class="prettyprint">mkdir</code>, creating a folder named <code class="prettyprint">input</code> in HDFS use</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt; hdfs dfs -mkdir input
+<div class="highlight"><pre><code class="language-" data-lang="">&gt; hdfs dfs -mkdir input
 </code></pre></div>
 <p>where <code class="prettyprint">hdfs</code> is the HDFS utility, <code class="prettyprint">dfs</code> is subcommad to handle basic HDFS operation,  <code class="prettyprint">-mkdir</code> means you want to create a directory and directory name is specified as <code class="prettyprint">input</code>. Above command actually create the <code class="prettyprint">input</code> directory in your home directory of HDFS, which by default shold be <code class="prettyprint">/user/your_name/</code>. Of course, you can create it to other place with absolute or relative path.</p>
 
 <h2 id="copy-data-in-and-out">Copy data in and out</h2>
 
 <p>Suppose you followed previous instrucion and created an directory named <code class="prettyprint">input</code>, you can copy data from local file system to HDFS using <code class="prettyprint">-put</code>. For example,</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt; hdfs dfs -put case.csv input
+<div class="highlight"><pre><code class="language-" data-lang="">&gt; hdfs dfs -put case.csv input
 &gt; hdfs dfs -put control.csv input
 </code></pre></div>
 <p>You can find these two files as described in <a href="/bigdata/data/">sample data</a>.</p>
 
 <p>Corresponds to <code class="prettyprint">-put</code>, <code class="prettyprint">-get</code> operation will copy data out of HDFS. For example</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -get input/case.csv local_case.csv
+<div class="highlight"><pre><code class="language-" data-lang="">hdfs dfs -get input/case.csv local_case.csv
 </code></pre></div>
 <p>will copy the <code class="prettyprint">input/case.csv</code> file out HDFS into current working directory using a new name <code class="prettyprint">local_case.csv</code>. If you didn&#39;t specify <code class="prettyprint">local_case.csv</code>, the original name <code class="prettyprint">case.csv</code> will be kept.</p>
 
 <h2 id="list-file-information">List File Information</h2>
 
 <p>Just like linux <code class="prettyprint">ls</code> command, <code class="prettyprint">-ls</code> is the operation to list files and folders in HDFS. For example, below command list items in your home directory of HDFS(i.e <code class="prettyprint">/user/your_name/</code>)</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt; hdfs dfs -ls
+<div class="highlight"><pre><code class="language-" data-lang="">&gt; hdfs dfs -ls
 Found 1 items
-drwxr-xr-x   - hadoop supergroup          0 2015-07-11 06:10 input
+-rwxr-xr-x   - hadoop supergroup          0 2015-07-11 06:10 input
 </code></pre></div>
 <p>You can see the newly created <code class="prettyprint">input</code> directory is listed. You can also see the files inside a particular directory</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&gt;hdfs dfs -ls input
+<div class="highlight"><pre><code class="language-" data-lang="">&gt;hdfs dfs -ls input
 found 2 items
 -rw-r--r--   1 hadoop supergroup     536404 2015-07-11 06:10 input/case.csv
 -rw-r--r--   1 hadoop supergroup     672568 2015-07-11 06:08 input/control.csv
@@ -162,17 +162,17 @@ found 2 items
 <h2 id="fetch-file-content">Fetch file content</h2>
 
 <p>Actually you don&#39;t need to copy file out first to see its content, you can directly use <code class="prettyprint">-cat</code> to printing the content of files in HDFS. For example, below command print out content of the one file you just put into HDFS.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -cat input/case.csv 
+<div class="highlight"><pre><code class="language-" data-lang="">hdfs dfs -cat input/case.csv 
 </code></pre></div>
 <p>You will find wildcard character is very useful since output of MapReduce and other Hadoop based tools tends to be directory. For example, to print content of all csv files(the case.csv and control.csv) in <code class="prettyprint">input</code> HDFS folder, you can</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -cat input/*.csv 
+<div class="highlight"><pre><code class="language-" data-lang="">hdfs dfs -cat input/*.csv 
 </code></pre></div>
 <h2 id="further-reading">Further reading</h2>
 
 <p>For more detailed usage of different commands and parameters, you can type</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -help
+<div class="highlight"><pre><code class="language-" data-lang="">hdfs dfs -help
 </code></pre></div>
-<div class="panel-group exercise"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#question1" style="text-decoration:none;">Exercise: Remove what you just created.</a></h4></div><div id="question1" class="panel-collapse collapse"><div class="panel-body"><div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -rm -r input</code></pre></div><p>You may miss the <code class="prettyprint">-r</code> option and get error. <code class="prettyprint">-r</code> tells HDFS to remove recursively. This is similar to linux command <code class="prettyprint">rm</code>.</p></div></div></div></div>
+<div class="panel-group exercise"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#question1" style="text-decoration:none;">Exercise: Remove what you just created.</a></h4></div><div id="question1" class="panel-collapse collapse"><div class="panel-body"><div class="highlight"><pre><code class="language-" data-lang="">hdfs dfs -rm -r input</code></pre></div><p>You may miss the <code class="prettyprint">-r</code> option and get error. <code class="prettyprint">-r</code> tells HDFS to remove recursively. This is similar to linux command <code class="prettyprint">rm</code>.</p></div></div></div></div>
 
 <h1 id="mapreduce">MapReduce</h1>
 
@@ -191,27 +191,27 @@ found 2 items
 <h2 id="mapper">Mapper</h2>
 
 <p>Create a Java file <code class="prettyprint">FrequencyMapper.java</code>. The FrequencyMapper class extends the predefined <code class="prettyprint">Mapper</code> class and overwrite the <code class="prettyprint">map</code> function.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">import java.io.IOException;
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
 
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.IntWritable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.LongWritable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.Text</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.Mapper</span><span class="o">;</span>
 
-public class FrequencyMapper
-  extends Mapper&lt;LongWritable, Text, Text, IntWritable&gt; {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FrequencyMapper</span>
+  <span class="kd">extends</span> <span class="n">Mapper</span><span class="o">&lt;</span><span class="n">LongWritable</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">&gt;</span> <span class="o">{</span>
 
-  private final static IntWritable one = new IntWritable(1);
+  <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">IntWritable</span> <span class="n">one</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
 
-  @Override
-  public void map(LongWritable offset, Text lineText, Context context)
-      throws IOException, InterruptedException {
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="n">map</span><span class="o">(</span><span class="n">LongWritable</span> <span class="n">offset</span><span class="o">,</span> <span class="n">Text</span> <span class="n">lineText</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">)</span>
+      <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
 
-    String line = lineText.toString();
-    String eventID = line.split(&quot;,&quot;)[1];
-    context.write(new Text(eventID), one);
-  }
-}
+    <span class="n">String</span> <span class="n">line</span> <span class="o">=</span> <span class="n">lineText</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">eventID</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">","</span><span class="o">)[</span><span class="mi">1</span><span class="o">];</span>
+    <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="k">new</span> <span class="n">Text</span><span class="o">(</span><span class="n">eventID</span><span class="o">),</span> <span class="n">one</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div>
 <p>The 4-tuple <code class="prettyprint">&lt;LongWritable, Text, Text, IntWritable&gt;</code> specifies that the inpur key-value pair is of type <code class="prettyprint">&lt;LongWritable, Text&gt;</code> and the output key-value type is of type <code class="prettyprint">&lt;Text, IntWritable&gt;</code>.
 Since the input files are plain text, we use the input key-value pair of type <code class="prettyprint">&lt;LongWritable, Text&gt;</code>. The key is the offset of the start of each line, which is not used here. The value is the actual text in the corresponding line.</p>
@@ -223,23 +223,23 @@ Since the input files are plain text, we use the input key-value pair of type <c
 <p>Hadoop internally performs a shuffling process to ensure that the output of the mapper with a same key (same <code class="prettyprint">event-id</code> in our problem) will go to a same reducer. A reducer thus receives a key and a collection of corresponding values (Java <code class="prettyprint">Iterable</code> object). In our case the key-value pair is <code class="prettyprint">(event-id, [1,1,...,1])</code>.</p>
 
 <p>Create a Java file <code class="prettyprint">FrequencyReducer.java</code>. The FrequencyReducer class extends the predefined <code class="prettyprint">Reducer</code> class and overwrite the <code class="prettyprint">reduce</code> function.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">import java.io.IOException;
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
 
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Reducer;
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.IntWritable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.Text</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.Reducer</span><span class="o">;</span>
 
-public class FrequencyReducer extends Reducer&lt;Text ,  IntWritable ,  Text ,  IntWritable &gt; {
-     @Override public void reduce( Text eventID,  Iterable&lt;IntWritable&gt; counts,  Context context)
-         throws IOException,  InterruptedException {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FrequencyReducer</span> <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span> <span class="o">,</span>  <span class="n">IntWritable</span> <span class="o">,</span>  <span class="n">Text</span> <span class="o">,</span>  <span class="n">IntWritable</span> <span class="o">&gt;</span> <span class="o">{</span>
+     <span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="n">reduce</span><span class="o">(</span> <span class="n">Text</span> <span class="n">eventID</span><span class="o">,</span>  <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">IntWritable</span><span class="o">&gt;</span> <span class="n">counts</span><span class="o">,</span>  <span class="n">Context</span> <span class="n">context</span><span class="o">)</span>
+         <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span>  <span class="n">InterruptedException</span> <span class="o">{</span>
 
-      int sum  = 0;
-      for ( IntWritable count  : counts) {
-        sum  += count.get();
-      }
-      context.write(eventID,  new IntWritable(sum));
-    }
-}
+      <span class="kt">int</span> <span class="n">sum</span>  <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+      <span class="k">for</span> <span class="o">(</span> <span class="n">IntWritable</span> <span class="n">count</span>  <span class="o">:</span> <span class="n">counts</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">sum</span>  <span class="o">+=</span> <span class="n">count</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+      <span class="o">}</span>
+      <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">eventID</span><span class="o">,</span>  <span class="k">new</span> <span class="n">IntWritable</span><span class="o">(</span><span class="n">sum</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
 </code></pre></div>
 <p>The 4-typle <code class="prettyprint">&lt;Text ,  IntWritable ,  Text ,  IntWritable &gt;</code> specifies the types of the input and output key-value pair.
@@ -248,42 +248,42 @@ Note that the type of the input key-value pair (<code class="prettyprint">&lt;Te
 <h2 id="main-function">Main function</h2>
 
 <p>Write a Java file <code class="prettyprint">Frequency.java</code> that runs the MapReduce job.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.Path</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.IntWritable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.Text</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.Job</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.lib.input.FileInputFormat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.lib.output.FileOutputFormat</span><span class="o">;</span>
 
-public class Frequency {
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Frequency</span> <span class="o">{</span>
 
-  public static void main(String[] args) throws Exception {
-    if (args.length != 2) {
-      System.err.println(&quot;Usage: Frequency &lt;input path&gt; &lt;output path&gt;&quot;);
-      System.exit(-1);
-    }
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">!=</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Usage: Frequency &lt;input path&gt; &lt;output path&gt;"</span><span class="o">);</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(-</span><span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    // create a Hadoop job and set the main class
-    Job job = Job.getInstance();
-    job.setJarByClass(Frequency.class);
-    job.setJobName(&quot;Frequency&quot;);
+    <span class="c1">// create a Hadoop job and set the main class</span>
+    <span class="n">Job</span> <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="na">getInstance</span><span class="o">();</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setJarByClass</span><span class="o">(</span><span class="n">Frequency</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setJobName</span><span class="o">(</span><span class="s">"Frequency"</span><span class="o">);</span>
 
-    // set the input and output path
-    FileInputFormat.addInputPath(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    <span class="c1">// set the input and output path</span>
+    <span class="n">FileInputFormat</span><span class="o">.</span><span class="na">addInputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]));</span>
+    <span class="n">FileOutputFormat</span><span class="o">.</span><span class="na">setOutputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]));</span>
 
-    // set the Mapper and Reducer class
-    job.setMapperClass(FrequencyMapper.class);
-    job.setReducerClass(FrequencyReducer.class);
+    <span class="c1">// set the Mapper and Reducer class</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setMapperClass</span><span class="o">(</span><span class="n">FrequencyMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setReducerClass</span><span class="o">(</span><span class="n">FrequencyReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
-    // specify the type of the output
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(IntWritable.class);
+    <span class="c1">// specify the type of the output</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setOutputKeyClass</span><span class="o">(</span><span class="n">Text</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setOutputValueClass</span><span class="o">(</span><span class="n">IntWritable</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
-    // run the job
-    System.exit(job.waitForCompletion(true) ? 0 : 1);
-  }
-}
+    <span class="c1">// run the job</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="n">job</span><span class="o">.</span><span class="na">waitForCompletion</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="mi">1</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div>
 <h2 id="compile-and-run">Compile and Run</h2>
 
@@ -292,14 +292,14 @@ public class Frequency {
 <h3 id="compile">Compile</h3>
 
 <p>Compile the three java files with <code class="prettyprint">javac</code></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">javac -cp $(hadoop classpath) -d Frequency FrequencyMapper.java FrequencyReducer.java Frequency.java 
+<div class="highlight"><pre><code class="language-" data-lang="">javac -cp $(hadoop classpath) -d Frequency FrequencyMapper.java FrequencyReducer.java Frequency.java 
 </code></pre></div>
 <p>where <code class="prettyprint">hadoop classpath</code> outputs the required class path to compile a Hadoop program. <code class="prettyprint">-d classes</code> puts the generated classes into the <code class="prettyprint">classes</code> directory. You will  see three class files in the <code class="prettyprint">classes</code> directory now.</p>
 
 <h3 id="create-jar">Create JAR</h3>
 
 <p>Let&#39;s create a jar named <code class="prettyprint">Frequency.jar</code> using classes we just compiled.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">jar -cvf Frequency.jar -C classes/ .
+<div class="highlight"><pre><code class="language-" data-lang="">jar -cvf Frequency.jar -C classes/ .
 </code></pre></div>
 <p class="msgbox bg-info">
 In real world application development, you will not need to compile files manually one by one then create jar. Instead, build tools like Maven, Gradle, SBT will be employed.
@@ -308,16 +308,16 @@ In real world application development, you will not need to compile files manual
 <h3 id="run">Run</h3>
 
 <p>You can run the jar file just created with</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hadoop jar Frequency.jar Frequency input output
+<div class="highlight"><pre><code class="language-" data-lang="">hadoop jar Frequency.jar Frequency input output
 </code></pre></div>
 <p>where <code class="prettyprint">Frequency.jar</code> is named of jar file, <code class="prettyprint">Frequency</code> is java class to run. <code class="prettyprint">input</code> and <code class="prettyprint">output</code> are parameters to the <code class="prettyprint">Frequency</code> class we implemented. Please be careful that <code class="prettyprint">input</code> and <code class="prettyprint">output</code> are used as path in HDFS.</p>
 
 <p>While the program is running, you will see a lot of messages. After the job finishes, you can check the results in the <code class="prettyprint">output</code> directory (created by Hadoop) by </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -ls output
+<div class="highlight"><pre><code class="language-" data-lang="">hdfs dfs -ls output
 hdfs dfs -cat output/*
 </code></pre></div>
 <p>You will get results like</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">DIAG03812       2
+<div class="highlight"><pre><code class="language-" data-lang="">DIAG03812       2
 DIAG03819       1
 DIAG0420        1
 DIAG0539        2
@@ -332,7 +332,7 @@ DIAG1120        5
 <h3 id="clean-up">Clean up</h3>
 
 <p>If you run the job again, you will see an error message saying the <code class="prettyprint">output</code> directory already exists. This prevents a user to accidentally overwrite a file. You can remove the directory by</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -rm -r output
+<div class="highlight"><pre><code class="language-" data-lang="">hdfs dfs -rm -r output
 </code></pre></div>
 
             <ul class="pager">
