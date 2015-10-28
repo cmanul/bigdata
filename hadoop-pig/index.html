@@ -115,9 +115,133 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <p>In this part of training, we show the usage of <a href="http://pig.apache.org/">Hadoop Pig</a>, a high-level data analysis tool on top of Hadoop MapReduce. Througout the training you will learn how to run interactive shell and run Pig script. We will use feature construction for predictive modeling from longitude data as an example.</p>
+            <ul class="pager">
+                
+  
+  
 
-<h1 id="interactive-shell-basic">Interactive Shell Basic</h1>
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+    
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+<li class="previous">
+    <a href="/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
+</li>
+
+                
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+    
+  
+
+  
+    
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+<li class="next">
+    <a href="/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Hive&rarr;</a>
+</li>
+
+
+            </ul>
+
+            <div class="bs-callout bs-callout-info" id="callout-helper-context-color-specificity">
+        <h4>Learning Objectives</h4><ul>
+<li>Know how to work with Pig interactive shell.</li>
+<li>Understand Pig Latin data types.</li>
+<li>Understand relation.</li>
+<li>Can implement simle data processing script in Pig Latin.</li>
+<li>Can write user defined function(UDF).</li>
+</ul>
+</div>
+
+<p>In this part of training, we show the usage of <a href="http://pig.apache.org/">Hadoop Pig</a>, a high-level data analysis tool on top of Hadoop MapReduce. Througout the training you will learn how to run interactive shell and run Pig script. We will use feature construction for predictive modeling from longitude data as an example.</p>
+
+<h1 id="interactive-shell">Interactive Shell</h1>
 
 <p>Pig provides a shell to manipulate data interactively. Let&#39;s start a shell an run that in local mode for demo purpose</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">pig -x local
@@ -132,7 +256,7 @@ grunt&gt;
 <p>Here we call the <code class="prettyprint">case_events</code> a <a href="http://pig.apache.org/docs/r0.14.0/basic.html#relations"><strong>relation</strong></a> in Pig Latin. In this statement, we load data from <code class="prettyprint">case.csv</code> file into <code class="prettyprint">case_events</code> relation. We also specified the <a href="http://pig.apache.org/docs/r0.14.0/basic.html#schemas"><strong>schema</strong></a> of the data as </p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">(patientid:chararray, eventname:chararray, dateoffset:int, value:double)
 </code></pre></div>
-<p>which define a four-field tuple with names and type of each field.</p>
+<p>which define a four-field tuple with names and type of each field corresponds to our raw data.</p>
 
 <p>You can check the schema using <code class="prettyprint">DESCRIBE</code> operator</p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; DESCRIBE case_events;
@@ -160,20 +284,22 @@ case_events: {patientid: chararray,eventname: chararray,dateoffset: int,value: d
 
 <h1 id="data-type">Data type</h1>
 
-<p>In this section, we briefly describe data types. Pig could work with simple type like <code class="prettyprint">int</code>, <code class="prettyprint">double</code>. Most important concept is <code class="prettyprint">tupe</code> and <code class="prettyprint">bag</code>.</p>
+<p>In this section, we briefly describe data types. Pig can work with simple type like <code class="prettyprint">int</code>, <code class="prettyprint">double</code>. More important types are <code class="prettyprint">tupe</code> and <code class="prettyprint">bag</code>.</p>
 
-<p><strong>Tuple</strong> is usually reprented with <code class="prettyprint">()</code>, for example</p>
+<p><strong>Tuple</strong> is usually represented with <code class="prettyprint">()</code>, for example</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">(021FB39310BC3797,DRUG55154239805,1456,10.0)
 </code></pre></div>
-<p>in Pig Latin, we could either fetch field by index (like <code class="prettyprint">$0</code>) or by name (like <code class="prettyprint">patientid</code>). With index we could also fetch a range of fields. For example <code class="prettyprint">$2..</code> means <em>2</em>-st to last. </p>
+<p>In Pig Latin, we can either fetch field by index (like <code class="prettyprint">$0</code>) or by name (like <code class="prettyprint">patientid</code>). With index we can also fetch a range of fields. For example <code class="prettyprint">$2..</code> means <em>2</em>-st to last.</p>
 
-<p><strong>Bag</strong> is usually denoted with <code class="prettyprint">{}</code>, from result of <code class="prettyprint">DESCRIBE case_events</code> we could see <code class="prettyprint">case_events</code> itself is a bag. You could regard bag as a special un ordered <code class="prettyprint">set</code> that don&#39;t check duplication.</p>
+<p><strong>Bag</strong> is usually denoted with <code class="prettyprint">{}</code>, from result of <code class="prettyprint">DESCRIBE case_events</code> we can see <code class="prettyprint">case_events</code> itself is a bag. You can regard bag as a special un ordered <code class="prettyprint">set</code> that doesn&#39;t check duplication.</p>
 
 <p>Check out <a href="http://pig.apache.org/docs/r0.14.0/basic.html#Data+Types+and+More">official doc about data type</a> for more. You will find examples of the type in below samples, pay attention to result of <code class="prettyprint">DESCRIBE</code> and you will find types and names of fields.</p>
 
 <h1 id="feature-construction">Feature construction</h1>
 
-<p>Next, you will practice working with Pig Latin in the context of feature construction for predictive modeling. You will learn built-in operators like <code class="prettyprint">GROUP BY</code>, <code class="prettyprint">JOIN</code> as well as User Defined Function (UDF) in python. The result of feature construction will be feature matrix that can be consumed by a lot of machine learning packages.</p>
+<p>Next, you will learn by practicing in the context of feature construction for predictive modeling. You will learn built-in operators like <code class="prettyprint">GROUP BY</code>, <code class="prettyprint">JOIN</code> as well as User Defined Function (UDF) in python. The result of feature construction will be feature matrix that can be consumed by a lot of machine learning packages.</p>
+
+<h2 id="overview">Overview</h2>
 
 <h2 id="load-data">Load data</h2>
 
@@ -249,7 +375,7 @@ grunt&gt; DUMP feature_name_index;
 (9977,DRUG99207049905)
 (9978,DRUG99207074501)
 </code></pre></div>
-<p>Next, we could update <code class="prettyprint">feature_name_values</code> to use feature index rather than feature name.</p>
+<p>Next, we can update <code class="prettyprint">feature_name_values</code> to use feature index rather than feature name.</p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; feature_id_values = JOIN feature_name_values BY featurename, feature_name_index BY featurename;
 grunt&gt; DESCRIBE feature_id_values;
 feature_id_values: {feature_name_values::patientid: chararray,feature_name_values::featurename: chararray,feature_name_values::value: long,feature_name_index::index: long,feature_name_index::featurename: chararray}  
@@ -302,7 +428,7 @@ grunt&gt; DUMP feature_vectors;
 (FBF4F34C7437373D,30:3220.000000 7... 9584:30.000000 9743:60.000000 9770:30.000000)
 (FBFD014814507B5C,30:270.000000 700:1.000000)
 </code></pre></div>
-<p>Next, we could join <code class="prettyprint">targets</code> and <code class="prettyprint">feature_vectors</code> to asscociate feature vector with target</p>
+<p>Next, we can join <code class="prettyprint">targets</code> and <code class="prettyprint">feature_vectors</code> to asscociate feature vector with target</p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; samples = JOIN targets BY patientid, feature_vectors BY patientid;
 grunt&gt; DESCRIBE samples;
 samples: {targets::patientid: chararray,targets::eventname: chararray,targets::dateoffset: int,targets::value: int,feature_vectors::patientid: chararray,feature_vectors::sparsefeature: chararray}
@@ -315,21 +441,21 @@ grunt&gt; DUMP samples;
 </code></pre></div>
 <h2 id="split-and-save">Split and save</h2>
 
-<p>We are almost there, just save the <code class="prettyprint">samples</code>. In machine learning setting, it&#39;s a common practice to split data into training and testing samples. We could do that by associate each sample with a random key and split with that random key.</p>
+<p>We are almost there, just save the <code class="prettyprint">samples</code>. In machine learning setting, it&#39;s a common practice to split data into training and testing samples. We can do that by associate each sample with a random key and split with that random key.</p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; samples = FOREACH samples GENERATE RANDOM() as assignmentkey, *;
 grunt&gt; SPLIT samples INTO testing IF assignmentkey &lt;= 0.20, training OTHERWISE;
 grunt&gt; training = FOREACH training GENERATE $1..;
 grunt&gt; testing = FOREACH testing GENERATE $1..;
 </code></pre></div>
-<p>Then, we could save </p>
+<p>Then, we can save </p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; STORE training INTO &#39;training&#39; USING PigStorage(&#39; &#39;);
 grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
 </code></pre></div>
 <h1 id="script">Script</h1>
 
-<p>Running commands interactively is efficient, but sometimes we want to save the commands for reuse. We could save the commands we run into a script file (i.e. features.pig) and run the entire script.</p>
+<p>Running commands interactively is efficient, but sometimes we want to save the commands for reuse. We can save the commands we run into a script file (i.e. features.pig) and run the entire script.</p>
 
-<p>You could checkout <code class="prettyprint">sample/pig</code> folder. Navigate to there and run the script simply with</p>
+<p>You can checkout <code class="prettyprint">sample/pig</code> folder. Navigate to there and run the script simply with</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">pig -x local features.pig
 </code></pre></div>
 
