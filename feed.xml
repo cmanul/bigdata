@@ -5,8 +5,8 @@
     <description>Gatech CSE big data bootcamp</description>
     <link>http://bigdata.manul.io/</link>
     <atom:link href="http://bigdata.manul.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 28 Oct 2015 16:55:36 -0400</pubDate>
-    <lastBuildDate>Wed, 28 Oct 2015 16:55:36 -0400</lastBuildDate>
+    <pubDate>Wed, 28 Oct 2015 17:00:01 -0400</pubDate>
+    <lastBuildDate>Wed, 28 Oct 2015 17:00:01 -0400</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -28,7 +28,7 @@
       </item>
     
       <item>
-        <title>Apache HBase</title>
+        <title>Hadoop HBase</title>
         <link>http://bigdata.manul.io/hadoop-hbase/</link>
         <guid isPermaLink="true">http://bigdata.manul.io/hadoop-hbase/</guid>
       </item>
@@ -40,13 +40,13 @@
       </item>
     
       <item>
-        <title>Apache Pig</title>
+        <title>Hadoop Pig</title>
         <link>http://bigdata.manul.io/hadoop-pig/</link>
         <guid isPermaLink="true">http://bigdata.manul.io/hadoop-pig/</guid>
       </item>
     
       <item>
-        <title>Apache Hive</title>
+        <title>Hadoop Hive</title>
         <link>http://bigdata.manul.io/hadoop-hive/</link>
         <guid isPermaLink="true">http://bigdata.manul.io/hadoop-hive/</guid>
       </item>
