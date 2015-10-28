@@ -172,25 +172,41 @@ found 2 items
 <p>For more detailed usage of different commands and parameters, you can type</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -help
 </code></pre></div>
-<div class="panel-group exercise"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#question169" style="text-decoration:none;">Exercise: Remove what you just created.</a></h4></div><div id="question169" class="panel-collapse collapse"><div class="panel-body"><div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -rm -r input
-</code></pre></div><p>You may miss the <code class="prettyprint">-r</code> option and get error. <code class="prettyprint">-r</code> tells HDFS to remove recursively. This is similar to linux command <code class="prettyprint">rm</code>.</p>
-</div></div></div></div>
+<div class="panel-group exercise">
+<div class="panel panel-default">
+<div class="panel-heading">
+<h4 class="panel-title">
+<a data-toggle="collapse" href="#question1" style="text-decoration:none;">Exercise: Remove what you just created.</a>
+</h4>
+</div>
 
-# MapReduce
-MapReduce works by breaking the processing into two phases: the map phase and the reduce phase. Each phase has key-value pairs as input and output, the types of which can be chosen by the user. As user, you need to define the `map` and `reducer` operations.
+<div id="question1" class="panel-collapse collapse">
+<div class="panel-body">
+<div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -rm -r input
+</code></pre></div>
+<p>You may miss the <code class="prettyprint">-r</code> option and get error. <code class="prettyprint">-r</code> tells HDFS to remove recursively. This is similar to linux command <code class="prettyprint">rm</code>.</p>
+</div>
 
-Let's write a simple MapReduce program in Java to calculate the frequency of each `event-id` in our **case.csv** file described in [sample data](/data/).
+<p></div></div></div></p>
 
-A MapReduce program consists of three parts:
-1. A Mapper Class
-2. A Reducer Class
-3. A main function that tells Hadoop to use the classes we created.
+<h1 id="mapreduce">MapReduce</h1>
 
-## Mapper
-Create a Java file `FrequencyMapper.java`. The FrequencyMapper class extends the predefined `Mapper` class and overwrite the `map` function.
+<p>MapReduce works by breaking the processing into two phases: the map phase and the reduce phase. Each phase has key-value pairs as input and output, the types of which can be chosen by the user. As user, you need to define the <code class="prettyprint">map</code> and <code class="prettyprint">reducer</code> operations.</p>
 
-```java
-import java.io.IOException;
+<p>Let&#39;s write a simple MapReduce program in Java to calculate the frequency of each <code class="prettyprint">event-id</code> in our <strong>case.csv</strong> file described in <a href="/data/">sample data</a>.</p>
+
+<p>A MapReduce program consists of three parts:</p>
+
+<ol>
+<li>A Mapper Class</li>
+<li>A Reducer Class</li>
+<li>A main function that tells Hadoop to use the classes we created.</li>
+</ol>
+
+<h2 id="mapper">Mapper</h2>
+
+<p>Create a Java file <code class="prettyprint">FrequencyMapper.java</code>. The FrequencyMapper class extends the predefined <code class="prettyprint">Mapper</code> class and overwrite the <code class="prettyprint">map</code> function.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">import java.io.IOException;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -198,7 +214,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 public class FrequencyMapper
-  extends Mapper<LongWritable, Text, Text, IntWritable> {
+  extends Mapper&lt;LongWritable, Text, Text, IntWritable&gt; {
 
   private final static IntWritable one = new IntWritable(1);
 
@@ -207,31 +223,29 @@ public class FrequencyMapper
       throws IOException, InterruptedException {
 
     String line = lineText.toString();
-    String eventID = line.split(",")[1];
+    String eventID = line.split(&quot;,&quot;)[1];
     context.write(new Text(eventID), one);
   }
 }
-```
+</code></pre></div>
+<p>The 4-tuple <code class="prettyprint">&lt;LongWritable, Text, Text, IntWritable&gt;</code> specifies that the inpur key-value pair is of type <code class="prettyprint">&lt;LongWritable, Text&gt;</code> and the output key-value type is of type <code class="prettyprint">&lt;Text, IntWritable&gt;</code>.
+Since the input files are plain text, we use the input key-value pair of type <code class="prettyprint">&lt;LongWritable, Text&gt;</code>. The key is the offset of the start of each line, which is not used here. The value is the actual text in the corresponding line.</p>
 
-The 4-tuple ` <LongWritable, Text, Text, IntWritable> ` specifies that the inpur key-value pair is of type `<LongWritable, Text>` and the output key-value type is of type `<Text, IntWritable>`.
-Since the input files are plain text, we use the input key-value pair of type `<LongWritable, Text>`. The key is the offset of the start of each line, which is not used here. The value is the actual text in the corresponding line.
+<p>We use <code class="prettyprint">toString()</code> to transform the Hadoop <code class="prettyprint">Text</code> object into the more familiar Java <code class="prettyprint">String</code> object and extract only the second field of the line (recall that each line is in the form of <code class="prettyprint">patient-id, event-id, timestamp, value</code>). We then call <code class="prettyprint">context.write</code> to write the output. Each <code class="prettyprint">line</code> will be mapped to a pair as <code class="prettyprint">(event-id, 1)</code>, where 1 is of type IntWritable. Since 1 is a constant, we use a static variable to store it. </p>
 
-We use `toString()` to transform the Hadoop `Text` object into the more familiar Java `String` object and extract only the second field of the line (recall that each line is in the form of `patient-id, event-id, timestamp, value`). We then call `context.write` to write the output. Each `line` will be mapped to a pair as `(event-id, 1)`, where 1 is of type IntWritable. Since 1 is a constant, we use a static variable to store it. 
+<h2 id="reducer">Reducer</h2>
 
-## Reducer
-Hadoop internally performs a shuffling process to ensure that the output of the mapper with a same key (same `event-id` in our problem) will go to a same reducer. A reducer thus receives a key and a collection of corresponding values (Java `Iterable` object). In our case the key-value pair is `(event-id, [1,1,...,1])`.
+<p>Hadoop internally performs a shuffling process to ensure that the output of the mapper with a same key (same <code class="prettyprint">event-id</code> in our problem) will go to a same reducer. A reducer thus receives a key and a collection of corresponding values (Java <code class="prettyprint">Iterable</code> object). In our case the key-value pair is <code class="prettyprint">(event-id, [1,1,...,1])</code>.</p>
 
-Create a Java file `FrequencyReducer.java`. The FrequencyReducer class extends the predefined `Reducer` class and overwrite the `reduce` function.
-
-```java
-import java.io.IOException;
+<p>Create a Java file <code class="prettyprint">FrequencyReducer.java</code>. The FrequencyReducer class extends the predefined <code class="prettyprint">Reducer</code> class and overwrite the <code class="prettyprint">reduce</code> function.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">import java.io.IOException;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class FrequencyReducer extends Reducer<Text ,  IntWritable ,  Text ,  IntWritable > {
-     @Override public void reduce( Text eventID,  Iterable<IntWritable> counts,  Context context)
+public class FrequencyReducer extends Reducer&lt;Text ,  IntWritable ,  Text ,  IntWritable &gt; {
+     @Override public void reduce( Text eventID,  Iterable&lt;IntWritable&gt; counts,  Context context)
          throws IOException,  InterruptedException {
 
       int sum  = 0;
@@ -242,15 +256,14 @@ public class FrequencyReducer extends Reducer<Text ,  IntWritable ,  Text ,  Int
     }
 }
 
-```
-The 4-typle `<Text ,  IntWritable ,  Text ,  IntWritable >` specifies the types of the input and output key-value pair.
-Note that the type of the input key-value pair (`<Text ,  IntWritable>`) is the same as the output key-value pair of the mapper.
+</code></pre></div>
+<p>The 4-typle <code class="prettyprint">&lt;Text ,  IntWritable ,  Text ,  IntWritable &gt;</code> specifies the types of the input and output key-value pair.
+Note that the type of the input key-value pair (<code class="prettyprint">&lt;Text ,  IntWritable&gt;</code>) is the same as the output key-value pair of the mapper.</p>
 
-## Main function
-Write a Java file `Frequency.java` that runs the MapReduce job.
+<h2 id="main-function">Main function</h2>
 
-```java
-import org.apache.hadoop.fs.Path;
+<p>Write a Java file <code class="prettyprint">Frequency.java</code> that runs the MapReduce job.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -261,14 +274,14 @@ public class Frequency {
 
   public static void main(String[] args) throws Exception {
     if (args.length != 2) {
-      System.err.println("Usage: Frequency <input path> <output path>");
+      System.err.println(&quot;Usage: Frequency &lt;input path&gt; &lt;output path&gt;&quot;);
       System.exit(-1);
     }
 
     // create a Hadoop job and set the main class
     Job job = Job.getInstance();
     job.setJarByClass(Frequency.class);
-    job.setJobName("Frequency");
+    job.setJobName(&quot;Frequency&quot;);
 
     // set the input and output path
     FileInputFormat.addInputPath(job, new Path(args[0]));
@@ -286,25 +299,23 @@ public class Frequency {
     System.exit(job.waitForCompletion(true) ? 0 : 1);
   }
 }
-```
+</code></pre></div>
+<h2 id="compile-and-run">Compile and Run</h2>
 
-## Compile and Run
-You can find all source code in `sample/hadoop` folder. You will need to navigate to that folder first, then compile, creat jar and run.
+<p>You can find all source code in <code class="prettyprint">sample/hadoop</code> folder. You will need to navigate to that folder first, then compile, creat jar and run.</p>
 
-### Compile
-Compile the three java files with `javac`
-```
-javac -cp $(hadoop classpath) -d Frequency FrequencyMapper.java FrequencyReducer.java Frequency.java 
-```
-where `hadoop classpath` outputs the required class path to compile a Hadoop program. `-d classes` puts the generated classes into the `classes` directory. You will  see three class files in the `classes` directory now.
+<h3 id="compile">Compile</h3>
 
+<p>Compile the three java files with <code class="prettyprint">javac</code></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">javac -cp $(hadoop classpath) -d Frequency FrequencyMapper.java FrequencyReducer.java Frequency.java 
+</code></pre></div>
+<p>where <code class="prettyprint">hadoop classpath</code> outputs the required class path to compile a Hadoop program. <code class="prettyprint">-d classes</code> puts the generated classes into the <code class="prettyprint">classes</code> directory. You will  see three class files in the <code class="prettyprint">classes</code> directory now.</p>
 
-### Create JAR
-Let's create a jar named `Frequency.jar` using classes we just compiled.
-```
-jar -cvf Frequency.jar -C classes/ .
-```
+<h3 id="create-jar">Create JAR</h3>
 
+<p>Let&#39;s create a jar named <code class="prettyprint">Frequency.jar</code> using classes we just compiled.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">jar -cvf Frequency.jar -C classes/ .
+</code></pre></div>
 <div class="msgbox bg-info"><h4>Information</h4><p>In real world application development, you will not need to compile files manually one by one then create jar. Instead, build tools like Maven, Gradle, SBT will be employed.</p>
 </div>
 
@@ -337,16 +348,29 @@ DIAG1120        5
 <p>If you run the job again, you will see an error message saying the <code class="prettyprint">output</code> directory already exists. This prevents a user to accidentally overwrite a file. You can remove the directory by</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -rm -r output
 </code></pre></div>
-<div class="panel-group exercise"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#question170" style="text-decoration:none;">Exercise: Count diagnostic code only(events start with DIAG).</a></h4></div><div id="question170" class="panel-collapse collapse"><div class="panel-body"><p>You can achieve this by updating mapper as</p><div class="highlight"><pre><code class="language-java" data-lang="java">public void map(LongWritable offset, Text lineText, Context context)
-    throws IOException, InterruptedException {
+<div class="panel-group exercise">
+<div class="panel panel-default">
+<div class="panel-heading">
+<h4 class="panel-title">
+<a data-toggle="collapse" href="#question2" style="text-decoration:none;">Exercise: Count diagnostic code only(events start with DIAG).</a>
+</h4>
+</div>
 
+<div id="question2" class="panel-collapse collapse">
+<div class="panel-body">
+<p>You can achieve this by updating mapper as</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">public void map(LongWritable offset, Text lineText, Context context)
+    throws IOException, InterruptedException {
   String line = lineText.toString();
   String eventID = line.split(&quot;,&quot;)[1];
   if(eventID.startsWith(&quot;DIAG&quot;)){
     context.write(new Text(eventID), one);
   }
 }
-</code></pre></div></div></div></div></div>
+</code></pre></div>
+</div>
+
+<p></div></div></div></p>
 
 
             <ul class="pager">
