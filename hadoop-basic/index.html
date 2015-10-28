@@ -44,7 +44,7 @@
 <body>
 
     <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="z-index:100">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -182,12 +182,11 @@ found 2 items
 
 <div id="question1" class="panel-collapse collapse">
 <div class="panel-body">
-<div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -rm -r input
+    <div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -rm -r input
 </code></pre></div>
 <p>You may miss the <code class="prettyprint">-r</code> option and get error. <code class="prettyprint">-r</code> tells HDFS to remove recursively. This is similar to linux command <code class="prettyprint">rm</code>.</p>
+</div></div></div>
 </div>
-
-<p></div></div></div></p>
 
 <h1 id="mapreduce">MapReduce</h1>
 
@@ -358,7 +357,7 @@ DIAG1120        5
 
 <div id="question2" class="panel-collapse collapse">
 <div class="panel-body">
-<p>You can achieve this by updating mapper as</p>
+    <p>You can achieve this by updating mapper as</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">public void map(LongWritable offset, Text lineText, Context context)
     throws IOException, InterruptedException {
   String line = lineText.toString();
@@ -368,9 +367,8 @@ DIAG1120        5
   }
 }
 </code></pre></div>
+</div></div></div>
 </div>
-
-<p></div></div></div></p>
 
 
             <ul class="pager">
@@ -383,12 +381,6 @@ DIAG1120        5
 
   
     
-  
-  
-
-  
-  
-
   
   
 
@@ -484,18 +476,10 @@ DIAG1120        5
     
   
 
-  
-    
-  
-
-  
-    
-  
-
 
 
 <li class="next">
-    <a href="/hbase/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Apache HBase&rarr;</a>
+    <a href="/hadoop-hbase/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Apache HBase&rarr;</a>
 </li>
 
 

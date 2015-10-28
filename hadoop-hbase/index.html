@@ -44,7 +44,7 @@
 <body>
 
     <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="z-index:100">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -115,11 +115,18 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <p>Apache HBase is a distributed column-oriented database built on top of the Hadoop file system. Use HBase when you need random, realtime read/write access to your Big Data. It provides a convenient interactive shell as well as a Java API.</p>
+            <div class="bs-callout bs-callout-info" id="callout-helper-context-color-specificity">
+        <h4>Learning Objectives</h4><ul>
+<li>Know HBase interactive shell.</li>
+<li>Being able to conduct CRUD operations.</li>
+</ul>
+</div>
+
+<p>Apache HBase is a distributed column-oriented database built on top of the Hadoop file system. Use HBase when you need random, realtime read/write access to your Big Data. It provides a convenient interactive shell as well as a Java API.</p>
 
 <h1 id="interactive-shell">Interactive Shell</h1>
 
-<p>You can start the HBase interactive shell using <code class="prettyprint">hbase shell</code> command. If HBase is successfully installed in your system, you will get </p>
+<p>You can start the HBase interactive shell using <code class="prettyprint">hbase shell</code> command. You will get</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">HBase Shell; enter &#39;help&lt;RETURN&gt;&#39; for list of supported commands.
 Type &quot;exit&lt;RETURN&gt;&quot; to leave the HBase Shell
 Version 0.94.18, rb149f3f0d25c5cd2f195b39fe05d42507fdeabfc, Sat May 23 00:09:16 GMT 2015
@@ -128,14 +135,7 @@ hbase(main):001:0&gt;
 </code></pre></div>
 <p>To exit the interactive shell, type <code class="prettyprint">exit</code> or <code class="prettyprint">&lt;ctrl+c&gt;</code>.</p>
 
-<ol>
-<li><p>Checking the status of the cluster</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):001:0&gt; status
-(may have some debug messages)
-2 servers, 0 dead, 1.0000 average load
-</code></pre></div></li>
-<li><p>Creating a table</p></li>
-</ol>
+<h1 id="create">Create</h1>
 
 <p>The syntax to create a table in HBase shell is shown below.</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">create &#39;table name&#39;, &#39;column family&#39;
@@ -146,17 +146,15 @@ hbase(main):001:0&gt;
 <p>And it will give you the following output.</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">0 row(s) in 1.1620 seconds
 </code></pre></div>
-<ol>
-<li>Listing table(s)</li>
-</ol>
+<h1 id="update">Update</h1>
+
+<h2 id="list-table(s)">List table(s)</h2>
 <div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):003:0&gt; list
 TABLE
 hospital
 1 row(s) in 0.0180 seconds
 </code></pre></div>
-<ol>
-<li>Describe and Alter the table</li>
-</ol>
+<h2 id="describe-and-alter-table">Describe and alter table</h2>
 
 <p>The <code class="prettyprint">describe</code> command returns the description of the table. </p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):004:0&gt; describe &#39;hospital&#39;
@@ -179,9 +177,7 @@ hbase(main):006:0&gt; alter &#39;hospital&#39;, {NAME =&gt; &#39;id&#39;, VERSIO
 <div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):007:0&gt; enable &#39;hospital&#39;
 
 </code></pre></div>
-<ol>
-<li>Putting data into the table</li>
-</ol>
+<h2 id="put-data">Put data</h2>
 
 <p>Using <code class="prettyprint">put</code> command, you can insert rows into a table. Its syntax is as follows:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">put &#39;table name&#39;, &#39;row key&#39;, &#39;colfamily:colname&#39;, &#39;value&#39;
@@ -196,9 +192,16 @@ Let&#39;s put some more records.</p>
 hbase(main):010:0&gt; put &#39;hospital&#39;, &#39;row1&#39;, &#39;value:value&#39;, &#39;1&#39;
 hbase(main):011:0&gt; put &#39;hospital&#39;, &#39;row2&#39;, &#39;id:event&#39;, &#39;event-id-2&#39;
 </code></pre></div>
-<ol>
-<li>Reading data </li>
-</ol>
+<h1 id="read">Read</h1>
+
+<h2 id="cluster-status">Cluster status</h2>
+
+<p>Checking the status of the cluster</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):001:0&gt; status
+(may have some debug messages)
+2 servers, 0 dead, 1.0000 average load
+</code></pre></div>
+<h2 id="table-data">Table data</h2>
 
 <p>Using the <code class="prettyprint">scan</code> command, you can get the table data.</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):012:0&gt; scan &#39;hospital&#39;
@@ -226,9 +229,9 @@ COLUMN                                   CELL
  id:patient       timestamp=1436622532169, value=patient-id-1
  1 row(s) in 0.9730 seconds
 </code></pre></div>
-<ol>
-<li>Deleting data</li>
-</ol>
+<h1 id="delete">Delete</h1>
+
+<h2 id="delete-cell">Delete cell</h2>
 
 <p>You can delete a specific cell in a table by the <code class="prettyprint">delete</code> command</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):016:0&gt; delete &#39;hospital&#39;, &#39;row1&#39;, &#39;id:event&#39;
@@ -238,11 +241,9 @@ COLUMN                                   CELL
 <div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):017:0&gt; deleteall &#39;hospital&#39;, &#39;row1&#39;
 0 row(s) in 0.0110 seconds   
 </code></pre></div>
-<ol>
-<li>Dropping a Table</li>
-</ol>
+<h2 id="drop-table">Drop table</h2>
 
-<p>Using the drop command, you can delete a table. Before dropping a table, you have to disable it.</p>
+<p>Using the <code class="prettyprint">drop</code> command, you can delete a table. Before dropping a table, you have to disable it.</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):018:0&gt; disable &#39;hospital&#39;
 0 row(s) in 1.1000 seconds
 
@@ -261,13 +262,7 @@ hbase(main):019:0&gt; drop &#39;hospital&#39;
   
 
   
-  
-
-  
     
-  
-  
-
   
   
 
@@ -301,14 +296,10 @@ hbase(main):019:0&gt; drop &#39;hospital&#39;
 
 
 <li class="previous">
-    <a href="/hbase/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Apache HBase</a>
+    <a href="/hadoop-basic/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Basic</a>
 </li>
 
                 
-  
-    
-  
-
   
     
   
@@ -329,10 +320,6 @@ hbase(main):019:0&gt; drop &#39;hospital&#39;
 
   
     
-    
-  
-
-  
     
   
 
