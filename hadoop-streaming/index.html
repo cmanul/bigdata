@@ -122,75 +122,75 @@
 <p>Let&#39;s first have a look at the source code<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of mapper and reducer respectively.</p>
 
 <p>The source of mapper is</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python">#!/usr/bin/env python
 
-<span class="kn">import</span> <span class="nn">sys</span>
+import sys
 
-<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">:</span>
-    <span class="n">line</span>        <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">splits</span>      <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+for line in sys.stdin:
+    line        = line.strip()
+    splits      = line.split(&#39;,&#39;, 3)
 
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
-        <span class="c"># ignore problemactic line</span>
-        <span class="k">continue</span>
+    if len(splits) &lt; 4:
+        # ignore problemactic line
+        continue
 
-    <span class="c"># unwind the splits</span>
-    <span class="n">patient_id</span><span class="p">,</span> <span class="n">event_name</span><span class="p">,</span> <span class="n">date_offset</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">splits</span>
+    # unwind the splits
+    patient_id, event_name, date_offset, value = splits
 
-    <span class="c"># emit key-value pair seperated by \t</span>
-    <span class="k">print</span> <span class="n">event_name</span> <span class="o">+</span> <span class="s">'</span><span class="se">\t</span><span class="s">1'</span>
+    # emit key-value pair seperated by \t
+    print event_name + &#39;\t1&#39;
 </code></pre></div>
 <p>The script read lines from  standard input and with some simple processing output the <code class="prettyprint">event_name</code> as key and <code class="prettyprint">1</code> as value to standard output.</p>
 
 <p>Reducer is a little bit complex. The output of mapper will be shuffled by Hadoop framework and reduder will get a list of key-value pairs. The framework gunrantee that same key will go to same reducer instance.</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python">#!/usr/bin/env python
 
-<span class="kn">import</span> <span class="nn">sys</span>
+import sys
 
-<span class="n">current_event</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="n">current_count</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">event_name</span> <span class="o">=</span> <span class="bp">None</span>
+current_event = None
+current_count = 0
+event_name = None
 
-<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">:</span>
-    <span class="c"># remove leading and trailing whitespace</span>
-    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+for line in sys.stdin:
+    # remove leading and trailing whitespace
+    line = line.strip()
 
-    <span class="c"># parse the input we got from mapper.py</span>
-    <span class="n">event_name</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    # parse the input we got from mapper.py
+    event_name, count = line.split(&#39;\t&#39;, 1)
 
-    <span class="c"># convert count (currently a string) to int</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
-    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
-        <span class="c"># count was not a number, so silently</span>
-        <span class="c"># ignore/discard this line</span>
-        <span class="k">continue</span>
+    # convert count (currently a string) to int
+    try:
+        count = int(count)
+    except ValueError:
+        # count was not a number, so silently
+        # ignore/discard this line
+        continue
 
-    <span class="c"># line is sorted with key (event name)</span>
-    <span class="k">if</span> <span class="n">current_event</span> <span class="o">==</span> <span class="n">event_name</span><span class="p">:</span>
-        <span class="c"># same key accumulate</span>
-        <span class="n">current_count</span> <span class="o">+=</span> <span class="n">count</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c"># a new key to work on</span>
-        <span class="k">if</span> <span class="n">current_event</span><span class="p">:</span>
-            <span class="c"># write result to STDOUT</span>
-            <span class="k">print</span> <span class="s">'</span><span class="si">%</span><span class="s">s</span><span class="se">\t</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="p">(</span><span class="n">current_event</span><span class="p">,</span> <span class="n">current_count</span><span class="p">)</span>
-        <span class="n">current_count</span> <span class="o">=</span> <span class="n">count</span>
-        <span class="n">current_event</span> <span class="o">=</span> <span class="n">event_name</span>
+    # line is sorted with key (event name)
+    if current_event == event_name:
+        # same key accumulate
+        current_count += count
+    else:
+        # a new key to work on
+        if current_event:
+            # write result to STDOUT
+            print &#39;%s\t%s&#39; % (current_event, current_count)
+        current_count = count
+        current_event = event_name
 
-<span class="c"># do not forget to output the last event_name if needed!</span>
-<span class="k">if</span> <span class="n">current_event</span> <span class="o">==</span> <span class="n">event_name</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">'</span><span class="si">%</span><span class="s">s</span><span class="se">\t</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="p">(</span><span class="n">current_event</span><span class="p">,</span> <span class="n">current_count</span><span class="p">)</span>
+# do not forget to output the last event_name if needed!
+if current_event == event_name:
+    print &#39;%s\t%s&#39; % (current_event, current_count)
 </code></pre></div>
 <p>This piece of code check the boundaries of sorted input and sum up values from same key.</p>
 
 <h1 id="how-to-run">How to run</h1>
 
 <p>Before running it in Hadoop, it&#39;s more convenient to test that in shell with <code class="prettyprint">cat</code> and <code class="prettyprint">sort</code> commands. You will need to navigate to <em>sample/hadoop-streaming</em> folder. Then, run below command in shell</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">cat data/<span class="k">*</span> | python mapper.py | sort | python reducer.py                       
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">cat data/* | python mapper.py | sort | python reducer.py                       
 </code></pre></div>
 <p>You will get results like</p>
-<div class="highlight"><pre><code class="language-" data-lang="">DIAG0043        1
+<div class="highlight"><pre><code class="language-text" data-lang="text">DIAG0043        1
 DIAG00845       8
 DIAG0086        1
 DIAG0088        4
@@ -203,20 +203,20 @@ DIAG0232        1
 ...
 </code></pre></div>
 <p>It works as expected, now we could run it in Hadoop. We first need to put data into HDFS then run hadoop</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hdfs dfs -put data/ /streaming-data
+<div class="highlight"><pre><code class="language-text" data-lang="text">hdfs dfs -put data/ /streaming-data
 hadoop jar hadoop-streaming.jar \
    -files mapper.py,reducer.py \
-   -mapper "python mapper.py" \
-   -reducer "python reducer.py" \
+   -mapper &quot;python mapper.py&quot; \
+   -reducer &quot;python reducer.py&quot; \
    -input /streaming-data \
    -output /streaming-output
 </code></pre></div>
 <p>We can check the result and clean up now.</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># check result</span>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"># check result
 hdfs dfs -ls /streaming-output
-hdfs dfs -cat /streaming-output/<span class="k">*</span>
+hdfs dfs -cat /streaming-output/*
 
-<span class="c"># clean up</span>
+# clean up
 hdfs dfs -rm -r /streaming-output
 hdfs dfs -rm -r /streaming-data
 </code></pre></div>
@@ -282,6 +282,9 @@ hdfs dfs -rm -r /streaming-data
   
   
 
+  
+  
+
 
 
 <li class="previous">
@@ -317,6 +320,10 @@ hdfs dfs -rm -r /streaming-data
 
   
     
+    
+  
+
+  
     
   
 

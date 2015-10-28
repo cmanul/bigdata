@@ -115,133 +115,187 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <p>This section will briefly go through the essential knowledge about scala for later Spark training. In this section we will first show how to work with spark shell, then show how use variables, functions with examples. Finally, we give instructions about how to compile and run a standalone program using <code class="prettyprint">sbt</code>.</p>
+            <div class="bs-callout bs-callout-info" id="callout-helper-context-color-specificity">
+        <h4>Learning Objectives</h4><ul>
+<li>Know how to work with scala interactive shell.</li>
+<li>Understand <code class="prettyprint">var</code> and <code class="prettyprint">val</code> and why prefer <code class="prettyprint">val</code>.</li>
+<li>Can define variables.</li>
+<li>Can define functions and make function calls.</li>
+<li>Can define class.</li>
+<li>Know Simple Build Tool(SBT).</li>
+</ul>
+</div>
 
-<h1 id="spark-shell">Spark Shell</h1>
+<p>This section will briefly go through the essential knowledge about scala for later Spark training. In this section we will first show how to work with scala shell, then show how use variables, functions with examples. Finally, we give instructions about how to compile and run a standalone program using <code class="prettyprint">sbt</code>.</p>
 
-<p>Open a terminal and navigate to the root of code samples. You could open a scala shell by typing <code class="prettyprint">scala</code>. Or, you could use <a href="http://www.scala-sbt.org/index.html">sbt</a> by typing <code class="prettyprint">sbt/sbt console</code>. The second approach will help you add your project source code and dependencies into class path, so that your functions or library functions will be available for you to try to in the interactive shell. </p>
+<h1 id="scala-shell">Scala Shell</h1>
+
+<p>Open a terminal and navigate to the root of code samples. You can open a scala shell by typing <code class="prettyprint">scala</code>. Or, you can use <a href="http://www.scala-sbt.org/index.html">sbt</a> by typing <code class="prettyprint">sbt/sbt console</code>. The second approach will help you add your project source code and dependencies into class path, so that your functions or library functions will be available for you to try to in the interactive shell. </p>
 
 <p>Start the scala shell you will see</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">$</span> <span class="n">sbt</span> <span class="n">console</span>
-<span class="o">[</span><span class="kt">info</span><span class="o">]...</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">$ sbt console
+[info]...
 
-<span class="nc">Welcome</span> <span class="n">to</span> <span class="nc">Scala</span> <span class="n">version</span> <span class="mf">2.10</span><span class="o">.</span><span class="mi">4</span> <span class="o">(</span><span class="nc">Java</span> <span class="nc">HotSpot</span><span class="o">(</span><span class="nc">TM</span><span class="o">)</span> <span class="mi">64</span><span class="o">-</span><span class="nc">Bit</span> <span class="nc">Server</span> <span class="nc">VM</span><span class="o">,</span> <span class="nc">Java</span> <span class="mf">1.8</span><span class="o">.</span><span class="mi">0</span><span class="o">).</span>
-<span class="nc">Type</span> <span class="n">in</span> <span class="n">expressions</span> <span class="n">to</span> <span class="n">have</span> <span class="n">them</span> <span class="n">evaluated</span><span class="o">.</span>
-<span class="nc">Type</span> <span class="k">:</span><span class="kt">help</span> <span class="kt">for</span> <span class="kt">more</span> <span class="kt">information.</span>
+Welcome to Scala version 2.10.4 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0).
+Type in expressions to have them evaluated.
+Type :help for more information.
 
-<span class="kt">scala&gt;</span> 
+scala&gt; 
 </code></pre></div>
-<p>type <code class="prettyprint">:quit</code> to stop the shell.</p>
+<p>You can type <code class="prettyprint">:quit</code> to stop and quit the shell, but don&#39;t do that now. We will show operations in the shell in following material.</p>
 
 <h1 id="variables">Variables</h1>
 
-<p>You could decalre a variable like</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">myInt</span> <span class="k">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="n">myInt</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">2</span>
+<h2 id="declare-val-and-var">Declare <code class="prettyprint">val</code> and <code class="prettyprint">var</code></h2>
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">myInt</span> <span class="k">=</span> <span class="mi">3</span>
+<p>Suppose you are still in the scala intertive shell. Define a immutable variable as</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val myInt = 1 + 1
+myInt: Int = 2
+
+scala&gt; myInt = 3
 </code></pre></div>
 <p>where <code class="prettyprint">val</code> is a key word in <code class="prettyprint">scala</code> that make the variable immutable. If you reassign a value to <code class="prettyprint">myInt</code>, error will be reported.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">myInt</span> <span class="k">=</span> <span class="mi">3</span>
-<span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">8</span><span class="k">:</span> <span class="kt">error:</span> <span class="kt">reassignment</span> <span class="kt">to</span> <span class="kt">val</span>
-       <span class="n">myInt</span> <span class="k">=</span> <span class="mi">3</span>
-             <span class="o">^</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myInt = 3
+&lt;console&gt;:8: error: reassignment to val
+       myInt = 3
+             ^
+scala&gt; 
+</code></pre></div>
+<div class="msgbox bg-warning"><h4>Warning</h4><p>In interactive shell, it&#39;s possible to redefine variable with same name. In scala source code file, it&#39;s not allowed.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val a = 1
+a: Int = 1
+scala&gt; val a = 2
+a: Int = 2
+</code></pre></div>
+</div>
 
-<span class="n">scala</span><span class="o">&gt;</span> 
-</code></pre></div>
-<p>Instead, variable declared with <code class="prettyprint">var</code> is mutable. In real practice, we try to use  <code class="prettyprint">val</code> instead of <code class="prettyprint">var</code> if possible as a good practice of functional programming.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">var</span> <span class="n">myString</span> <span class="k">=</span> <span class="s">"Hello Big Data"</span>
-<span class="n">myString</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Hello</span> <span class="nc">Big</span> <span class="nc">Data</span>
+<p>Instead, variable declared with <code class="prettyprint">var</code> is mutable. In real practice, we try to use <code class="prettyprint">val</code> instead of <code class="prettyprint">var</code> if possible as a good practice of functional programming. </p>
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">myString</span> <span class="k">=</span> <span class="s">"Hello Scala"</span>
-<span class="n">myString</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Hello</span> <span class="nc">Scala</span>
-</code></pre></div>
-<p>Looks like we are working with script language like Javascript or Python, no variable type is specified. In fact, <code class="prettyprint">scala</code> is static type language and the compiler implicitly infered the type. You could always specify a type as</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">myDouble</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">myDouble</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">3.0</span>
-</code></pre></div>
-<p>Beside <code class="prettyprint">Int</code>, <code class="prettyprint">Double</code> and <code class="prettyprint">String</code>. Built-in variable types of Scala you may need in this training include</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">myList</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"this"</span><span class="o">,</span> <span class="s">"is"</span><span class="o">,</span> <span class="s">"a"</span><span class="o">,</span> <span class="s">"list"</span><span class="o">,</span> <span class="s">"of"</span><span class="o">,</span> <span class="s">"string"</span><span class="o">)</span>
-<span class="n">myList</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">is</span><span class="o">,</span> <span class="n">a</span><span class="o">,</span> <span class="n">list</span><span class="o">,</span> <span class="n">of</span><span class="o">,</span> <span class="n">string</span><span class="o">)</span>
+<div class="msgbox bg-info"><h4>Information</h4><p>You may have concern that maybe finally many immutable variables will be declared. Actually, with chained function calls, that situation is not the case for well organized code.</p>
+</div>
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">myTuple</span><span class="k">:</span><span class="o">(</span><span class="kt">Double</span><span class="o">,</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="mf">1.0</span><span class="o">,</span> <span class="mf">2.0</span><span class="o">)</span>
-<span class="n">myTuple</span><span class="k">:</span> <span class="o">(</span><span class="kt">Double</span><span class="o">,</span> <span class="kt">Double</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="mf">1.0</span><span class="o">,</span><span class="mf">2.0</span><span class="o">)</span>
+<p>An example of mutable variable is</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; var myString = &quot;Hello Big Data&quot;
+myString: String = Hello Big Data
+
+scala&gt; myString = &quot;Hello Scala&quot;
+myString: String = Hello Scala
 </code></pre></div>
+<h2 id="type">Type</h2>
+
+<p>It looks like we are working with script language like Javascript or Python, as no variable type is specified explicitly. In fact, <code class="prettyprint">scala</code> is static type language and the compiler can implicitly infer the type in most cae. However, you can always specify a type as</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val myDouble: Double = 3
+myDouble: Double = 3.0
+</code></pre></div>
+<p>It&#39;s always encouraged to do so unless it&#39;s too obvious like declare a variable with built-in basic type.</p>
+
+<p>Beside <code class="prettyprint">Int</code>, <code class="prettyprint">Double</code> and <code class="prettyprint">String</code>, built-in variable types of Scala you will need in this training is <code class="prettyprint">List</code> and <code class="prettyprint">Tuple</code></p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val myList: List[String] = List(&quot;this&quot;, &quot;is&quot;, &quot;a&quot;, &quot;list&quot;, &quot;of&quot;, &quot;string&quot;)
+myList: List[String] = List(this, is, a, list, of, string)
+
+scala&gt; val myTuple:(Double, Double) = (1.0, 2.0)
+myTuple: (Double, Double) = (1.0,2.0)
+</code></pre></div>
+<p>Here the <code class="prettyprint">List[String]</code> is syntax of generics in Scala, which is same as <code class="prettyprint">C#</code>. In above example, <code class="prettyprint">List[String]</code> means a <code class="prettyprint">List</code> of <code class="prettyprint">String</code> and <code class="prettyprint">(Double, Double)</code> means a two-field tuple type and both the 1st element and 1nd element should be of type <code class="prettyprint">Double</code>.</p>
+
 <h1 id="functions">Functions</h1>
 
-<p>You could define a function and call into it</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="n">triple</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="o">{</span>
-     <span class="o">|</span> <span class="n">x</span><span class="o">*</span><span class="mi">3</span>
-     <span class="o">|</span> <span class="o">}</span>
-<span class="n">triple</span><span class="k">:</span> <span class="o">(</span><span class="kt">x:</span> <span class="kt">Int</span><span class="o">)</span><span class="kt">Int</span>
+<p>You can define a function and call into it like</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; def triple(x: Int): Int = {
+     | x*3
+     | }
+triple: (x: Int)Int
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">triple</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
-<span class="n">res0</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">6</span>
+scala&gt; triple(2)
+res0: Int = 6
 </code></pre></div>
-<p>Where <code class="prettyprint">x: Int</code> is parameter and type, the second <code class="prettyprint">Int</code> is function return type. There&#39;s not explicit <code class="prettyprint">return</code> statement, the result of last expresssion <code class="prettyprint">x*3</code> will be returned. In this example, as there are only one expression and return type could be infered by compiler, you could define function as</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">def</span> <span class="n">triple</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="n">x</span><span class="o">*</span><span class="mi">3</span>
+<p>Where <code class="prettyprint">x: Int</code> is parameter and its type, and the second <code class="prettyprint">Int</code> is function return type. There&#39;s not explicit <code class="prettyprint">return</code> statement, but the result of last expresssion <code class="prettyprint">x*3</code> will be returned like <code class="prettyprint">Ruby</code>. In this example, as there is only one expression and return type can be infered by compiler, you may define function as</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">def triple(x: Int) = x*3
 </code></pre></div>
-<p>Scala is object-oriented, function calls on a class method is straight forward like most OO language</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">myString</span><span class="o">.</span><span class="n">lastIndexOf</span><span class="o">(</span><span class="s">"Scala"</span><span class="o">)</span>
-<span class="n">res1</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">6</span>
+<p>Scala is object-oriented, function calls on a class method is straight forward like most OO languages(i.e. Java, C#)</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myString.lastIndexOf(&quot;Scala&quot;)
+res1: Int = 6
 </code></pre></div>
-<p>If the function do not have parameters, you could call it without parenthesis</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">myInt</span><span class="o">.</span><span class="n">toString</span>
-<span class="n">res2</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="mi">2</span>
+<p>If the function do not have parameters, you can even call it without parenthesis</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myInt.toString
+res2: String = 2
 </code></pre></div>
-<p>You could also define an anonymous function and pass it to variable like lambda expression in some other language:</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">increaseOne</span> <span class="k">=</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="n">increaseOne</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">&lt;</span><span class="n">function1</span><span class="o">&gt;</span>
+<p>You can also define an anonymous function and pass it to variable like lambda expression in some other languages:</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val increaseOne = (x: Int) =&gt; x + 1
+increaseOne: Int =&gt; Int = &lt;function1&gt;
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">increaseOne</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
-<span class="n">res3</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">4</span>
+scala&gt; increaseOne(3)
+res3: Int = 4
 </code></pre></div>
 <p>Anonymous function is very useful when a simple funtion will be passed as parameter to a function call</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">myList</span><span class="o">.</span><span class="n">foreach</span><span class="o">{</span><span class="n">item</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">item</span><span class="o">)}</span>
-<span class="k">this</span>
-<span class="n">is</span>
-<span class="n">a</span>
-<span class="n">list</span>
-<span class="n">of</span>
-<span class="n">string</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myList.foreach{item: String =&gt; println(item)}
+this
+is
+a
+list
+of
+string
 </code></pre></div>
-<p>where <code class="prettyprint">item: String =&gt; println(item)</code> is an anonymous function. This function call be simpled to </p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">myList</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>
+<p>where <code class="prettyprint">item: String =&gt; println(item)</code> is an anonymous function. This function call be further simplified to </p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myList.foreach(println(_))
+scala&gt; myList.foreach(println)
 </code></pre></div>
-<p>where <code class="prettyprint">_</code> will represent first parameter. You could even write <code class="prettyprint">myList.foreach(println)</code> only.</p>
+<p>where <code class="prettyprint">_</code> represent first parameter of the anonymous function with body <code class="prettyprint">println(_)</code>. Additional <code class="prettyprint">_</code> will represent other parameters. For example, we can calculate sum of numbers using reduce</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val myInt = List(1, 2, 3, 4, 5, 6)
+myInt: List[Int] = List(1, 2, 3, 4, 5, 6)
+
+scala&gt; myInt.reduce(_ + _)
+res0: Int = 21
+</code></pre></div>
+<p>In above example, <code class="prettyprint">reduce</code> will aggregate <code class="prettyprint">List[A]</code> into <code class="prettyprint">A</code> and we defined the aggregator as <code class="prettyprint">_ + _</code> to sum them up. Of course, you can write that more explicit like</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; myInt.reduce((a, b)=&gt; a+b)
+res1: Int = 21
+</code></pre></div>
+<div class="msgbox bg-info"><h4>Information</h4><p>Partial function and placeholder syntax is an advanced topic of Scala programming language. It&#39;s hard to master withing short period of time. For this tutorial, we will use that in simple cases like the sum operation above.</p>
+</div>
 
 <h1 id="class">Class</h1>
 
-<p>Declare class in scala could be as simple as </p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">Patient</span><span class="o">(</span><span class="k">val</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="k">val</span> <span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
-<span class="n">defined</span> <span class="k">class</span> <span class="nc">Patient</span>
+<p>Declaration of a class in scala is as simple as </p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; class Patient(val name: String, val id: Int)
+defined class Patient
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">patient</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Partial</span>
-<span class="nc">PartialOrdering</span>    <span class="nc">PartiallyOrdered</span>   
+scala&gt; val patient = new Patient(&quot;Bob&quot;, 1)
+patient: Patient = Patient@755f5e80
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">patient</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Partial</span>
-<span class="nc">PartialOrdering</span>    <span class="nc">PartiallyOrdered</span>   
-
-<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">patient</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Patient</span><span class="o">(</span><span class="s">"Bob"</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
-<span class="n">patient</span><span class="k">:</span> <span class="kt">Patient</span> <span class="o">=</span> <span class="nc">Patient</span><span class="k">@</span><span class="mf">755f</span><span class="mi">5</span><span class="n">e80</span>
-
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">patient</span><span class="o">.</span><span class="n">name</span>
-<span class="n">res13</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Bob</span>
+scala&gt; patient.name
+res13: String = Bob
 </code></pre></div>
-<p>A special kind of class we will use is <a href="http://www.scala-lang.org/old/node/107"><code class="prettyprint">Case Class</code></a>. <code class="prettyprint">Case Class</code> could be declared as </p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">Patient</span><span class="o">(</span><span class="k">val</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="k">val</span> <span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+<p>Here we see the succint syntax of Scala again. <code class="prettyprint">class Patient(val name: String, val id: Int)</code> not only defined constructor of <code class="prettyprint">Patient</code> but also defined two member varialbles(<code class="prettyprint">name</code> and <code class="prettyprint">id</code>). </p>
+
+<p>A special kind of class we will use a lot is <a href="http://www.scala-lang.org/old/node/107"><code class="prettyprint">Case Class</code></a>. <code class="prettyprint">Case Class</code> can be declared as </p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; case class Patient(val name: String, val id: Int)
+</code></pre></div>
+<p>and see below <a href="#pattern-matching">Pattern Matching</a> for use case.</p>
+
+<h1 id="pattern-matching">Pattern Matching</h1>
+
+<p>You may know the <code class="prettyprint">switch..case</code> in other language. Scala provides a more flexible and powerful technique, <code class="prettyprint">Pattern Matching</code>. Below example shows one can match by value, by type in one match.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">val x = 2
+x match {
+    case a: Int =&gt; println(&quot;a is int&quot;)
+    case 3 =&gt; println(&quot;equals 3&quot;)
+    case _ =&gt; println(&quot;unknown&quot;)
+}
 </code></pre></div>
 <p>It&#39;s very convenient to use case class in pattern matting</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">p</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Patient</span><span class="o">(</span><span class="s">"Abc"</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
-<span class="n">p</span><span class="k">:</span> <span class="kt">Patient</span> <span class="o">=</span> <span class="nc">Patient</span><span class="o">(</span><span class="nc">Abc</span><span class="o">,</span><span class="mi">1</span><span class="o">)</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val p = new Patient(&quot;Abc&quot;, 1)
+p: Patient = Patient(Abc,1)
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">p</span> <span class="k">match</span> <span class="o">{</span><span class="k">case</span> <span class="nc">Patient</span><span class="o">(</span><span class="s">"Abc"</span><span class="o">,</span> <span class="n">id</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"matching id is $id"</span><span class="o">)}</span>
-<span class="n">matching</span> <span class="n">id</span> <span class="n">is</span> <span class="mi">1</span>
+scala&gt; p match {case Patient(&quot;Abc&quot;, id) =&gt; println(s&quot;matching id is $id&quot;)}
+matching id is 1
 </code></pre></div>
+<p>Here we not only matched value, but also extracted one member field from the <code class="prettyprint">Patient</code> class instance.</p>
+
 <h1 id="standalone-program">Standalone Program</h1>
 
 <p>Working with large real world application, you usually need to compile and package your source code with some tools. Here we show how to compile and run a simple program with <a href="http://www.scala-sbt.org/index.html">sbt</a>. Run the sample code in &#39;hello-bigdata&#39; folder</p>
-<div class="highlight"><pre><code class="language-" data-lang="">% sbt/sbt run
+<div class="highlight"><pre><code class="language-text" data-lang="text">% sbt/sbt run
 Attempting to fetch sbt
 ######################################################################## 100.0%
 Launching sbt from sbt/sbt-launch-0.13.8.jar
@@ -252,16 +306,16 @@ Launching sbt from sbt/sbt-launch-0.13.8.jar
 Hello bigdata
 [success] Total time: 2 s, completed May 3, 2015 8:42:48 PM
 </code></pre></div>
-<p>the source code file <code class="prettyprint">hello.scals</code> is compiled and invoked.</p>
+<p>the source code file <code class="prettyprint">hello.scala</code> is compiled and invoked.</p>
 
 <h1 id="further-reading">Further Reading</h1>
 
-<p>This is a very brief overview of important Scala language features required for the training. We highly recommend the readers to checkout below references</p>
+<p>This is a very brief overview of important Scala language features required for the training. We highly recommend readers to checkout below references to get a bettern understanding of <code class="prettyprint">Scala</code> programming language.</p>
 
 <ul>
 <li><a href="https://twitter.github.io/scala_school/index.html">Twitter Scala School</a></li>
 <li><a href="http://docs.scala-lang.org/tutorials/?_ga=1.128323084.1826222080.1429310377">Official Scala Tutorial</a></li>
-<li><a href="http://www.scala-sbt.org/0.13/tutorial/index.html">sbt tutorial</a></li>
+<li><a href="http://www.scala-sbt.org/0.13/tutorial/index.html">SBT tutorial</a></li>
 </ul>
 
 
@@ -299,6 +353,9 @@ Hello bigdata
 
   
     
+  
+  
+
   
   
 
@@ -377,10 +434,14 @@ Hello bigdata
     
   
 
+  
+    
+  
+
 
 
 <li class="next">
-    <a href="/spark-sql/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Spark Sql&rarr;</a>
+    <a href="/spark-basic/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Spark Basic&rarr;</a>
 </li>
 
 

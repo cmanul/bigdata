@@ -126,7 +126,7 @@
 <p>Spark provide API to load data in json, parquet, hive table etc. You could refer to the official <a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#data-sources">Spark SQL programming guide</a> for those formats. Here we show how to load csv files, we will use the <a href="https://github.com/databricks/spark-csv">spark-csv</a> module by databricks.</p>
 
 <p>Start spark shell with below command to add extra dependencies</p>
-<div class="highlight"><pre><code class="language-" data-lang="">% spark/bin/spark-shell --packages com.databricks:spark-csv_2.10:1.0.3
+<div class="highlight"><pre><code class="language-text" data-lang="text">% spark/bin/spark-shell --packages com.databricks:spark-csv_2.10:1.0.3
 [logs]
 
 Spark context available as sc.
@@ -136,48 +136,48 @@ SQL context available as sqlContext.
 scala&gt; 
 </code></pre></div>
 <p>Now, load data</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">patientEvents</span> <span class="k">=</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="s">"data/"</span><span class="o">,</span> <span class="s">"com.databricks.spark.csv"</span><span class="o">).</span>
-     <span class="n">toDF</span><span class="o">(</span><span class="s">"patientId"</span><span class="o">,</span> <span class="s">"eventId"</span><span class="o">,</span> <span class="s">"date"</span><span class="o">,</span> <span class="s">"value"</span><span class="o">)</span>
-<span class="n">patientEvents</span><span class="k">:</span> <span class="kt">org.apache.spark.sql.DataFrame</span> <span class="o">=</span> <span class="o">[</span><span class="kt">patientId:</span> <span class="kt">string</span>, <span class="kt">eventId:</span> <span class="kt">string</span>, <span class="kt">date:</span> <span class="kt">string</span>, <span class="kt">value:</span> <span class="kt">string</span><span class="o">]</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val patientEvents = sqlContext.load(&quot;data/&quot;, &quot;com.databricks.spark.csv&quot;).
+     toDF(&quot;patientId&quot;, &quot;eventId&quot;, &quot;date&quot;, &quot;value&quot;)
+patientEvents: org.apache.spark.sql.DataFrame = [patientId: string, eventId: string, date: string, value: string]
 </code></pre></div>
 <p>the first parameter is path to data, and second is data source. Here we specify a directory name so that all files in that directory will be read and second parameter make sure we will the proper parser. Next we call <code class="prettyprint">toDF</code> to rename the column with meaningful name.</p>
 
 <h1 id="manipulating-data">Manipulating data</h1>
 
 <p>There are two methods to work with the DataFrame, either using the domain specific language (DSL) or use SQL. Writing SQL is straight forward assuming you have experience with any relational database.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">patientEvents</span><span class="o">.</span><span class="n">registerTempTable</span><span class="o">(</span><span class="s">"events"</span><span class="o">)</span>
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="o">(</span><span class="s">"select patientId, eventId, count(*) count from events where eventId like 'DIAG%' group by patientId, eventId order by count desc"</span><span class="o">).</span><span class="n">collect</span>
-<span class="n">res5</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">org.apache.spark.sql.Row</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(...)</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; patientEvents.registerTempTable(&quot;events&quot;)
+scala&gt; sqlContext.sql(&quot;select patientId, eventId, count(*) count from events where eventId like &#39;DIAG%&#39; group by patientId, eventId order by count desc&quot;).collect
+res5: Array[org.apache.spark.sql.Row] = Array(...)
 </code></pre></div>
 <p>Here the <code class="prettyprint">patientEvents</code> DataFrame is registered as a table in sql context so that we could run sql commands. Next line is a standard sql command with <code class="prettyprint">where</code>, <code class="prettyprint">group by</code> and <code class="prettyprint">sort by</code> statements.</p>
 
 <p>Next, we show how to manipulate data with DSL, same result of previous SQL command could be achieved by</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">patientEvents</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="n">$</span><span class="s">"eventId"</span><span class="o">.</span><span class="n">startsWith</span><span class="o">(</span><span class="s">"DIAG"</span><span class="o">)).</span><span class="n">groupBy</span><span class="o">(</span><span class="s">"patientId"</span><span class="o">,</span> <span class="s">"eventId"</span><span class="o">).</span><span class="n">count</span><span class="o">.</span><span class="n">orderBy</span><span class="o">(</span><span class="n">$</span><span class="s">"count"</span><span class="o">.</span><span class="n">desc</span><span class="o">).</span><span class="n">show</span>
-<span class="n">patientId</span>        <span class="n">eventId</span>   <span class="n">count</span>
-<span class="mf">00291F</span><span class="mi">39917544</span><span class="n">B1</span> <span class="nc">DIAG28521</span> <span class="mi">16</span>   
-<span class="mf">00291F</span><span class="mi">39917544</span><span class="n">B1</span> <span class="nc">DIAG58881</span> <span class="mi">16</span>   
-<span class="mf">00291F</span><span class="mi">39917544</span><span class="n">B1</span> <span class="nc">DIAG2809</span>  <span class="mi">13</span>   
-<span class="mi">00824</span><span class="n">B6D595BAFB8</span> <span class="nc">DIAG4019</span>  <span class="mi">11</span>   
-<span class="mi">0085</span><span class="n">B4F55FFA358D</span> <span class="nc">DIAG28521</span> <span class="mi">9</span>    
-<span class="mi">6</span><span class="n">A8F2B98C1F6F5DA</span> <span class="nc">DIAG58881</span> <span class="mi">8</span>    
-<span class="mi">019</span><span class="n">E4729585EF3DD</span> <span class="nc">DIAG4019</span>  <span class="mi">8</span>    
-<span class="mi">0124</span><span class="n">E58C3460D3F8</span> <span class="nc">DIAG4019</span>  <span class="mi">8</span>    
-<span class="mf">2D5D3D5F</span><span class="mi">03</span><span class="n">C8C176</span> <span class="nc">DIAG4019</span>  <span class="mi">8</span>    
-<span class="mi">01</span><span class="n">A999551906C787</span> <span class="nc">DIAG4019</span>  <span class="mi">7</span>    
-<span class="o">...</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; patientEvents.filter($&quot;eventId&quot;.startsWith(&quot;DIAG&quot;)).groupBy(&quot;patientId&quot;, &quot;eventId&quot;).count.orderBy($&quot;count&quot;.desc).show
+patientId        eventId   count
+00291F39917544B1 DIAG28521 16   
+00291F39917544B1 DIAG58881 16   
+00291F39917544B1 DIAG2809  13   
+00824B6D595BAFB8 DIAG4019  11   
+0085B4F55FFA358D DIAG28521 9    
+6A8F2B98C1F6F5DA DIAG58881 8    
+019E4729585EF3DD DIAG4019  8    
+0124E58C3460D3F8 DIAG4019  8    
+2D5D3D5F03C8C176 DIAG4019  8    
+01A999551906C787 DIAG4019  7    
+...
 </code></pre></div>
 <h1 id="saving-data">Saving data</h1>
 
 <p>Spark SQL provides a convenient way to save data in different format just like loading data. For example you could write </p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">patientEvents</span><span class="o">.</span>
-    <span class="n">filter</span><span class="o">(</span><span class="n">$</span><span class="s">"eventId"</span><span class="o">.</span><span class="n">startsWith</span><span class="o">(</span><span class="s">"DIAG"</span><span class="o">)).</span>
-    <span class="n">groupBy</span><span class="o">(</span><span class="s">"patientId"</span><span class="o">,</span> <span class="s">"eventId"</span><span class="o">).</span>
-    <span class="n">count</span><span class="o">.</span>
-    <span class="n">orderBy</span><span class="o">(</span><span class="n">$</span><span class="s">"count"</span><span class="o">.</span><span class="n">desc</span><span class="o">).</span>
-    <span class="n">save</span><span class="o">(</span><span class="s">"aggregated.json"</span><span class="o">,</span> <span class="s">"json"</span><span class="o">)</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; patientEvents.
+    filter($&quot;eventId&quot;.startsWith(&quot;DIAG&quot;)).
+    groupBy(&quot;patientId&quot;, &quot;eventId&quot;).
+    count.
+    orderBy($&quot;count&quot;.desc).
+    save(&quot;aggregated.json&quot;, &quot;json&quot;)
 </code></pre></div>
 <p>or</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">patientEvents</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="n">$</span><span class="s">"eventId"</span><span class="o">.</span><span class="n">startsWith</span><span class="o">(</span><span class="s">"DIAG"</span><span class="o">)).</span><span class="n">groupBy</span><span class="o">(</span><span class="s">"patientId"</span><span class="o">,</span> <span class="s">"eventId"</span><span class="o">).</span><span class="n">count</span><span class="o">.</span><span class="n">orderBy</span><span class="o">(</span><span class="n">$</span><span class="s">"count"</span><span class="o">.</span><span class="n">desc</span><span class="o">).</span><span class="n">save</span><span class="o">(</span><span class="s">"aggregated.csv"</span><span class="o">,</span> <span class="s">"com.databricks.spark.csv"</span><span class="o">)</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; patientEvents.filter($&quot;eventId&quot;.startsWith(&quot;DIAG&quot;)).groupBy(&quot;patientId&quot;, &quot;eventId&quot;).count.orderBy($&quot;count&quot;.desc).save(&quot;aggregated.csv&quot;, &quot;com.databricks.spark.csv&quot;)
 </code></pre></div>
 <p>to save your transformed data in <code class="prettyprint">json</code> or <code class="prettyprint">csv</code> format respectively.</p>
 
@@ -187,29 +187,32 @@ scala&gt;
 
 <ol>
 <li><p>define and register an UDF</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">udf</span><span class="o">.</span><span class="n">register</span><span class="o">(</span><span class="s">"getEventType"</span><span class="o">,</span> <span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">s</span> <span class="k">match</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="n">diagnostics</span> <span class="k">if</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">startsWith</span><span class="o">(</span><span class="s">"DIAG"</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="s">"diagnostics"</span>
-    <span class="k">case</span> <span class="s">"PAYMENT"</span> <span class="k">=&gt;</span> <span class="s">"payment"</span>
-    <span class="k">case</span> <span class="n">drug</span> <span class="k">if</span> <span class="n">drug</span><span class="o">.</span><span class="n">startsWith</span><span class="o">(</span><span class="s">"DRUG"</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="s">"drug"</span>
-    <span class="k">case</span> <span class="n">procedure</span> <span class="k">if</span> <span class="n">procedure</span><span class="o">.</span><span class="n">startsWith</span><span class="o">(</span><span class="s">"PROC"</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="s">"procedure"</span>
-    <span class="k">case</span> <span class="s">"heartfailure"</span> <span class="k">=&gt;</span> <span class="s">"heart failure"</span>
-    <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="s">"unkown"</span>
-    <span class="o">})</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; sqlContext.udf.register(&quot;getEventType&quot;, (s: String) =&gt; s match {
+    case diagnostics if diagnostics.startsWith(&quot;DIAG&quot;) =&gt; &quot;diagnostics&quot;
+    case &quot;PAYMENT&quot; =&gt; &quot;payment&quot;
+    case drug if drug.startsWith(&quot;DRUG&quot;) =&gt; &quot;drug&quot;
+    case procedure if procedure.startsWith(&quot;PROC&quot;) =&gt; &quot;procedure&quot;
+    case &quot;heartfailure&quot; =&gt; &quot;heart failure&quot;
+    case _ =&gt; &quot;unkown&quot;
+    })
 </code></pre></div></li>
 <li><p>write sql and call your function</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">sqlContext</span><span class="o">.</span><span class="n">sql</span><span class="o">(</span><span class="s">"select getEventType(eventId) type, count(*) count from events group by getEventType(eventId) order by count desc"</span><span class="o">).</span><span class="n">show</span>
-<span class="k">type</span>          <span class="kt">count</span>
-<span class="n">drug</span>          <span class="mi">16251</span>
-<span class="n">diagnostics</span>   <span class="mi">10820</span>
-<span class="n">payment</span>       <span class="mi">3259</span> 
-<span class="n">procedure</span>     <span class="mi">514</span>  
-<span class="n">heart</span> <span class="n">failure</span> <span class="mi">300</span>  
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; sqlContext.sql(&quot;select getEventType(eventId) type, count(*) count from events group by getEventType(eventId) order by count desc&quot;).show
+type          count
+drug          16251
+diagnostics   10820
+payment       3259 
+procedure     514  
+heart failure 300  
 </code></pre></div></li>
 </ol>
 
 
             <ul class="pager">
                 
+  
+  
+
   
   
 
@@ -257,10 +260,14 @@ scala&gt;
 
 
 <li class="previous">
-    <a href="/scala-basic/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Scala Basic</a>
+    <a href="/spark-basic/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Spark Basic</a>
 </li>
 
                 
+  
+    
+  
+
   
     
   

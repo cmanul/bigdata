@@ -120,8 +120,8 @@
 <h1 id="interactive-shell">Interactive Shell</h1>
 
 <p>You can start the HBase interactive shell using <code class="prettyprint">hbase shell</code> command. If HBase is successfully installed in your system, you will get </p>
-<div class="highlight"><pre><code class="language-" data-lang="">HBase Shell; enter 'help&lt;RETURN&gt;' for list of supported commands.
-Type "exit&lt;RETURN&gt;" to leave the HBase Shell
+<div class="highlight"><pre><code class="language-text" data-lang="text">HBase Shell; enter &#39;help&lt;RETURN&gt;&#39; for list of supported commands.
+Type &quot;exit&lt;RETURN&gt;&quot; to leave the HBase Shell
 Version 0.94.18, rb149f3f0d25c5cd2f195b39fe05d42507fdeabfc, Sat May 23 00:09:16 GMT 2015
 
 hbase(main):001:0&gt; 
@@ -130,7 +130,7 @@ hbase(main):001:0&gt;
 
 <ol>
 <li><p>Checking the status of the cluster</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):001:0&gt; status
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):001:0&gt; status
 (may have some debug messages)
 2 servers, 0 dead, 1.0000 average load
 </code></pre></div></li>
@@ -138,18 +138,18 @@ hbase(main):001:0&gt;
 </ol>
 
 <p>The syntax to create a table in HBase shell is shown below.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">create 'table name', 'column family'
+<div class="highlight"><pre><code class="language-text" data-lang="text">create &#39;table name&#39;, &#39;column family&#39;
 </code></pre></div>
 <p>Let&#39;s create a table called <code class="prettyprint">hospital</code> with two column families <code class="prettyprint">id</code> and <code class="prettyprint">value</code>.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):002:0&gt; create 'hospital', 'id', 'value'
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):002:0&gt; create &#39;hospital&#39;, &#39;id&#39;, &#39;value&#39;
 </code></pre></div>
 <p>And it will give you the following output.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">0 row(s) in 1.1620 seconds
+<div class="highlight"><pre><code class="language-text" data-lang="text">0 row(s) in 1.1620 seconds
 </code></pre></div>
 <ol>
 <li>Listing table(s)</li>
 </ol>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):003:0&gt; list
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):003:0&gt; list
 TABLE
 hospital
 1 row(s) in 0.0180 seconds
@@ -159,24 +159,24 @@ hospital
 </ol>
 
 <p>The <code class="prettyprint">describe</code> command returns the description of the table. </p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):004:0&gt; describe 'hospital'
-'hospital', {NAME =&gt; 'id', DATA_BLOCK_ENCODING =&gt; 'NONE', BLOOMFILTER =&gt; 'NONE', REPLICATION_SCOPE =&gt; true                                                    
-  '0', VERSIONS =&gt; '3', COMPRESSION =&gt; 'NONE', MIN_VERSIONS =&gt; '0', TTL =&gt; '2147483647', KEEP_DELETED_                                                         
- CELLS =&gt; 'false', BLOCKSIZE =&gt; '65536', IN_MEMORY =&gt; 'false', ENCODE_ON_DISK =&gt; 'true', BLOCKCACHE =&gt;                                                         
-  'true'}, {NAME =&gt; 'value', DATA_BLOCK_ENCODING =&gt; 'NONE', BLOOMFILTER =&gt; 'NONE', REPLICATION_SCOPE =                                                         
- &gt; '0', VERSIONS =&gt; '3', COMPRESSION =&gt; 'NONE', MIN_VERSIONS =&gt; '0', TTL =&gt; '2147483647', KEEP_DELETED                                                         
- _CELLS =&gt; 'false', BLOCKSIZE =&gt; '65536', IN_MEMORY =&gt; 'false', ENCODE_ON_DISK =&gt; 'true', BLOCKCACHE =                                                         
- &gt; 'true'}                                                                                                                                                     
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):004:0&gt; describe &#39;hospital&#39;
+&#39;hospital&#39;, {NAME =&gt; &#39;id&#39;, DATA_BLOCK_ENCODING =&gt; &#39;NONE&#39;, BLOOMFILTER =&gt; &#39;NONE&#39;, REPLICATION_SCOPE =&gt; true                                                    
+  &#39;0&#39;, VERSIONS =&gt; &#39;3&#39;, COMPRESSION =&gt; &#39;NONE&#39;, MIN_VERSIONS =&gt; &#39;0&#39;, TTL =&gt; &#39;2147483647&#39;, KEEP_DELETED_                                                         
+ CELLS =&gt; &#39;false&#39;, BLOCKSIZE =&gt; &#39;65536&#39;, IN_MEMORY =&gt; &#39;false&#39;, ENCODE_ON_DISK =&gt; &#39;true&#39;, BLOCKCACHE =&gt;                                                         
+  &#39;true&#39;}, {NAME =&gt; &#39;value&#39;, DATA_BLOCK_ENCODING =&gt; &#39;NONE&#39;, BLOOMFILTER =&gt; &#39;NONE&#39;, REPLICATION_SCOPE =                                                         
+ &gt; &#39;0&#39;, VERSIONS =&gt; &#39;3&#39;, COMPRESSION =&gt; &#39;NONE&#39;, MIN_VERSIONS =&gt; &#39;0&#39;, TTL =&gt; &#39;2147483647&#39;, KEEP_DELETED                                                         
+ _CELLS =&gt; &#39;false&#39;, BLOCKSIZE =&gt; &#39;65536&#39;, IN_MEMORY =&gt; &#39;false&#39;, ENCODE_ON_DISK =&gt; &#39;true&#39;, BLOCKCACHE =                                                         
+ &gt; &#39;true&#39;}                                                                                                                                                     
 1 row(s) in 0.0350 seconds
 </code></pre></div>
 <p>This shows some basic information for each column family. For example, the <code class="prettyprint">id</code> column family has block size 65536 and keeps at most 3 versions for each cell (distinguish by timestamp).</p>
 
 <p>We can alter the setting by using <code class="prettyprint">alter</code>. But we need to first disable the table.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):005:0&gt; disable 'hospital'
-hbase(main):006:0&gt; alter 'hospital', {NAME =&gt; 'id', VERSIONS =&gt; 5}
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):005:0&gt; disable &#39;hospital&#39;
+hbase(main):006:0&gt; alter &#39;hospital&#39;, {NAME =&gt; &#39;id&#39;, VERSIONS =&gt; 5}
 </code></pre></div>
 <p>Don&#39;t forget to re-enable after changing the setting.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):007:0&gt; enable 'hospital'
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):007:0&gt; enable &#39;hospital&#39;
 
 </code></pre></div>
 <ol>
@@ -184,24 +184,24 @@ hbase(main):006:0&gt; alter 'hospital', {NAME =&gt; 'id', VERSIONS =&gt; 5}
 </ol>
 
 <p>Using <code class="prettyprint">put</code> command, you can insert rows into a table. Its syntax is as follows:</p>
-<div class="highlight"><pre><code class="language-" data-lang="">put 'table name', 'row key', 'colfamily:colname', 'value'
+<div class="highlight"><pre><code class="language-text" data-lang="text">put &#39;table name&#39;, &#39;row key&#39;, &#39;colfamily:colname&#39;, &#39;value&#39;
 </code></pre></div>
 <p>For example, let&#39;s put a record of a paitent-id.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):008:0&gt; put 'hospital', 'row1', 'id:patient', 'patient-id-1'
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):008:0&gt; put &#39;hospital&#39;, &#39;row1&#39;, &#39;id:patient&#39;, &#39;patient-id-1&#39;
 0 row(s) in 0.0140 seconds
 </code></pre></div>
 <p>This puts the value <code class="prettyprint">patient-id-1</code> in row <code class="prettyprint">row1</code> and column <code class="prettyprint">patient</code> (within the column family <code class="prettyprint">id</code>).
 Let&#39;s put some more records.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):009:0&gt; put 'hospital', 'row1', 'id:event', 'event-id-1'
-hbase(main):010:0&gt; put 'hospital', 'row1', 'value:value', '1'
-hbase(main):011:0&gt; put 'hospital', 'row2', 'id:event', 'event-id-2'
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):009:0&gt; put &#39;hospital&#39;, &#39;row1&#39;, &#39;id:event&#39;, &#39;event-id-1&#39;
+hbase(main):010:0&gt; put &#39;hospital&#39;, &#39;row1&#39;, &#39;value:value&#39;, &#39;1&#39;
+hbase(main):011:0&gt; put &#39;hospital&#39;, &#39;row2&#39;, &#39;id:event&#39;, &#39;event-id-2&#39;
 </code></pre></div>
 <ol>
 <li>Reading data </li>
 </ol>
 
 <p>Using the <code class="prettyprint">scan</code> command, you can get the table data.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):012:0&gt; scan 'hospital'
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):012:0&gt; scan &#39;hospital&#39;
 ROW            COLUMN+CELL
  row1          column=id:event, timestamp=1436623001980, value=event-id-1
  row1          column=id:patient, timestamp=1436622532169, value=patient-id-1
@@ -210,11 +210,11 @@ ROW            COLUMN+CELL
 2 row(s) in 0.0130 seconds
 </code></pre></div>
 <p>If you only want to know the number of rows, you can use</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):013:0&gt; count 'hospital'
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):013:0&gt; count &#39;hospital&#39;
 2 row(s) in 0.0130 seconds
 </code></pre></div>
 <p>Using the <code class="prettyprint">get</code> command, you can get a single row of data at a time.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):014:0&gt; get 'hospital', 'row1' 
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):014:0&gt; get &#39;hospital&#39;, &#39;row1&#39; 
 COLUMN                                   CELL
  id:event           timestamp=1436623001980, value=event-id-1
  id:patient         timestamp=1436622532169, value=patient-id-1
@@ -222,7 +222,7 @@ COLUMN                                   CELL
 3 row(s) in 0.0270 seconds
 </code></pre></div>
 <p>We can further specify the column that we want to retrieve.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):015:0&gt; get 'hospital', 'row1', {COLUMN =&gt; 'id:patient'}
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):015:0&gt; get &#39;hospital&#39;, &#39;row1&#39;, {COLUMN =&gt; &#39;id:patient&#39;}
  id:patient       timestamp=1436622532169, value=patient-id-1
  1 row(s) in 0.9730 seconds
 </code></pre></div>
@@ -231,11 +231,11 @@ COLUMN                                   CELL
 </ol>
 
 <p>You can delete a specific cell in a table by the <code class="prettyprint">delete</code> command</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):016:0&gt; delete 'hospital', 'row1', 'id:event'
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):016:0&gt; delete &#39;hospital&#39;, &#39;row1&#39;, &#39;id:event&#39;
 0 row(s) in 0.0100 seconds
 </code></pre></div>
 <p>To delete all the cells in a row, use the <code class="prettyprint">deleteall</code> command</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):017:0&gt; deleteall 'hospital', 'row1'
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):017:0&gt; deleteall &#39;hospital&#39;, &#39;row1&#39;
 0 row(s) in 0.0110 seconds   
 </code></pre></div>
 <ol>
@@ -243,10 +243,10 @@ COLUMN                                   CELL
 </ol>
 
 <p>Using the drop command, you can delete a table. Before dropping a table, you have to disable it.</p>
-<div class="highlight"><pre><code class="language-" data-lang="">hbase(main):018:0&gt; disable 'hospital'
+<div class="highlight"><pre><code class="language-text" data-lang="text">hbase(main):018:0&gt; disable &#39;hospital&#39;
 0 row(s) in 1.1000 seconds
 
-hbase(main):019:0&gt; drop 'hospital'
+hbase(main):019:0&gt; drop &#39;hospital&#39;
 </code></pre></div>
 
             <ul class="pager">
@@ -265,6 +265,9 @@ hbase(main):019:0&gt; drop 'hospital'
 
   
     
+  
+  
+
   
   
 
@@ -326,6 +329,10 @@ hbase(main):019:0&gt; drop 'hospital'
 
   
     
+    
+  
+
+  
     
   
 

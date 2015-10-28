@@ -120,10 +120,10 @@
 <h1 id="basic-concept">Basic concept</h1>
 
 <p>Spark GraphX abstracts the graph as a concept named property graph, which means that each edge and vertex is associated with some property. The <code class="prettyprint">Graph</code> class has below definition</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">class</span> <span class="nc">Graph</span><span class="o">[</span><span class="kt">VD</span>, <span class="kt">ED</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">val</span> <span class="n">vertices</span><span class="k">:</span> <span class="kt">VertexRDD</span><span class="o">[</span><span class="kt">VD</span><span class="o">]</span>
-  <span class="k">val</span> <span class="n">edges</span><span class="k">:</span> <span class="kt">EdgeRDD</span><span class="o">[</span><span class="kt">ED</span><span class="o">]</span>
-<span class="o">}</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">class Graph[VD, ED] {
+  val vertices: VertexRDD[VD]
+  val edges: EdgeRDD[ED]
+}
 </code></pre></div>
 <p>We could regard <code class="prettyprint">VertexRDD[VD]</code> as RDD of <code class="prettyprint">(VertexID, VD)</code> tuple and <code class="prettyprint">EdgeRDD[ED]</code> as RDD of <code class="prettyprint">(VertexID, VertexID, ED)</code>.</p>
 
@@ -133,75 +133,75 @@
 
 <ol>
 <li><p>define  necessary data structure and import</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">import</span> <span class="nn">org.apache.spark.SparkContext._</span>
-<span class="k">import</span> <span class="nn">org.apache.spark.graphx._</span>
-<span class="k">import</span> <span class="nn">org.apache.spark.rdd.RDD</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">import org.apache.spark.SparkContext._
+import org.apache.spark.graphx._
+import org.apache.spark.rdd.RDD
 
-<span class="k">abstract</span> <span class="k">class</span> <span class="nc">VertexProperty</span> <span class="k">extends</span> <span class="nc">Serializable</span>
+abstract class VertexProperty extends Serializable
 
-<span class="k">case</span> <span class="k">class</span> <span class="nc">PatientProperty</span><span class="o">(</span><span class="n">patientId</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">VertexProperty</span>
+case class PatientProperty(patientId: String) extends VertexProperty
 
-<span class="k">case</span> <span class="k">class</span> <span class="nc">DiagnosticProperty</span><span class="o">(</span><span class="n">icd9code</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">VertexProperty</span>
+case class DiagnosticProperty(icd9code: String) extends VertexProperty
 
-<span class="k">case</span> <span class="k">class</span> <span class="nc">PatientEvent</span><span class="o">(</span><span class="n">patientId</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">eventName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">value</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span>
+case class PatientEvent(patientId: String, eventName: String, date: Int, value: Double)
 </code></pre></div></li>
 <li><p>load patient event data and filter out diagnostic related only</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">allEvents</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"data/"</span><span class="o">).</span>
-    <span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">split</span><span class="o">(</span><span class="s">","</span><span class="o">)).</span>
-    <span class="n">map</span><span class="o">(</span><span class="n">splits</span> <span class="k">=&gt;</span> <span class="nc">PatientEvent</span><span class="o">(</span><span class="n">splits</span><span class="o">(</span><span class="mi">0</span><span class="o">),</span> <span class="n">splits</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="n">splits</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">toInt</span><span class="o">,</span> <span class="n">splits</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="n">toDouble</span><span class="o">))</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">val allEvents = sc.textFile(&quot;data/&quot;).
+    map(_.split(&quot;,&quot;)).
+    map(splits =&gt; PatientEvent(splits(0), splits(1), splits(2).toInt, splits(3).toDouble))
 
-<span class="c1">// get and cache dianosticEvents as we will reuse
-</span><span class="k">val</span> <span class="n">diagnosticEvents</span> <span class="k">=</span> <span class="n">allEvents</span><span class="o">.</span>
-    <span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">eventName</span><span class="o">.</span><span class="n">startsWith</span><span class="o">(</span><span class="s">"DIAG"</span><span class="o">)).</span><span class="n">cache</span><span class="o">()</span>
+// get and cache dianosticEvents as we will reuse
+val diagnosticEvents = allEvents.
+    filter(_.eventName.startsWith(&quot;DIAG&quot;)).cache()
 </code></pre></div></li>
 <li><p>create patient vertex</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// create patient vertex
-</span><span class="k">val</span> <span class="n">patientVertexIdRDD</span> <span class="k">=</span> <span class="n">diagnosticEvents</span><span class="o">.</span>
-    <span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">patientId</span><span class="o">).</span>  
-    <span class="n">distinct</span><span class="o">.</span>            <span class="c1">// get distinct patient ids
-</span>    <span class="n">zipWithIndex</span>         <span class="c1">// assign an index as vertex id
-</span>
-<span class="k">val</span> <span class="n">patient2VertexId</span> <span class="k">=</span> <span class="n">patientVertexIdRDD</span><span class="o">.</span><span class="n">collect</span><span class="o">.</span><span class="n">toMap</span>
-<span class="k">val</span> <span class="n">patientVertex</span> <span class="k">=</span> <span class="n">patientVertexIdRDD</span><span class="o">.</span>
-    <span class="n">map</span><span class="o">{</span><span class="k">case</span><span class="o">(</span><span class="n">patientId</span><span class="o">,</span> <span class="n">index</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">index</span><span class="o">,</span> <span class="nc">PatientProperty</span><span class="o">(</span><span class="n">patientId</span><span class="o">))}.</span>
-    <span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">RDD</span><span class="o">[(</span><span class="kt">VertexId</span>, <span class="kt">VertexProperty</span><span class="o">)]]</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">// create patient vertex
+val patientVertexIdRDD = diagnosticEvents.
+    map(_.patientId).  
+    distinct.            // get distinct patient ids
+    zipWithIndex         // assign an index as vertex id
+
+val patient2VertexId = patientVertexIdRDD.collect.toMap
+val patientVertex = patientVertexIdRDD.
+    map{case(patientId, index) =&gt; (index, PatientProperty(patientId))}.
+    asInstanceOf[RDD[(VertexId, VertexProperty)]]
 </code></pre></div>
 <p>Notice that in order to assign an unique ID for each vertex, we finally <code class="prettyprint">collect</code> all the patient to <code class="prettyprint">VertrexID</code> mapping. Theoritically this is not an efficient practice. One could mitigate uniqueness of ID by calculating ID directly with Hash.</p></li>
 <li><p>create diagnostic code vertex</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// create diagnostic code vertex
-</span><span class="k">val</span> <span class="n">startIndex</span> <span class="k">=</span> <span class="n">patient2VertexId</span><span class="o">.</span><span class="n">size</span>
-<span class="k">val</span> <span class="n">diagnosticVertexIdRDD</span> <span class="k">=</span> <span class="n">diagnosticEvents</span><span class="o">.</span>
-    <span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">eventName</span><span class="o">).</span>
-    <span class="n">distinct</span><span class="o">.</span>
-    <span class="n">zipWithIndex</span><span class="o">.</span>
-    <span class="n">map</span><span class="o">{</span><span class="k">case</span><span class="o">(</span><span class="n">icd9code</span><span class="o">,</span> <span class="n">zeroBasedIndex</span><span class="o">)</span> <span class="k">=&gt;</span> 
-        <span class="o">(</span><span class="n">icd9code</span><span class="o">,</span> <span class="n">zeroBasedIndex</span> <span class="o">+</span> <span class="n">startIndex</span><span class="o">)}</span> <span class="c1">// make sure no confilic with patient vertex id
-</span>
-<span class="k">val</span> <span class="n">diagnostic2VertexId</span> <span class="k">=</span> <span class="n">diagnosticVertexIdRDD</span><span class="o">.</span><span class="n">collect</span><span class="o">.</span><span class="n">toMap</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">// create diagnostic code vertex
+val startIndex = patient2VertexId.size
+val diagnosticVertexIdRDD = diagnosticEvents.
+    map(_.eventName).
+    distinct.
+    zipWithIndex.
+    map{case(icd9code, zeroBasedIndex) =&gt; 
+        (icd9code, zeroBasedIndex + startIndex)} // make sure no confilic with patient vertex id
 
-<span class="k">val</span> <span class="n">diagnosticVertex</span> <span class="k">=</span> <span class="n">diagnosticVertexIdRDD</span><span class="o">.</span>
-    <span class="n">map</span><span class="o">{</span><span class="k">case</span><span class="o">(</span><span class="n">icd9code</span><span class="o">,</span> <span class="n">index</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">index</span><span class="o">,</span> <span class="nc">DiagnosticProperty</span><span class="o">(</span><span class="n">icd9code</span><span class="o">))}.</span>
-    <span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">RDD</span><span class="o">[(</span><span class="kt">VertexId</span>, <span class="kt">VertexProperty</span><span class="o">)]]</span>
+val diagnostic2VertexId = diagnosticVertexIdRDD.collect.toMap
+
+val diagnosticVertex = diagnosticVertexIdRDD.
+    map{case(icd9code, index) =&gt; (index, DiagnosticProperty(icd9code))}.
+    asInstanceOf[RDD[(VertexId, VertexProperty)]]
 </code></pre></div>
 <p>Here we assign vertex id by adding the result of <code class="prettyprint">zipWithIndex</code> with an offset obtained from previous patient vertex to avoid ID confilication between patient and diagnostic code.</p></li>
 <li><p>create edges </p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">bcPatient2VertexId</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">broadcast</span><span class="o">(</span><span class="n">patient2VertexId</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">bcDiagnostic2VertexId</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">broadcast</span><span class="o">(</span><span class="n">diagnostic2VertexId</span><span class="o">)</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">val bcPatient2VertexId = sc.broadcast(patient2VertexId)
+val bcDiagnostic2VertexId = sc.broadcast(diagnostic2VertexId)
 
-<span class="k">val</span> <span class="n">edges</span> <span class="k">=</span> <span class="n">diagnosticEvents</span><span class="o">.</span>
-    <span class="n">map</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="o">((</span><span class="n">event</span><span class="o">.</span><span class="n">patientId</span><span class="o">,</span> <span class="n">event</span><span class="o">.</span><span class="n">eventName</span><span class="o">),</span> <span class="mi">1</span><span class="o">)).</span>
-    <span class="n">reduceByKey</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">).</span>
-    <span class="n">map</span><span class="o">{</span><span class="k">case</span><span class="o">((</span><span class="n">patientId</span><span class="o">,</span> <span class="n">icd9code</span><span class="o">),</span> <span class="n">count</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">patientId</span><span class="o">,</span> <span class="n">icd9code</span><span class="o">,</span> <span class="n">count</span><span class="o">)}.</span>
-    <span class="n">map</span><span class="o">{</span><span class="k">case</span><span class="o">(</span><span class="n">patientId</span><span class="o">,</span> <span class="n">icd9code</span><span class="o">,</span> <span class="n">count</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Edge</span><span class="o">(</span>
-        <span class="n">bcPatient2VertexId</span><span class="o">.</span><span class="n">value</span><span class="o">(</span><span class="n">patientId</span><span class="o">),</span>
-        <span class="n">bcDiagnostic2VertexId</span><span class="o">.</span><span class="n">value</span><span class="o">(</span><span class="n">icd9code</span><span class="o">),</span>
-        <span class="n">count</span>
-    <span class="o">)}</span>
+val edges = diagnosticEvents.
+    map(event =&gt; ((event.patientId, event.eventName), 1)).
+    reduceByKey(_ + _).
+    map{case((patientId, icd9code), count) =&gt; (patientId, icd9code, count)}.
+    map{case(patientId, icd9code, count) =&gt; Edge(
+        bcPatient2VertexId.value(patientId),
+        bcDiagnostic2VertexId.value(icd9code),
+        count
+    )}
 </code></pre></div>
 <p>We first broadcast patient and diagnostic code to vertext id mappting. Broadcast could avoid uncessary copy in distributed setting thus will be more effecient. Then we count occurrence of <code class="prettyprint">(patient-id, icd-9-code)</code> pairs with <code class="prettyprint">map</code> and <code class="prettyprint">reduceByKey</code>, finally we translate them to proper <code class="prettyprint">VertexID</code>.</p></li>
 <li><p>put it together to create the graph</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">vertices</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">union</span><span class="o">(</span><span class="n">patientVertex</span><span class="o">,</span> <span class="n">diagnosticVertex</span><span class="o">)</span>
-<span class="k">val</span> <span class="n">graph</span> <span class="k">=</span> <span class="nc">Graph</span><span class="o">(</span><span class="n">vertices</span><span class="o">,</span> <span class="n">edges</span><span class="o">)</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">val vertices = sc.union(patientVertex, diagnosticVertex)
+val graph = Graph(vertices, edges)
 </code></pre></div></li>
 </ol>
 
@@ -212,35 +212,35 @@
 <h2 id="connected-components">Connected components</h2>
 
 <p><a href="http://en.wikipedia.org/wiki/Connected_component_(">Connected component</a> could help find disconnected subgraphs. GraphX provide the API to get connected components as below</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">connectedComponents</span> <span class="k">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">connectedComponents</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">val connectedComponents = graph.connectedComponents
 </code></pre></div>
 <p>The return result is a graph and assigned components of original graph is stored as <code class="prettyprint">VertexProperty</code>. For example</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">connectedComponents</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">take</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-<span class="nc">Array</span><span class="o">[(</span><span class="kt">org.apache.spark.graphx.VertexId</span>, <span class="kt">org.apache.spark.graphx.VertexId</span><span class="o">)]</span> <span class="k">=</span> 
-<span class="nc">Array</span><span class="o">((</span><span class="mi">2556</span><span class="o">,</span><span class="mi">0</span><span class="o">),</span> <span class="o">(</span><span class="mi">1260</span><span class="o">,</span><span class="mi">0</span><span class="o">),</span> <span class="o">(</span><span class="mi">1410</span><span class="o">,</span><span class="mi">0</span><span class="o">),</span> <span class="o">(</span><span class="mi">324</span><span class="o">,</span><span class="mi">0</span><span class="o">),</span> <span class="o">(</span><span class="mi">180</span><span class="o">,</span><span class="mi">0</span><span class="o">))</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; connectedComponents.vertices.take(5)
+Array[(org.apache.spark.graphx.VertexId, org.apache.spark.graphx.VertexId)] = 
+Array((2556,0), (1260,0), (1410,0), (324,0), (180,0))
 </code></pre></div>
 <p>The first element of the tuple is <code class="prettyprint">VertexID</code> identical to original graph. The second element in the tuple is <code class="prettyprint">connected component</code> represented by smalled <code class="prettyprint">VertexID</code> in that component. In above example, five vertices belong to same component.</p>
 
 <p>We could easily get number of connected components using operations on RDD as below.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">connectedComponents</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_2</span><span class="o">).</span><span class="n">distinct</span><span class="o">.</span><span class="n">collect</span>
-<span class="nc">Array</span><span class="o">[</span><span class="kt">org.apache.spark.graphx.VertexId</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">169</span><span class="o">,</span> <span class="mi">239</span><span class="o">)</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; connectedComponents.vertices.map(_._2).distinct.collect
+Array[org.apache.spark.graphx.VertexId] = Array(0, 169, 239)
 </code></pre></div>
 <h2 id="degree">Degree</h2>
 
 <p>The property graph abstraction of GraphX is directed graph. It provides computation of in-dgree, out-degree and total degree. For example, we could get degrees as</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">inDegrees</span> <span class="k">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">inDegrees</span>
-<span class="k">val</span> <span class="n">outDegrees</span> <span class="k">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">outDegrees</span>
-<span class="k">val</span> <span class="n">totalDegrees</span> <span class="k">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">degrees</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">val inDegrees = graph.inDegrees
+val outDegrees = graph.outDegrees
+val totalDegrees = graph.degrees
 </code></pre></div>
 <h2 id="pagerank">PageRank</h2>
 
 <p>GraphX also provides implementation of the famous <a href="http://en.wikipedia.org/wiki/PageRank">PageRank</a> algorithm, which could compute the &#39;importance&#39; of a vertex. The graph we generated above is a bipartite graph and not suitable for PageRank. To gve an example of PageRank, we randomly generate a graph and run fixed iteration of PageRank algorithm on it.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">import</span> <span class="nn">org.apache.spark.graphx.util.GraphGenerators</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">import org.apache.spark.graphx.util.GraphGenerators
 
-<span class="k">val</span> <span class="n">randomGraph</span> <span class="k">=</span> <span class="nc">Graph</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> 
-   <span class="nc">GraphGenerators</span><span class="o">.</span><span class="n">logNormalGraph</span><span class="o">(</span><span class="n">sc</span><span class="o">,</span> <span class="n">numVertices</span> <span class="k">=</span> <span class="mi">100</span><span class="o">)</span>
+val randomGraph = Graph[Int, Int] = 
+   GraphGenerators.logNormalGraph(sc, numVertices = 100)
 
-<span class="k">val</span> <span class="n">pagerank</span> <span class="k">=</span> <span class="n">randomGraph</span><span class="o">.</span><span class="n">staticPageRank</span><span class="o">(</span><span class="mi">20</span><span class="o">)</span>
+val pagerank = randomGraph.staticPageRank(20)
 </code></pre></div>
 <p>Or, we could run PageRank util converge with tolerance as <code class="prettyprint">0.01</code> using <code class="prettyprint">randomGraph.pageRank(0.01)</code></p>
 
@@ -251,33 +251,33 @@
 <h2 id="explore-comorbidities">Explore comorbidities</h2>
 
 <p><a href="http://en.wikipedia.org/wiki/Comorbidity">Comorbidity</a> is additional disorders co-occuring with primary disease. We know all the case patients have heart failure, we could explore possible comorbidities as below (see comments for more explaination)</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// get all the case patients
-</span><span class="k">val</span> <span class="n">casePatients</span> <span class="k">=</span> <span class="n">allEvents</span><span class="o">.</span>
-    <span class="n">filter</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="n">event</span><span class="o">.</span><span class="n">eventName</span> <span class="o">==</span> <span class="s">"heartfailure"</span> <span class="o">&amp;&amp;</span> <span class="n">event</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mf">1.0</span><span class="o">).</span>
-    <span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">patientId</span><span class="o">).</span>
-    <span class="n">collect</span><span class="o">.</span>
-    <span class="n">toSet</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">// get all the case patients
+val casePatients = allEvents.
+    filter(event =&gt; event.eventName == &quot;heartfailure&quot; &amp;&amp; event.value == 1.0).
+    map(_.patientId).
+    collect.
+    toSet
 
-<span class="c1">// broadcast
-</span><span class="k">val</span> <span class="n">scCasePatients</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">broadcast</span><span class="o">(</span><span class="n">casePatients</span><span class="o">)</span>
+// broadcast
+val scCasePatients = sc.broadcast(casePatients)
 
-<span class="c1">//filter the graph with subGraph operation
-</span><span class="k">val</span> <span class="n">filteredGraph</span> <span class="k">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">subgraph</span><span class="o">(</span><span class="n">vpred</span> <span class="k">=</span> <span class="o">{</span><span class="k">case</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">attr</span><span class="o">)</span> <span class="k">=&gt;</span>
-        <span class="k">val</span> <span class="n">isPatient</span> <span class="k">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">isInstanceOf</span><span class="o">[</span><span class="kt">PatientProperty</span><span class="o">]</span>
-        <span class="k">val</span> <span class="n">patient</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span><span class="n">isPatient</span><span class="o">)</span> <span class="n">attr</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">PatientProperty</span><span class="o">]</span> <span class="k">else</span> <span class="kc">null</span>
-        <span class="c1">// return true iff. isn't patient or is case patient
-</span>        <span class="o">!</span><span class="n">isPatient</span> <span class="o">||</span> <span class="o">(</span><span class="n">scCasePatients</span><span class="o">.</span><span class="n">value</span> <span class="n">contains</span> <span class="n">patient</span><span class="o">.</span><span class="n">patientId</span><span class="o">)</span>
-    <span class="o">})</span>
+//filter the graph with subGraph operation
+val filteredGraph = graph.subgraph(vpred = {case(id, attr) =&gt;
+        val isPatient = attr.isInstanceOf[PatientProperty]
+        val patient = if(isPatient) attr.asInstanceOf[PatientProperty] else null
+        // return true iff. isn&#39;t patient or is case patient
+        !isPatient || (scCasePatients.value contains patient.patientId)
+    })
 
-<span class="c1">//calculate indegrees and get top vertices
-</span><span class="k">val</span> <span class="n">top5ComorbidityVertices</span> <span class="k">=</span> <span class="n">filteredGraph</span><span class="o">.</span><span class="n">inDegrees</span><span class="o">.</span>
-        <span class="n">takeOrdered</span><span class="o">(</span><span class="mi">5</span><span class="o">)(</span><span class="n">scala</span><span class="o">.</span><span class="nc">Ordering</span><span class="o">.</span><span class="n">by</span><span class="o">(-</span><span class="k">_</span><span class="o">.</span><span class="n">_2</span><span class="o">))</span>
+//calculate indegrees and get top vertices
+val top5ComorbidityVertices = filteredGraph.inDegrees.
+        takeOrdered(5)(scala.Ordering.by(-_._2))
 </code></pre></div>
 <p>We have</p>
-<div class="highlight"><pre><code class="language-" data-lang="">top5ComorbidityVertices: Array[(org.apache.spark.graphx.VertexId, Int)] = Array((3129,86), (335,63), (857,58), (2048,49), (669,48))
+<div class="highlight"><pre><code class="language-text" data-lang="text">top5ComorbidityVertices: Array[(org.apache.spark.graphx.VertexId, Int)] = Array((3129,86), (335,63), (857,58), (2048,49), (669,48))
 </code></pre></div>
 <p>And we could check the vertex of index 3129 in original graph is</p>
-<div class="highlight"><pre><code class="language-" data-lang="">scala&gt; graph.vertices.filter(_._1 == 3129).collect
+<div class="highlight"><pre><code class="language-text" data-lang="text">scala&gt; graph.vertices.filter(_._1 == 3129).collect
 Array[(org.apache.spark.graphx.VertexId, VertexProperty)] = 
 Array((3129,DiagnosticProperty(DIAG4019)))
 </code></pre></div>
@@ -286,31 +286,34 @@ Array((3129,DiagnosticProperty(DIAG4019)))
 <h2 id="similar-patients">Similar patients</h2>
 
 <p>Given a patient diagnostic graph, we could also find similar patients. One of the most straightforward approach is shortest path on the graph.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">sssp</span> <span class="k">=</span> <span class="n">graph</span><span class="o">.</span>
-    <span class="n">mapVertices</span><span class="o">((</span><span class="n">id</span><span class="o">,</span> <span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="k">if</span> <span class="o">(</span><span class="n">id</span> <span class="o">==</span> <span class="mi">0L</span><span class="o">)</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="nc">Double</span><span class="o">.</span><span class="nc">PositiveInfinity</span><span class="o">).</span>
-    <span class="n">pregel</span><span class="o">(</span><span class="nc">Double</span><span class="o">.</span><span class="nc">PositiveInfinity</span><span class="o">)(</span>
-        <span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">dist</span><span class="o">,</span> <span class="n">newDist</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">min</span><span class="o">(</span><span class="n">dist</span><span class="o">,</span> <span class="n">newDist</span><span class="o">),</span> <span class="c1">// Vertex Program
-</span>        <span class="n">triplet</span> <span class="k">=&gt;</span> <span class="o">{</span>  <span class="c1">// Send Message
-</span>            <span class="k">var</span> <span class="n">msg</span><span class="k">:</span> <span class="kt">Iterator</span><span class="o">[(</span><span class="kt">org.apache.spark.graphx.VertexId</span>, <span class="kt">Double</span><span class="o">)]</span> <span class="k">=</span> <span class="nc">Iterator</span><span class="o">.</span><span class="n">empty</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">triplet</span><span class="o">.</span><span class="n">srcAttr</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">triplet</span><span class="o">.</span><span class="n">dstAttr</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">msg</span> <span class="k">=</span> <span class="n">msg</span> <span class="o">++</span> <span class="nc">Iterator</span><span class="o">((</span><span class="n">triplet</span><span class="o">.</span><span class="n">dstId</span><span class="o">,</span> <span class="n">triplet</span><span class="o">.</span><span class="n">srcAttr</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span>
-            <span class="o">}</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">val sssp = graph.
+    mapVertices((id, _) =&gt; if (id == 0L) 0.0 else Double.PositiveInfinity).
+    pregel(Double.PositiveInfinity)(
+        (id, dist, newDist) =&gt; math.min(dist, newDist), // Vertex Program
+        triplet =&gt; {  // Send Message
+            var msg: Iterator[(org.apache.spark.graphx.VertexId, Double)] = Iterator.empty
+            if (triplet.srcAttr + 1 &lt; triplet.dstAttr) {
+                msg = msg ++ Iterator((triplet.dstId, triplet.srcAttr + 1))
+            }
 
-            <span class="k">if</span> <span class="o">(</span><span class="n">triplet</span><span class="o">.</span><span class="n">dstAttr</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">triplet</span><span class="o">.</span><span class="n">srcAttr</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">msg</span> <span class="k">=</span> <span class="n">msg</span> <span class="o">++</span> <span class="nc">Iterator</span><span class="o">((</span><span class="n">triplet</span><span class="o">.</span><span class="n">srcId</span><span class="o">,</span> <span class="n">triplet</span><span class="o">.</span><span class="n">dstAttr</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span>
-            <span class="o">}</span>
-            <span class="n">println</span><span class="o">(</span><span class="n">msg</span><span class="o">)</span>
-            <span class="n">msg</span>
-        <span class="o">},</span>
-        <span class="o">(</span><span class="n">a</span><span class="o">,</span><span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">min</span><span class="o">(</span><span class="n">a</span><span class="o">,</span><span class="n">b</span><span class="o">)</span> <span class="c1">// Merge Message
-</span>    <span class="o">)</span>
+            if (triplet.dstAttr + 1 &lt; triplet.srcAttr) {
+                msg = msg ++ Iterator((triplet.srcId, triplet.dstAttr + 1))
+            }
+            println(msg)
+            msg
+        },
+        (a,b) =&gt; math.min(a,b) // Merge Message
+    )
 
-<span class="c1">// get top 5 most similar
-</span><span class="n">sssp</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_2</span> <span class="o">&lt;</span> <span class="nc">Double</span><span class="o">.</span><span class="nc">PositiveInfinity</span><span class="o">).</span><span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_1</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="o">).</span><span class="n">takeOrdered</span><span class="o">(</span><span class="mi">5</span><span class="o">)(</span><span class="n">scala</span><span class="o">.</span><span class="nc">Ordering</span><span class="o">.</span><span class="n">by</span><span class="o">(-</span><span class="k">_</span><span class="o">.</span><span class="n">_2</span><span class="o">))</span>
+// get top 5 most similar
+sssp.vertices.filter(_._2 &lt; Double.PositiveInfinity).filter(_._1 &lt; 300).takeOrdered(5)(scala.Ordering.by(-_._2))
 </code></pre></div>
 
             <ul class="pager">
                 
+  
+  
+
   
   
 
@@ -362,6 +365,10 @@ Array((3129,DiagnosticProperty(DIAG4019)))
 </li>
 
                 
+  
+    
+  
+
   
     
   

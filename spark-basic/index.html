@@ -115,72 +115,94 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <h1 id="spark-interactive-shell">Spark Interactive Shell</h1>
+            <div class="bs-callout bs-callout-info" id="callout-helper-context-color-specificity">
+        <h4>Learning Objectives</h4><ul>
+<li>Invoking command in Spark interactive shell.</li>
+<li>Familiar with RDD concept.</li>
+<li>Know basic RDD operations.</li>
+</ul>
+</div>
 
-<p>Start the Spark interactive shell by typing the command in the Spark directory.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">bin</span><span class="o">/</span><span class="n">spark</span><span class="o">-</span><span class="n">shell</span>
-</code></pre></div>
-<p>You may find the logging statements that get printed in the shell distracting. You can control the verbosity of the logging. To do this, you can create a file in the conf directory called <code class="prettyprint">log4j.properties</code>. The Spark developers already include a template for this file called <code class="prettyprint">log4j.properties.template</code>. To make the logging less verbose, make a copy of <code class="prettyprint">conf/log4j.properties.template</code> called <code class="prettyprint">conf/log4j.properties</code> and find the following line:</p>
-<div class="highlight"><pre><code class="language-" data-lang="">log4j.rootCategory=INFO, console
-</code></pre></div>
-<p>Replace <code class="prettyprint">INFO</code> with <code class="prettyprint">WARN</code> so that only WARN messages and above are shown.</p>
+<h1 id="spark-shell">Spark Shell</h1>
 
-<p>A driver program can access Spark through a <code class="prettyprint">SparkContext</code> object, which represents a connection to a computing cluster. In the interactive shell, <code class="prettyprint">SparkContext</code> is already created for you as variable <code class="prettyprint">sc</code>. Try printing out <code class="prettyprint">sc</code> to see its type.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">sc</span>
-<span class="n">res0</span><span class="k">:</span> <span class="kt">org.apache.spark.SparkContext</span> <span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">spark</span><span class="o">.</span><span class="nc">SparkContext</span><span class="k">@</span><span class="mf">87860d</span><span class="n">e</span>
+<p>Start the Spark interactive shell by invoking <code class="prettyprint">spark-shell</code> in terminal. Then you will see</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&gt; spark-shell
+Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
+...
+[messages]
+...
+Spark context available as sc.
+scala&gt;
 </code></pre></div>
-<h1 id="resilient-distributed-datasets-(rdds)">Resilient Distributed Datasets (RDDs)</h1>
+<p>In Spark, we call the main entrance of program the driver. Here in interactive shell, the Spark shell program is driver. A driver program can access Spark through a <code class="prettyprint">SparkContext</code> object, which represents a connection to a computing cluster. In above interactive shell, <code class="prettyprint">SparkContext</code> is already created for you as variable <code class="prettyprint">sc</code>. You can input <code class="prettyprint">sc</code> to see its type.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">scala&gt; sc
+res0: org.apache.spark.SparkContext = org.apache.spark.SparkContext@27896d3b
+</code></pre></div>
+<h1 id="rdd">RDD</h1>
 
-<p>RDD is Spark&#39;s core abstraction for working with data. An RDD is simply a fault-tolerant distributed collection of elements. In Spark, all work is expressed as either creating new RDDs, transforming existing RDDs, or calling operations on RDDs to compute a result. There are two ways to create RDDs: by distributing a collection of objects (e.g., a list or set), or by referencing a dataset in an external storage system, such as a shared filesystem, HDFS, HBase, or any data source offering a Hadoop InputFormat.</p>
+<p>Resilient Distributed Dataset(RDD) is Spark&#39;s core abstraction for working with data. An RDD is simply a fault-tolerant <strong>distributed</strong> collection of elements. In Spark, all work is expressed as either creating new RDDs, transforming existing RDDs, or calling operations on RDDs to compute a result. There are two ways to create RDDs: by distributing a collection of objects (e.g., a list or set), or by referencing a dataset in an external storage system, such as a shared filesystem, HDFS, HBase, or any data source offering a Hadoop InputFormat.</p>
 
 <h2 id="parallelized-collections">Parallelized Collections</h2>
 
 <p>The simplest way to create an RDD is to take an existing collection (a Scala Seq) in your program and pass it to SparkContext&#39;s <code class="prettyprint">parallelize()</code> method.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">data</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
-<span class="n">data</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val data = Array(1, 2, 3, 4, 5)
+data: Array[Int] = Array(1, 2, 3, 4, 5)
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">distData</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="o">(</span><span class="n">data</span><span class="o">)</span>
-<span class="n">distData</span><span class="k">:</span> <span class="kt">org.apache.spark.rdd.RDD</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">ParallelCollectionRDD</span><span class="o">[</span><span class="err">2</span><span class="o">]</span> <span class="n">at</span> <span class="n">parallelize</span> <span class="n">at</span> <span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">23</span>
+scala&gt; val distData = sc.parallelize(data)
+distData: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[2] at parallelize at &lt;console&gt;:23
 </code></pre></div>
-<p>Once created, the distributed dataset (distData) can be operated on in parallel. For example, we can add up the elements by calling <code class="prettyprint">distData.reduce((a, b) =&gt; a + b)</code>. You will see more operations on RDD later on.
-This approach is very useful when you are learning Spark. However, this is not widely used in practice since it requires the entire dataset to be in memory on one machine.</p>
+<p>Once created, the distributed dataset (distData) can be operated on in parallel. For example, we can add up the elements by calling <code class="prettyprint">distData.reduce((a, b) =&gt; a + b)</code>. You will see more operations on RDD later on.</p>
+
+<div class="msgbox bg-warning"><h4>Warning</h4><p>Parallelizing a collection is very useful when you are learning Spark. However, this is not encouraged in real practice since it requires the entire dataset to be in memory of driver program first. Instead, importing data from <a href="#external-datasets">external datasets</a> should be employed.</p>
+</div>
 
 <h2 id="external-datasets">External Datasets</h2>
 
 <p>A more common way to create RDDs is to load data from external storage. Below we show how to load data from your local file system.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">lines</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"case.csv"</span><span class="o">)</span>
-<span class="n">lines</span><span class="k">:</span> <span class="kt">org.apache.spark.rdd.RDD</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">README</span><span class="o">.</span><span class="n">md</span> <span class="nc">MapPartitionsRDD</span><span class="o">[</span><span class="err">1</span><span class="o">]</span> <span class="n">at</span> <span class="n">textFile</span> <span class="n">at</span> <span class="o">&lt;</span><span class="n">console</span><span class="k">&gt;:</span><span class="mi">21</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val lines = sc.textFile(&quot;case.csv&quot;)
+lines: org.apache.spark.rdd.RDD[String] = README.md MapPartitionsRDD[1] at textFile at &lt;console&gt;:21
 </code></pre></div>
+<p>Here in above example, each line of the original file will become an element in the <code class="prettyprint">lines</code> RDD.</p>
+
+<div class="msgbox bg-info"><h4>Information</h4><p>Reading data from file syetem, Spark relies on HDFS library. In above example we didn&#39;t configure HDFS through environmental viarable or configuration file so that data is read from local file system. </p>
+</div>
+
 <h1 id="rdd-operations">RDD Operations</h1>
 
-<p>RDDs offer two types of operations: <strong>transformation</strong> and <strong>actions</strong>. 
-Transformations are operations on RDDs that return a new RDD, such as <code class="prettyprint">map()</code> and <code class="prettyprint">filter()</code>.
-Actions are operations that return a result to the driver program or write it to storage, such as <code class="prettyprint">first()</code> and <code class="prettyprint">count()</code>.
-Spark treats transformations and actions very differently, so understanding which type of operation you are performing is very important.
-You can check whether a function is a transformation or an action by looking at its return type: transformations return RDDs, whereas actions return some other data type.</p>
+<p>RDDs offer two types of operations: <strong>transformation</strong> and <strong>actions</strong>:</p>
 
-<p>All transformations in Spark are lazy, in that they do not compute the results right away. Instead, they just remember the operations applied to some base dataset (e.g. an Array or a file). The transformations are only computed when an action requires a result to be returned to the driver program.
+<ul>
+<li><strong>Transformations</strong> are operations on RDDs that return a new RDD, such as <code class="prettyprint">map()</code> and <code class="prettyprint">filter()</code>.</li>
+<li><strong>Actions</strong> are operations that return a result to the driver program or write it to storage, such as <code class="prettyprint">first()</code> and <code class="prettyprint">count()</code>.</li>
+</ul>
+
+<p>Spark treats <strong>transformations</strong> and <strong>actions</strong> very differently, so understanding which type of operation you are performing is very important.
+You can check whether a function is a transformation or an action by looking at its return type: <strong>transformations</strong> return RDDs, whereas <strong>actions</strong> return some other data type.</p>
+
+<p>All <strong>transformations</strong> in Spark are lazy, in that they do not compute the results right away. Instead, they just remember the operations applied to some base dataset (e.g. an Array or a file). The <strong>transformations</strong> are only computed when an action requires a result to be returned to the driver program.
 Therefore, the above command of reading in a file has not actually been executed yet. 
-We can force the evaluation of RDDs by calling any actions.</p>
+We can force the evaluation of RDDs by calling any <strong>actions</strong>.</p>
 
 <p>Let&#39;s go through some common RDD operations by playing with our dataset.
-Recall that in the file <strong>case.csv</strong>, each line is a 4-tuple <code class="prettyprint">patient-id, event-id, timestamp, value</code>.</p>
+Recall that in the file <strong>case.csv</strong>, each line is a 4-filed tuple <code class="prettyprint">(patient-id, event-id, timestamp, value)</code>.</p>
 
-<ol>
-<li>Count the number of lines in the input file</li>
-</ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">count</span><span class="o">()</span>
-<span class="n">res1</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">14046</span>
+<h2 id="count">Count</h2>
+
+<p>We can count the number of lines in the input file using <code class="prettyprint">count</code> operation, i.e.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; lines.count()
+res1: Long = 14046
 </code></pre></div>
-<ol>
-<li>Let us take a peek at the data. The <code class="prettyprint">take(k)</code> will return the first k elements in the RDD. Spark also provides <code class="prettyprint">collect()</code> which brings all the elements in the RDD back to the driver program. Note that it is only used when the data is small.</li>
-</ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">take</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-</code></pre></div><div class="highlight"><pre><code class="language-" data-lang="">res2: Array[String] = Array(00013D2EFD8E45D1,DIAG78820,1166,1.0, 00013D2EFD8E45D1,DIAGV4501,1166,1.0, 00013D2EFD8E45D1,heartfailure,1166,1.0, 00013D2EFD8E45D1,DIAG2720,1166,1.0, 00013D2EFD8E45D1,DIAG4019,1166,1.0)  
+<p>Clearly, <code class="prettyprint">count</code> is an <strong>action</strong>.</p>
+
+<h2 id="take">Take</h2>
+
+<p>Let us take a peek at the data. The <code class="prettyprint">take(k)</code> will return the first k elements in the RDD. Spark also provides <code class="prettyprint">collect()</code> which brings all the elements in the RDD back to the driver program. Note that it is only used when the data is small. Both <code class="prettyprint">take</code> and <code class="prettyprint">collect</code> are <strong>actions</strong>.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; lines.take(5)
+res2: Array[String] = Array(00013D2EFD8E45D1,DIAG78820,1166,1.0, 00013D2EFD8E45D1,DIAGV4501,1166,1.0, 00013D2EFD8E45D1,heartfailure,1166,1.0, 00013D2EFD8E45D1,DIAG2720,1166,1.0, 00013D2EFD8E45D1,DIAG4019,1166,1.0)  
 </code></pre></div>
 <p>We got the first 5 records in this RDD. However, this is hard to read. We can make it more readable by traversing the array to print each record on its own line. </p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">take</span><span class="o">(</span><span class="mi">5</span><span class="o">).</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
-</code></pre></div><div class="highlight"><pre><code class="language-" data-lang="">00013D2EFD8E45D1,DIAG78820,1166,1.0
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; lines.take(5).foreach(println)
+00013D2EFD8E45D1,DIAG78820,1166,1.0
 00013D2EFD8E45D1,DIAGV4501,1166,1.0
 00013D2EFD8E45D1,heartfailure,1166,1.0
 00013D2EFD8E45D1,DIAG2720,1166,1.0
@@ -188,64 +210,70 @@ Recall that in the file <strong>case.csv</strong>, each line is a 4-tuple <code 
 </code></pre></div>
 <p>Note that during the above 3 commands, the RDD <code class="prettyprint">lines</code> has been computed (i.e. read in from file) 3 times. We can prevent this by calling <code class="prettyprint">lines.cache()</code>, which will cache the RDD in memory.</p>
 
-<ol>
-<li><p>We can count the number of records for a particular patients by using the <code class="prettyprint">filter</code> function.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="n">line</span> <span class="k">=&gt;</span> <span class="n">line</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span><span class="s">"00013D2EFD8E45D1"</span><span class="o">)).</span><span class="n">count</span><span class="o">()</span>
-<span class="n">res4</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">200</span>
-</code></pre></div></li>
-<li><p>We can also calculate the number of distinct patients.
-In order to do this, we first extract the patient ID from each line.
-We use the <code class="prettyprint">map()</code> function, which transforms each item in the RDD into a new item by performing the provided function. In this example, we transform each line into the corresponding patient ID by extracting only the first column. We then eliminate duplicate IDs by the <code class="prettyprint">distinct()</code> function.</p></li>
-</ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">line</span> <span class="k">=&gt;</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="o">(</span><span class="s">","</span><span class="o">)(</span><span class="mi">0</span><span class="o">)).</span><span class="n">distinct</span><span class="o">().</span><span class="n">count</span><span class="o">()</span>
-<span class="n">res5</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">100</span>
+<h2 id="map">Map</h2>
+
+<p>The <code class="prettyprint">map</code> operation in Spark is similar to that of Hadoop. It&#39;s a <strong>transformation</strong> that transforms each item in the RDD into a new item by performing the provided function. For example, in order to get IDs of loaded patients, we use <code class="prettyprint">map</code> like</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; lines.map(line =&gt; line.split(&quot;,&quot;)(0))
 </code></pre></div>
-<ol>
-<li>Suppose now we want to calculate the total payment by each patients. A payment record in the dataset is in the form of <code class="prettyprint">(patient-id, PAYMENT, timestamp, value)</code>.
-<code class="prettyprint">scala
-scala&gt; val payments = lines.filter(line =&gt; line.contains(&quot;PAYMENT&quot;)).
-                             map{ x =&gt;
-                               val s = x.split(&quot;,&quot;)
-                               (s(0), s(3).toFloat)
-                             }.reduceByKey(_+_)
-</code></li>
-</ol>
+<h2 id="filter">Filter</h2>
 
-<p>The RDD returned by <code class="prettyprint">filter</code> contains those records associated with payment. Each item is then transformed to a key-value pair <code class="prettyprint">(patient-id, amount)</code>. Because each patient can have multiple payments, we need to use <code class="prettyprint">reduceByKey</code> to sum up the payments for each patient.</p>
+<p>As indicated by it&#39;s name, <code class="prettyprint">filter</code> can <strong>transform</strong> an RDD to another by filtering out elements that satisfy given condition. For example, we can count the number of records for a particular patients by using the <code class="prettyprint">filter</code> function.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; lines.filter(line =&gt; line.contains(&quot;00013D2EFD8E45D1&quot;)).count()
+res4: Long = 200
+</code></pre></div>
+<h2 id="distinct">Distinct</h2>
 
-<p>We can then show the top-3 patients with the highest payment.</p>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">payments</span><span class="o">.</span><span class="n">sortBy</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">_2</span><span class="o">,</span> <span class="kc">false</span><span class="o">).</span><span class="n">take</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
-</code></pre></div><div class="highlight"><pre><code class="language-" data-lang="">(0085B4F55FFA358D,139880.0)
+<p><code class="prettyprint">distinct</code> is a <code class="prettyprint">transformation</code> that transform a RDD to another by eliminating duplications. We can use that to calculate the number of distinct patients. In order to do this, we first extract the patient ID from each line.
+We use the <code class="prettyprint">map()</code> function, In this example, we transform each line into the corresponding patient ID by extracting only the first column. We then eliminate duplicate IDs by the <code class="prettyprint">distinct()</code> function.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; lines.map(line =&gt; line.split(&quot;,&quot;)(0)).distinct().count()
+res5: Long = 100
+</code></pre></div>
+<h2 id="reduce">Reduce</h2>
+
+<p>Spark provides a similar operation of reduce in MapReduce, <code class="prettyprint">reduceByKey</code>. This name is more informative. It <em>transform</em> an <code class="prettyprint">RDD[(K, V)]</code> into <code class="prettyprint">RDD[(K, List[V])]</code> and aggregate on <code class="prettyprint">List[V]</code> to get <code class="prettyprint">RDD[(K, V)]</code>. Suppose now we want to calculate the total payment by each patients. A payment record in the dataset is in the form of <code class="prettyprint">(patient-id, PAYMENT, timestamp, value)</code>.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val payments = lines.filter(line =&gt; line.contains(&quot;PAYMENT&quot;)).
+                                 map{ x =&gt;
+                                   val s = x.split(&quot;,&quot;)
+                                   (s(0), s(3).toFloat)
+                                 }.reduceByKey(_+_)
+</code></pre></div>
+<p>The RDD returned by <code class="prettyprint">filter</code> contains those records associated with payment. Each item is then transformed to a key-value pair <code class="prettyprint">(patient-id, amount)</code> with <code class="prettyprint">map</code>. Because each patient can have multiple payments, we need to use <code class="prettyprint">reduceByKey</code> to sum up the payments for each patient. Here in this example, <code class="prettyprint">patient-id</code> will be key, and <code class="prettyprint">amount</code> be value to aggregate.</p>
+
+<p>We can then show the top-3 patients with the highest payment using <code class="prettyprint">sortBy</code> first.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; payments.sortBy(_._2, false).take(3).foreach(println)
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">(0085B4F55FFA358D,139880.0)
 (019E4729585EF3DD,108980.0)
 (01AC552BE839AB2B,108530.0)
 </code></pre></div>
-<ol>
-<li>For RDD consists of numeric values, Spark provides some useful statistical primitives.</li>
-</ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">payment_values</span> <span class="k">=</span> <span class="n">payments</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">payment</span> <span class="k">=&gt;</span> <span class="n">payment</span><span class="o">.</span><span class="n">_2</span><span class="o">).</span><span class="n">cache</span><span class="o">()</span>
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">max</span><span class="o">()</span>
-<span class="n">res6</span><span class="k">:</span> <span class="kt">Float</span> <span class="o">=</span> <span class="mf">139880.0</span>
+<h2 id="statistics">Statistics</h2>
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">min</span><span class="o">()</span>
-<span class="n">res7</span><span class="k">:</span> <span class="kt">Float</span> <span class="o">=</span> <span class="mf">3910.0</span>
+<p>For RDD consists of numeric values, Spark provides some useful statistical primitives.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val payment_values = payments.map(payment =&gt; payment._2).cache()
+scala&gt; payment_values.max()
+res6: Float = 139880.0
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">sum</span><span class="o">()</span>
-<span class="n">res8</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">2842480.0</span>
+scala&gt; payment_values.min()
+res7: Float = 3910.0
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">mean</span><span class="o">()</span>
-<span class="n">res9</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">28424.8</span>  
+scala&gt; payment_values.sum()
+res8: Double = 2842480.0
 
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">payment_values</span><span class="o">.</span><span class="n">stdev</span><span class="o">()</span>
-<span class="n">res10</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">26337.091771112468</span>
+scala&gt; payment_values.mean()
+res9: Double = 28424.8  
+
+scala&gt; payment_values.stdev()
+res10: Double = 26337.091771112468
 </code></pre></div>
-<ol>
-<li>RDDs support many of the operations of mathematical sets, such as <code class="prettyprint">union</code> and <code class="prettyprint">intersection</code>, even when the RDDs themselves are not properly sets. For example, we can combine the two files by the <code class="prettyprint">union</code> fucntion.</li>
-</ol>
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">lines2</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"control.csv"</span><span class="o">)</span>
-<span class="n">scala</span><span class="o">&gt;</span> <span class="n">lines</span><span class="o">.</span><span class="n">union</span><span class="o">(</span><span class="n">lines2</span><span class="o">).</span><span class="n">count</span><span class="o">()</span> 
-<span class="n">res11</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">31144</span> 
+<h2 id="set-operation">Set Operation</h2>
+
+<p>RDDs support many of the operations of mathematical sets, such as <code class="prettyprint">union</code> and <code class="prettyprint">intersection</code>, even when the RDDs themselves are not properly sets. For example, we can combine the two files by the <code class="prettyprint">union</code> fucntion. Please notice that <code class="prettyprint">union</code> here is not strictly identical to union operation in mathmatics as Spark will not remove duplication.</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala">scala&gt; val lines2 = sc.textFile(&quot;control.csv&quot;)
+scala&gt; lines.union(lines2).count() 
+res11: Long = 31144 
 
 </code></pre></div>
+<h1 id="further-reading">Further Reading</h1>
+
 <p>For the complete list of RDD operations, please see the 
 <a href="https://spark.apache.org/docs/latest/programming-guide.html#rdd-operations">Spark Programming Guide</a>.</p>
 
@@ -286,6 +314,11 @@ scala&gt; val payments = lines.filter(line =&gt; line.contains(&quot;PAYMENT&quo
   
 
   
+    
+  
+  
+
+  
   
 
   
@@ -295,6 +328,10 @@ scala&gt; val payments = lines.filter(line =&gt; line.contains(&quot;PAYMENT&quo
   
 
 
+
+<li class="previous">
+    <a href="/scala-basic/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Scala Basic</a>
+</li>
 
                 
   
@@ -343,9 +380,12 @@ scala&gt; val payments = lines.filter(line =&gt; line.contains(&quot;PAYMENT&quo
 
   
     
+      
+    
   
 
   
+    
     
   
 
@@ -353,7 +393,15 @@ scala&gt; val payments = lines.filter(line =&gt; line.contains(&quot;PAYMENT&quo
     
   
 
+  
+    
+  
 
+
+
+<li class="next">
+    <a href="/spark-sql/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Spark Sql&rarr;</a>
+</li>
 
 
             </ul>
