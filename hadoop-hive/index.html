@@ -9,21 +9,21 @@
     <meta name="description" content="Gatech CSE big data bootcamp">
     <title>Hadoop Hive - Bigdata Bootcamp</title>
 
-    <link rel="canonical" href="http://bigdata.manul.io/hadoop-hive/">
+    <link rel="canonical" href="http://www.sunlab.org/bigdata/hadoop-hive/">
     <!-- favicon -->
-    <link rel="icon" type="image/png" sizes="100x60" href="/image/favicon.png">
+    <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bigdata/css/bootstrap.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/bigdata-bootcamp.min.css">
+    <link rel="stylesheet" href="/bigdata/css/bigdata-bootcamp.min.css">
 
     <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/bigdata/css/syntax.css">
 
     <!-- TOC -->
-    <link rel="stylesheet" href="/css/jquery.tocify.css">
+    <link rel="stylesheet" href="/bigdata/css/jquery.tocify.css">
 
 
     <!-- Custom Fonts -->
@@ -54,40 +54,40 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Bigdata Bootcamp</a>
+            <a class="navbar-brand" href="/bigdata/">Bigdata Bootcamp</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
 <!--                 <li>
-                    <a href="/">Home</a>
+                    <a href="/bigdata/">Home</a>
                 </li> -->
                 <li>
-                    <a href="/contact/">Contact us</a>
+                    <a href="/bigdata/contact/">Contact us</a>
                 </li>
 <!--                 <li>
-                    <a href="/spark/">Spark</a>
+                    <a href="/bigdata/spark/">Spark</a>
                 </li> -->
 <!--                 <li>
-                    <a href="/hadoop/">Hadoop</a>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
                 </li> -->
             </ul>
             <ul class="nav navbar-nav navbar-left">
                 <li>
-                    <a href="/">Home</a>
+                    <a href="/bigdata/">Home</a>
                 </li>
 <!--                 <li>
-                    <a href="/about/">About</a>
+                    <a href="/bigdata/about/">About</a>
                 </li> -->
                 <li>
-                    <a href="/hadoop/">Hadoop</a>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
                 </li>
                 <li>
-                    <a href="/spark/">Spark</a>
+                    <a href="/bigdata/spark/">Spark</a>
                 </li>
-                <li><a href="/environment/">Environment</a></li>
-                <li><a href="/data/">Data</a></li>
+                <li><a href="/bigdata/environment/">Environment</a></li>
+                <li><a href="/bigdata/data/">Data</a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -97,7 +97,7 @@
 
 
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/image/background.jpg')">
+<header class="intro-header" style="background-image: url('/bigdata/image/background.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -161,7 +161,7 @@
 
 
 <li class="previous">
-    <a href="/hadoop-pig/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Pig</a>
+    <a href="/bigdata/hadoop-pig/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Pig</a>
 </li>
 
                 
@@ -223,22 +223,33 @@
 
 
 <li class="next">
-    <a href="/spark/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Overview of Spark&rarr;</a>
+    <a href="/bigdata/spark/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Overview of Spark&rarr;</a>
 </li>
 
 
             </ul>
 
-            <p>This section shows the basic usage of Hadoop Hive. Hive provides SQL like language HiveQL on top of Hadoop. Instead of writing raw MapReduce program, you can work on data warehouse task using simple farmiliar query language.</p>
+            <div class="bs-callout bs-callout-info" id="callout-helper-context-color-specificity">
+        <h4>Learning Objectives</h4><ul>
+<li>Know how to work with Hive interactive shell.</li>
+<li>Can create table.</li>
+<li>Can load data into table.</li>
+<li>Can run basic query.</li>
+</ul>
+</div>
+
+<p>This section shows the basic usage of Hadoop Hive. Hive provides SQL like language <code class="prettyprint">HiveQL</code> on top of Hadoop. Instead of writing raw MapReduce program, you can work on data warehouse task using simple farmiliar query language.</p>
 
 <h1 id="interactive-shell">Interactive shell</h1>
 
-<p>In the sample code, we will use the data of patient event sequences in tupel format. Let&#39;s start the Hive CLI interactive shell first by typing <code class="prettyprint">hive</code> in command line</p>
+<p>In the sample code, we will continue to use our event tuple <a href="/bigdata/data/">patient data</a>. Let&#39;s start the Hive CLI interactive shell first by typing <code class="prettyprint">hive</code> in command line</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; hive
 ...                                                                         
 [info]
 hive&gt; 
 </code></pre></div>
+<h1 id="create-table">Create table</h1>
+
 <p>Before loading data, we first need to define a table just like working with database server with SQL.</p>
 <div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; CREATE TABLE events (
     &gt;   patient_id STRING,
@@ -252,7 +263,7 @@ OK
 Time taken: 0.289 seconds
 hive&gt; 
 </code></pre></div>
-<p>And we could check existing tables and schema with commands</p>
+<p>And you can check existing tables and schema with commands</p>
 <div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; SHOW TABLES;
 OK
 events
@@ -265,7 +276,9 @@ date_offset             int
 value                   int                                         
 Time taken: 0.221 seconds, Fetched: 4 row(s)
 </code></pre></div>
-<p>Next, let&#39;s insert data into the table.</p>
+<h1 id="load-data">Load data</h1>
+
+<p>Let&#39;s insert data into the table.</p>
 <div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; LOAD DATA LOCAL INPATH &#39;data&#39;
     &gt; OVERWRITE INTO TABLE events;
 Loading data to table default.events
@@ -273,7 +286,11 @@ Table default.events stats: [numFiles=2, numRows=0, totalSize=1208972, rawDataSi
 OK
 Time taken: 0.521 seconds
 </code></pre></div>
-<p>Then we could run SQL we are farmiliar with like</p>
+<h1 id="query">Query</h1>
+
+<h2 id="basic">Basic</h2>
+
+<p>Then you can run SQL we are farmiliar with like</p>
 <div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; SELECT patient_id, count(*) FROM events
     &gt; GROUP BY patient_id;
 
@@ -290,7 +307,9 @@ FBF4F34C7437373D        119
 FBFD014814507B5C        28
 Time taken: 20.351 seconds, Fetched: 300 row(s)
 </code></pre></div>
-<p>We could also save query result to local directory</p>
+<h2 id="save-result">Save result</h2>
+
+<p>You can also save query result to local directory</p>
 <div class="highlight"><pre><code class="language-sql" data-lang="sql">hive&gt; INSERT OVERWRITE LOCAL DIRECTORY &#39;tmp_local_out&#39;
     &gt; ROW FORMAT DELIMITED
     &gt; FIELDS TERMINATED BY &#39;,&#39;
@@ -304,11 +323,11 @@ Time taken: 20.351 seconds, Fetched: 300 row(s)
 OK
 Time taken: 17.034 seconds
 </code></pre></div>
-<p>You could learn more about the syntax from its <a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual">language manual</a>.</p>
+<p>You can learn more about the syntax from its <a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual">language manual</a>.</p>
 
 <h1 id="besides-shell">Besides shell</h1>
 
-<p>Besides running commands with interactive shell, you can also run a script. In the <code class="prettyprint">sample/hive</code> folder, you can run the entire script with</p>
+<p>Besides running commands with interactive shell, you can also run a script in batch mode without interaction. In the <code class="prettyprint">sample/hive</code> folder, you can run the entire script with</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">hive -f sample.hql
 </code></pre></div>
 <p>The content of the script is simply the combination of commands we run in shell with one more statement to drop existing table if necessary</p>
@@ -337,7 +356,7 @@ SELECT patient_id, count(*)
 FROM events 
 GROUP BY patient_id;
 </code></pre></div>
-<p>Further, it&#39;s possible to run <a href="https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients">hive as a server</a> and connect with JDBC or its beeline client.</p>
+<p>Further, it&#39;s possible to run <a href="https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients">hive as a server</a> and connect to the server with JDBC or with its beeline client.</p>
 
 <h1 id="related-tools">Related tools</h1>
 
@@ -390,7 +409,7 @@ GROUP BY patient_id;
 
 
 <li class="previous">
-    <a href="/hadoop-pig/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Pig</a>
+    <a href="/bigdata/hadoop-pig/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Pig</a>
 </li>
 
                 
@@ -452,7 +471,7 @@ GROUP BY patient_id;
 
 
 <li class="next">
-    <a href="/spark/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Overview of Spark&rarr;</a>
+    <a href="/bigdata/spark/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Overview of Spark&rarr;</a>
 </li>
 
 
@@ -493,7 +512,7 @@ GROUP BY patient_id;
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <ul class="list-inline text-center">
                     <li>
-                        <a href="/feed.xml" target="_blank">
+                        <a href="/bigdata/feed.xml" target="_blank">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
@@ -538,20 +557,20 @@ GROUP BY patient_id;
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/bigdata/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/bigdata/js/bootstrap.min.js "></script>
 
 <!-- TOC -->
-<script src="/js/jquery-ui.min.js"></script>
-<script src="/js/jquery.tocify.js"></script>
+<script src="/bigdata/js/jquery-ui.min.js"></script>
+<script src="/bigdata/js/jquery.tocify.js"></script>
 
 <!-- ACE Editor -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/bigdata-bootcamp.js "></script>
+<script src="/bigdata/js/bigdata-bootcamp.js "></script>
 
 
 </body>

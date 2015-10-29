@@ -9,21 +9,21 @@
     <meta name="description" content="Gatech CSE big data bootcamp">
     <title>Hadoop Pig - Bigdata Bootcamp</title>
 
-    <link rel="canonical" href="http://bigdata.manul.io/hadoop-pig/">
+    <link rel="canonical" href="http://www.sunlab.org/bigdata/hadoop-pig/">
     <!-- favicon -->
-    <link rel="icon" type="image/png" sizes="100x60" href="/image/favicon.png">
+    <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bigdata/css/bootstrap.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/bigdata-bootcamp.min.css">
+    <link rel="stylesheet" href="/bigdata/css/bigdata-bootcamp.min.css">
 
     <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/bigdata/css/syntax.css">
 
     <!-- TOC -->
-    <link rel="stylesheet" href="/css/jquery.tocify.css">
+    <link rel="stylesheet" href="/bigdata/css/jquery.tocify.css">
 
 
     <!-- Custom Fonts -->
@@ -54,40 +54,40 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Bigdata Bootcamp</a>
+            <a class="navbar-brand" href="/bigdata/">Bigdata Bootcamp</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
 <!--                 <li>
-                    <a href="/">Home</a>
+                    <a href="/bigdata/">Home</a>
                 </li> -->
                 <li>
-                    <a href="/contact/">Contact us</a>
+                    <a href="/bigdata/contact/">Contact us</a>
                 </li>
 <!--                 <li>
-                    <a href="/spark/">Spark</a>
+                    <a href="/bigdata/spark/">Spark</a>
                 </li> -->
 <!--                 <li>
-                    <a href="/hadoop/">Hadoop</a>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
                 </li> -->
             </ul>
             <ul class="nav navbar-nav navbar-left">
                 <li>
-                    <a href="/">Home</a>
+                    <a href="/bigdata/">Home</a>
                 </li>
 <!--                 <li>
-                    <a href="/about/">About</a>
+                    <a href="/bigdata/about/">About</a>
                 </li> -->
                 <li>
-                    <a href="/hadoop/">Hadoop</a>
+                    <a href="/bigdata/hadoop/">Hadoop</a>
                 </li>
                 <li>
-                    <a href="/spark/">Spark</a>
+                    <a href="/bigdata/spark/">Spark</a>
                 </li>
-                <li><a href="/environment/">Environment</a></li>
-                <li><a href="/data/">Data</a></li>
+                <li><a href="/bigdata/environment/">Environment</a></li>
+                <li><a href="/bigdata/data/">Data</a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -97,7 +97,7 @@
 
 
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/image/background.jpg')">
+<header class="intro-header" style="background-image: url('/bigdata/image/background.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -161,7 +161,7 @@
 
 
 <li class="previous">
-    <a href="/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
+    <a href="/bigdata/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
 </li>
 
                 
@@ -223,7 +223,7 @@
 
 
 <li class="next">
-    <a href="/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Hive&rarr;</a>
+    <a href="/bigdata/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Hive&rarr;</a>
 </li>
 
 
@@ -301,17 +301,22 @@ case_events: {patientid: chararray,eventname: chararray,dateoffset: int,value: d
 
 <h2 id="overview">Overview</h2>
 
+<p>The process of feature construction is depicted below
+<img src="/bigdata/image/post/hadoop-pig-process.svg" alt="feature construction high level" title="Feature Construction Process"></p>
+
+<p>We will start from loading raw data. Then we extrat the prediction target(i.e. the patient will have heart failure or not). Next, we aggregate events of patient into features. After that we need to link prediction target and features to compose complete training/testing samples. Finally we split the data into training and testing sets and save.</p>
+
 <h2 id="load-data">Load data</h2>
 
 <p>First, you can check your working directory and availability of raw data file by</p>
-<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; pwd    
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; pwd
 file:/path/to/bigdata-bootcamp
 grunt&gt; ls data
 file:/path/to/bigdata-bootcamp/data/case.csv&lt;r 1&gt;    536404
 file:/path/to/bigdata-bootcamp/data/control.csv&lt;r 1&gt; 672568
 grunt&gt; 
 </code></pre></div>
-<p>Then, let&#39;s load the data as</p>
+<p>Then, let&#39;s load the data as a <code class="prettyprint">relation</code></p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">grunt&gt; events = LOAD &#39;data/&#39; USING PigStorage(&#39;,&#39;) AS (patientid:chararray, eventname:chararray, dateoffset:int, value:int);
 </code></pre></div>
 <h2 id="extract-target-and-filter">Extract target and filter</h2>
@@ -321,14 +326,16 @@ grunt&gt;
 grunt&gt; event_target_pairs = JOIN events by patientid, targets BY patientid;
 grunt&gt; filtered_events = FILTER event_target_pairs BY (events::dateoffset &lt;= targets::dateoffset - 365);
 </code></pre></div>
-<p>After <code class="prettyprint">JOIN</code> we have some redundant fields we will no longer need, so that we can project <code class="prettyprint">filtered_events</code> to a simpler format.</p>
+<p>After <code class="prettyprint">JOIN</code> we have some redundant fields we will no longer need, so that we can project <code class="prettyprint">filtered_events</code> into a simpler format.</p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; filtered_events = FOREACH filtered_events GENERATE $0 AS patientid, $1 AS eventname, $3 AS value;
 </code></pre></div>
 <p>Notice that as dateoffset is no longer useful after filtering, we droped that.</p>
 
 <h2 id="aggregate-events-into-feature">Aggregate events into feature</h2>
 
-<p>Our raw data is event sequence. In order to aggregate that into feature suitable for machine learning, we can  sum up event value as feature value corresponds to the given event. In additionFor example, given below raw event sequence for a patient</p>
+<h3 id="illustrative-sample">Illustrative sample</h3>
+
+<p>Our raw data is event sequence. In order to aggregate that into feature suitable for machine learning, we can <strong>sum</strong> up event value as feature value corresponds to the given event. Each event type will become a feature and we will redictly use event name as feature name. For example, given below raw event sequence for a patient</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">FBFD014814507B5C,PAYMENT,1220,30.0
 FBFD014814507B5C,DIAGE887,1321,1.0
 FBFD014814507B5C,PAYMENT,1321,1000.0
@@ -340,9 +347,10 @@ FBFD014814507B5C,DRUG52959072214,1016,30.0
 (DIAGE887, 2.0)
 (DRUG52959072214, 30.0)
 </code></pre></div>
-<p>Below code will convert <code class="prettyprint">filtered_events</code> into tuples in <code class="prettyprint">(patientid, feature name, feature value)</code> format</p>
-<div class="highlight"><pre><code class="language-pig" data-lang="pig">
-grunt&gt; feature_name_values = GROUP filtered_events BY (patientid, eventname);
+<h3 id="code">Code</h3>
+
+<p>Below code will convert <code class="prettyprint">filtered_events</code> from <a href="#extract-target-and-filter">previous filter step</a> into tuples in <code class="prettyprint">(patientid, feature name, feature value)</code> format</p>
+<div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; feature_name_values = GROUP filtered_events BY (patientid, eventname);
 grunt&gt; DESCRIBE feature_name_values;                                         
 feature_name_values: {group: (patientid: chararray,eventname: chararray),filtered_events: {(patientid: chararray,eventname: chararray,value: int)}}
 grunt&gt; feature_name_values = FOREACH feature_name_values GENERATE group.$0, group.$1 as featurename, SUM(filtered_events.value) AS value;
@@ -357,7 +365,9 @@ grunt&gt; dump feature_name_values;
 </code></pre></div>
 <h2 id="assign-index-to-feature">Assign index to feature</h2>
 
-<p>In machine learning setting, we want to assign an index to each different feature. Form example, DIAG38845 corresponds to 1 and DIAGV6546 corresponds to 2 etc.</p>
+<h3 id="get-unique-index">Get unique index</h3>
+
+<p>In machine learning setting, we want to assign an index to each different feature rather than directly use name. Form example, <code class="prettyprint">DIAG38845</code> corresponds to No.1 and <code class="prettyprint">DIAGV6546</code> corresponds to NO.2 etc.</p>
 
 <p>Below code find unique feature name using <code class="prettyprint">DISTINCT</code>and assign an index to feature name with <code class="prettyprint">RANK</code></p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; feature_names = FOREACH feature_name_values GENERATE featurename;
@@ -375,6 +385,8 @@ grunt&gt; DUMP feature_name_index;
 (9977,DRUG99207049905)
 (9978,DRUG99207074501)
 </code></pre></div>
+<h3 id="use-unique-index">Use unique index</h3>
+
 <p>Next, we can update <code class="prettyprint">feature_name_values</code> to use feature index rather than feature name.</p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; feature_id_values = JOIN feature_name_values BY featurename, feature_name_index BY featurename;
 grunt&gt; DESCRIBE feature_id_values;
@@ -392,6 +404,8 @@ grunt&gt; DUMP feature_id_values;
 </code></pre></div>
 <h2 id="format-feature-matrix">Format feature matrix</h2>
 
+<h3 id="illustratative-example">Illustratative example</h3>
+
 <p>Now, we are approaching the final step. We need to create a feature vector for each patient. Our ultimate result will convert each patient into a feature vector associated with target we want to predict. We already get target in the <code class="prettyprint">targets</code> relation. Our final representation is like below</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">target featureid:value[featureid:value]...
 </code></pre></div>
@@ -407,6 +421,8 @@ grunt&gt; DUMP feature_id_values;
 </code></pre></div>
 <p>notice that the <code class="prettyprint">feautreid</code> is in increase order and this is required by a lot of machine learning package. We call such target (aka label) and features pair a <code class="prettyprint">sample</code>.</p>
 
+<h3 id="code">Code</h3>
+
 <p>Let&#39;s for group <code class="prettyprint">feature_id_values</code> by patientid and check the structure</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">grunt&gt; grpd = GROUP feature_id_values BY patientid;
 grunt&gt; DESCRIBE grpd;
@@ -417,7 +433,7 @@ grpd: {group: chararray,feature_id_values: {(patientid: chararray,featureid: lon
 def bag_to_svmlight(input):
     return &#39; &#39;.join(( &quot;%s:%f&quot; % (fid, float(fvalue)) for _, fid, fvalue in input))
 </code></pre></div>
-<p>The script just simply enumerate all tuples from <code class="prettyprint">input</code> and form id value pairs then join. <code class="prettyprint">@outputSchema(&quot;feature:chararray&quot;)</code> specifies the return value name and tupe. In order to use that, we need to register it first</p>
+<p>The script simply enumerate all tuples from <code class="prettyprint">input</code> and form id value pairs then join. <code class="prettyprint">@outputSchema(&quot;feature:chararray&quot;)</code> specifies the return value name and tupe. In order to use that, we need to register it first</p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; REGISTER sample/pig/utils.py USING jython AS utils;
 grunt&gt; feature_vectors = FOREACH grpd {
     sorted = ORDER feature_id_values BY featureid;
@@ -428,6 +444,8 @@ grunt&gt; DUMP feature_vectors;
 (FBF4F34C7437373D,30:3220.000000 7... 9584:30.000000 9743:60.000000 9770:30.000000)
 (FBFD014814507B5C,30:270.000000 700:1.000000)
 </code></pre></div>
+<h2 id="merge">Merge</h2>
+
 <p>Next, we can join <code class="prettyprint">targets</code> and <code class="prettyprint">feature_vectors</code> to asscociate feature vector with target</p>
 <div class="highlight"><pre><code class="language-pig" data-lang="pig">grunt&gt; samples = JOIN targets BY patientid, feature_vectors BY patientid;
 grunt&gt; DESCRIBE samples;
@@ -453,11 +471,27 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
 </code></pre></div>
 <h1 id="script">Script</h1>
 
-<p>Running commands interactively is efficient, but sometimes we want to save the commands for reuse. We can save the commands we run into a script file (i.e. features.pig) and run the entire script.</p>
+<p>Running commands interactively is efficient, but sometimes we want to save the commands for future reuse purpose. We can save the commands we run into a script file (i.e. features.pig) and run the entire script in batch mode.</p>
 
-<p>You can checkout <code class="prettyprint">sample/pig</code> folder. Navigate to there and run the script simply with</p>
+<p>You can checkout in <em>sample/pig</em> folder. Navigate to there and run the script simply with</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">pig -x local features.pig
 </code></pre></div>
+<div class="panel-group exercise">
+<div class="panel panel-default">
+<div class="panel-heading">
+<h4 class="panel-title">
+<a data-toggle="collapse" href="#question235" style="text-decoration:none;">Exercise: Use data one year before but no earlier than 2 years(i.e. 1 year observation window size).</a>
+</h4>
+</div>
+
+<div id="question235" class="panel-collapse collapse">
+<div class="panel-body">
+    <p>Additional conditions can be applied together with 1 year prediction window. i.e. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">filtered_events = FILTER event_target_pairs BY (events::dateoffset &lt;= targets::dateoffset - 365) AND (events::dateoffset &gt;= targets::dateoffset - 730);
+</code></pre></div>
+</div></div></div>
+</div>
+
 
             <ul class="pager">
                 
@@ -505,7 +539,7 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
 
 
 <li class="previous">
-    <a href="/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
+    <a href="/bigdata/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
 </li>
 
                 
@@ -567,7 +601,7 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
 
 
 <li class="next">
-    <a href="/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Hive&rarr;</a>
+    <a href="/bigdata/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Hive&rarr;</a>
 </li>
 
 
@@ -608,7 +642,7 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <ul class="list-inline text-center">
                     <li>
-                        <a href="/feed.xml" target="_blank">
+                        <a href="/bigdata/feed.xml" target="_blank">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
@@ -653,20 +687,20 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/bigdata/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/bigdata/js/bootstrap.min.js "></script>
 
 <!-- TOC -->
-<script src="/js/jquery-ui.min.js"></script>
-<script src="/js/jquery.tocify.js"></script>
+<script src="/bigdata/js/jquery-ui.min.js"></script>
+<script src="/bigdata/js/jquery.tocify.js"></script>
 
 <!-- ACE Editor -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/bigdata-bootcamp.js "></script>
+<script src="/bigdata/js/bigdata-bootcamp.js "></script>
 
 
 </body>
