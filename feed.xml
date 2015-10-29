@@ -3,70 +3,70 @@
   <channel>
     <title>Bigdata Bootcamp</title>
     <description>Gatech CSE big data bootcamp</description>
-    <link>http://www.sunlab.org/bigdata/</link>
-    <atom:link href="http://www.sunlab.org/bigdata/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 28 Oct 2015 21:25:26 -0400</pubDate>
-    <lastBuildDate>Wed, 28 Oct 2015 21:25:26 -0400</lastBuildDate>
+    <link>http://bigdata.manul.io/</link>
+    <atom:link href="http://bigdata.manul.io/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Wed, 28 Oct 2015 21:26:27 -0400</pubDate>
+    <lastBuildDate>Wed, 28 Oct 2015 21:26:27 -0400</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
         <title>Big Data Bootcamp</title>
-        <link>http://www.sunlab.org/bigdata/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/</guid>
+        <link>http://bigdata.manul.io/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/</guid>
       </item>
     
       <item>
         <title>Overview of Hadop</title>
-        <link>http://www.sunlab.org/bigdata/hadoop/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop/</guid>
+        <link>http://bigdata.manul.io/hadoop/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/hadoop/</guid>
       </item>
     
       <item>
         <title>Hadoop Basic</title>
-        <link>http://www.sunlab.org/bigdata/hadoop-basic/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-basic/</guid>
+        <link>http://bigdata.manul.io/hadoop-basic/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/hadoop-basic/</guid>
       </item>
     
       <item>
         <title>Hadoop HBase</title>
-        <link>http://www.sunlab.org/bigdata/hadoop-hbase/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-hbase/</guid>
+        <link>http://bigdata.manul.io/hadoop-hbase/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/hadoop-hbase/</guid>
       </item>
     
       <item>
         <title>Hadoop Streaming</title>
-        <link>http://www.sunlab.org/bigdata/hadoop-streaming/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-streaming/</guid>
+        <link>http://bigdata.manul.io/hadoop-streaming/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/hadoop-streaming/</guid>
       </item>
     
       <item>
         <title>Hadoop Pig</title>
-        <link>http://www.sunlab.org/bigdata/hadoop-pig/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-pig/</guid>
+        <link>http://bigdata.manul.io/hadoop-pig/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/hadoop-pig/</guid>
       </item>
     
       <item>
         <title>Hadoop Hive</title>
-        <link>http://www.sunlab.org/bigdata/hadoop-hive/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/hadoop-hive/</guid>
+        <link>http://bigdata.manul.io/hadoop-hive/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/hadoop-hive/</guid>
       </item>
     
       <item>
         <title>Overview of Spark</title>
-        <link>http://www.sunlab.org/bigdata/spark/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/spark/</guid>
+        <link>http://bigdata.manul.io/spark/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/spark/</guid>
       </item>
     
       <item>
         <title>Scala Basic</title>
-        <link>http://www.sunlab.org/bigdata/scala-basic/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/scala-basic/</guid>
+        <link>http://bigdata.manul.io/scala-basic/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/scala-basic/</guid>
       </item>
     
       <item>
         <title>Spark Basic</title>
-        <link>http://www.sunlab.org/bigdata/spark-basic/</link>
-        <guid isPermaLink="true">http://www.sunlab.org/bigdata/spark-basic/</guid>
+        <link>http://bigdata.manul.io/spark-basic/</link>
+        <guid isPermaLink="true">http://bigdata.manul.io/spark-basic/</guid>
       </item>
     
   </channel>

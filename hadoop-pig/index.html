@@ -9,21 +9,21 @@
     <meta name="description" content="Gatech CSE big data bootcamp">
     <title>Hadoop Pig - Bigdata Bootcamp</title>
 
-    <link rel="canonical" href="http://www.sunlab.org/bigdata/hadoop-pig/">
+    <link rel="canonical" href="http://bigdata.manul.io/hadoop-pig/">
     <!-- favicon -->
-    <link rel="icon" type="image/png" sizes="100x60" href="/bigdata/image/favicon.png">
+    <link rel="icon" type="image/png" sizes="100x60" href="/image/favicon.png">
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/bigdata/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/bigdata/css/bigdata-bootcamp.min.css">
+    <link rel="stylesheet" href="/css/bigdata-bootcamp.min.css">
 
     <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/bigdata/css/syntax.css">
+    <link rel="stylesheet" href="/css/syntax.css">
 
     <!-- TOC -->
-    <link rel="stylesheet" href="/bigdata/css/jquery.tocify.css">
+    <link rel="stylesheet" href="/css/jquery.tocify.css">
 
 
     <!-- Custom Fonts -->
@@ -54,40 +54,40 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/bigdata/">Bigdata Bootcamp</a>
+            <a class="navbar-brand" href="/">Bigdata Bootcamp</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
 <!--                 <li>
-                    <a href="/bigdata/">Home</a>
+                    <a href="/">Home</a>
                 </li> -->
                 <li>
-                    <a href="/bigdata/contact/">Contact us</a>
+                    <a href="/contact/">Contact us</a>
                 </li>
 <!--                 <li>
-                    <a href="/bigdata/spark/">Spark</a>
+                    <a href="/spark/">Spark</a>
                 </li> -->
 <!--                 <li>
-                    <a href="/bigdata/hadoop/">Hadoop</a>
+                    <a href="/hadoop/">Hadoop</a>
                 </li> -->
             </ul>
             <ul class="nav navbar-nav navbar-left">
                 <li>
-                    <a href="/bigdata/">Home</a>
+                    <a href="/">Home</a>
                 </li>
 <!--                 <li>
-                    <a href="/bigdata/about/">About</a>
+                    <a href="/about/">About</a>
                 </li> -->
                 <li>
-                    <a href="/bigdata/hadoop/">Hadoop</a>
+                    <a href="/hadoop/">Hadoop</a>
                 </li>
                 <li>
-                    <a href="/bigdata/spark/">Spark</a>
+                    <a href="/spark/">Spark</a>
                 </li>
-                <li><a href="/bigdata/environment/">Environment</a></li>
-                <li><a href="/bigdata/data/">Data</a></li>
+                <li><a href="/environment/">Environment</a></li>
+                <li><a href="/data/">Data</a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -97,7 +97,7 @@
 
 
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/bigdata/image/background.jpg')">
+<header class="intro-header" style="background-image: url('/image/background.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -161,7 +161,7 @@
 
 
 <li class="previous">
-    <a href="/bigdata/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
+    <a href="/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
 </li>
 
                 
@@ -223,7 +223,7 @@
 
 
 <li class="next">
-    <a href="/bigdata/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Hive&rarr;</a>
+    <a href="/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Hive&rarr;</a>
 </li>
 
 
@@ -302,7 +302,7 @@ case_events: {patientid: chararray,eventname: chararray,dateoffset: int,value: d
 <h2 id="overview">Overview</h2>
 
 <p>The process of feature construction is depicted below
-<img src="/bigdata/image/post/hadoop-pig-process.svg" alt="feature construction high level" title="Feature Construction Process"></p>
+<img src="/image/post/hadoop-pig-process.svg" alt="feature construction high level" title="Feature Construction Process"></p>
 
 <p>We will start from loading raw data. Then we extrat the prediction target(i.e. the patient will have heart failure or not). Next, we aggregate events of patient into features. After that we need to link prediction target and features to compose complete training/testing samples. Finally we split the data into training and testing sets and save.</p>
 
@@ -480,11 +480,11 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
 <div class="panel panel-default">
 <div class="panel-heading">
 <h4 class="panel-title">
-<a data-toggle="collapse" href="#question235" style="text-decoration:none;">Exercise: Use data one year before but no earlier than 2 years(i.e. 1 year observation window size).</a>
+<a data-toggle="collapse" href="#question3" style="text-decoration:none;">Exercise: Use data one year before but no earlier than 2 years(i.e. 1 year observation window size).</a>
 </h4>
 </div>
 
-<div id="question235" class="panel-collapse collapse">
+<div id="question3" class="panel-collapse collapse">
 <div class="panel-body">
     <p>Additional conditions can be applied together with 1 year prediction window. i.e. </p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">filtered_events = FILTER event_target_pairs BY (events::dateoffset &lt;= targets::dateoffset - 365) AND (events::dateoffset &gt;= targets::dateoffset - 730);
@@ -539,7 +539,7 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
 
 
 <li class="previous">
-    <a href="/bigdata/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
+    <a href="/hadoop-streaming/" data-toggle="tooltip" data-placement="top" title="Previous Lesson">&larr; Hadoop Streaming</a>
 </li>
 
                 
@@ -601,7 +601,7 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
 
 
 <li class="next">
-    <a href="/bigdata/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Hive&rarr;</a>
+    <a href="/hadoop-hive/" data-toggle="tooltip" data-placement="top" title="Next Lesson">Hadoop Hive&rarr;</a>
 </li>
 
 
@@ -642,7 +642,7 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <ul class="list-inline text-center">
                     <li>
-                        <a href="/bigdata/feed.xml" target="_blank">
+                        <a href="/feed.xml" target="_blank">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
@@ -687,20 +687,20 @@ grunt&gt; STORE testing INTO &#39;testing&#39; USING PigStorage(&#39; &#39;);
 </footer>
 
 <!-- jQuery -->
-<script src="/bigdata/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/bigdata/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- TOC -->
-<script src="/bigdata/js/jquery-ui.min.js"></script>
-<script src="/bigdata/js/jquery.tocify.js"></script>
+<script src="/js/jquery-ui.min.js"></script>
+<script src="/js/jquery.tocify.js"></script>
 
 <!-- ACE Editor -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/bigdata/js/bigdata-bootcamp.js "></script>
+<script src="/js/bigdata-bootcamp.js "></script>
 
 
 </body>
